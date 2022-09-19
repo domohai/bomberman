@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group 'org.example'
@@ -7,6 +9,12 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+javafx {
+    version = "19"
+    modules = [ 'javafx.controls', 'javafx.base', 'javafx.fxml', 'javafx.graphics',
+                'javafx.media', 'javafx.swing', 'javafx.web']
 }
 
 dependencies {

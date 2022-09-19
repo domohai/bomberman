@@ -2,11 +2,10 @@ package core;
 
 import util.Const;
 import util.Time;
-
 import javax.swing.JFrame;
 
 public class Window extends JFrame implements Runnable {
-    private static Window window = null;
+    private static Window window = null; // the only window
     private boolean isRunning;
 
     private Window() {
@@ -15,8 +14,14 @@ public class Window extends JFrame implements Runnable {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addMouseListener(MouseController.get()); // add mouseListener
+        this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
+    }
+    
+    public void init() {
+    
     }
 
     public static Window get() {
@@ -27,7 +32,8 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void update(double delta_time) {
-        System.out.println(1/delta_time + "fps");
+        //System.out.println(1/delta_time + "fps");
+        
     }
 
     @Override
