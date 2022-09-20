@@ -67,7 +67,7 @@ public class Window extends JFrame implements Runnable {
                 delta_time = time - lastFrameTime;
                 lastFrameTime = time;
                 update(delta_time);
-                //Thread.sleep(16);
+                Thread.sleep(16);
             }
         } catch (Exception e) {
             e.printStackTrace();
