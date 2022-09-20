@@ -1,5 +1,9 @@
 package core;
 
+import scenes.MenuScene;
+import scenes.PlayScene;
+import scenes.Scene;
+import scenes.SceneType;
 import util.Const;
 import util.Time;
 import javax.swing.JFrame;
@@ -7,6 +11,7 @@ import javax.swing.JFrame;
 public class Window extends JFrame implements Runnable {
     private static Window window = null; // the only window
     private boolean isRunning;
+    private static Scene currentScene = null;
 
     private Window() {
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
@@ -21,7 +26,7 @@ public class Window extends JFrame implements Runnable {
     }
     
     public void init() {
-    
+        Window.changeScene(SceneType.PLAY_SCENE);
     }
 
     public static Window get() {
@@ -33,7 +38,22 @@ public class Window extends JFrame implements Runnable {
 
     public void update(double delta_time) {
         //System.out.println(1/delta_time + "fps");
+        Window.currentScene.update(delta_time);
         
+    }
+    
+    public static void changeScene(SceneType type) {
+        switch (type) {
+            case MENU_SCENE:
+                Window.currentScene = new MenuScene();
+                break;
+            case PLAY_SCENE:
+                Window.currentScene = new PlayScene();
+                break;
+            default:
+                System.out.println("Invalid scene!");
+                break;
+        }
     }
 
     @Override
