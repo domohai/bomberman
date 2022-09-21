@@ -4,6 +4,10 @@ import java.awt.Graphics2D;
 
 public class MenuScene extends Scene {
     
+    public MenuScene() {
+        super();
+    }
+    
     @Override
     public void update(double dt) {
     

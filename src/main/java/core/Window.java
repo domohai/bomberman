@@ -3,16 +3,34 @@ package core;
 import scenes.MenuScene;
 import scenes.PlayScene;
 import scenes.Scene;
-import scenes.SceneType;
+import enums.SceneType;
 import util.Const;
 import util.Time;
 import javax.swing.JFrame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 
+/**
+ * We are implementing a system called Entity component system (ECS)
+ * to build this game and if you're wondering what it is
+ * I have a few links for more information about ECS
+ * link to a video: <a href="https://www.youtube.com/watch?v=HkG8ZdhoXhs">...</a>
+ * link to a book: <a href="https://gameprogrammingpatterns.com/component.html">...</a>
+ * have it your way:)
+ */
 public class Window extends JFrame implements Runnable {
     private static Window window = null; // the only window
     private boolean isRunning;
     private static Scene currentScene = null;
-
+    private Image bufferImage = null;
+    private Graphics bufferGraphics = null;
+    
+    /**
+     * we don't want any other class to call this constructor,
+     * so we only have one window open
+     * that's the reason why it's private:)
+     */
     private Window() {
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setTitle(Const.SCREEN_TITLE);
@@ -25,7 +43,12 @@ public class Window extends JFrame implements Runnable {
         this.isRunning = true;
     }
     
+    /**
+     * initialize stuff:)
+     */
     public void init() {
+        bufferImage = createImage(getWidth(), getHeight());
+        bufferGraphics = bufferImage.getGraphics();
         Window.changeScene(SceneType.PLAY_SCENE);
     }
 
@@ -39,25 +62,46 @@ public class Window extends JFrame implements Runnable {
     public void update(double delta_time) {
         //System.out.println(1/delta_time + "fps");
         Window.currentScene.update(delta_time);
-        
+        this.draw(getGraphics());
     }
     
-    public static void changeScene(SceneType type) {
-        switch (type) {
-            case MENU_SCENE:
-                Window.currentScene = new MenuScene();
-                break;
-            case PLAY_SCENE:
-                Window.currentScene = new PlayScene();
-                break;
-            default:
-                System.out.println("Invalid scene!");
-                break;
-        }
+    public void draw(Graphics g) {
+        renderOffScreen(bufferGraphics);
+        g.drawImage(bufferImage, 0, 30, getWidth(), getHeight(), null);
     }
-
+    
+    /**
+     * this function draws all the objects to an image called bufferImage
+     * and then the bufferImage will be drawn to the window (JFrame)
+     * so the movement of objects will be more smooth.:)
+     * @param g bufferGraphics
+     */
+    public void renderOffScreen(Graphics g) {
+        Graphics2D g2D = (Graphics2D) g;
+        Window.currentScene.draw(g2D);
+    }
+    
+    /**
+     * switch between menuScene and playScene...:)
+     * @param type type of new scene
+     */
+    public static void changeScene(SceneType type) {
+        // enhanced switch case statement;)
+        switch (type) {
+            case MENU_SCENE -> Window.currentScene = new MenuScene();
+            case PLAY_SCENE -> Window.currentScene = new PlayScene();
+            default -> System.out.println("Invalid scene!");
+        }
+        Window.currentScene.init();
+        Window.currentScene.start();
+    }
+    
+    /**
+     * Game loop
+     */
     @Override
     public void run() {
+        // variables for calculating delta time
         double lastFrameTime = 0.0;
         double time;
         double delta_time;
