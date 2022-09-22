@@ -1,15 +1,14 @@
 package components;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class Sprite extends Component {
     public String path;
     public BufferedImage image;
-    int width, height;
-    int row, col;
+    private int width, height;
 
     public Sprite(String path) {
         this.path = path;
@@ -18,19 +17,22 @@ public class Sprite extends Component {
             image = ImageIO.read(new File(path));
             width = image.getWidth();
             height = image.getHeight();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
 //            System.out.println("Can't load image file at: " + path);
 //            System.exit(-1);
         }
     }
 
-    @Override
-    public void draw(Graphics2D g2) {
-        int x = row;
-        int y = col;
-        g2.drawImage(image, x, y, width, height, null);
+    public int getWidth() {
+        return width;
     }
 
+    public int getHeight() {
+        return height;
+    }
 
+    public BufferedImage getImage() {
+        return image;
+    }
 }

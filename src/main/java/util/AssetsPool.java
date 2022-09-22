@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AssetsPool {
-    static Map<String, Sprite> sprites = new HashMap<>();
+    private static Map<String, Sprite> sprites = new HashMap<>();
 
     public static boolean hasSprite(String path) {
         File file = new File(path);
