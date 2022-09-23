@@ -1,6 +1,8 @@
 package scenes;
 
 import core.GameObject;
+import core.Renderer;
+
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +10,11 @@ import java.util.List;
 public abstract class Scene {
     protected boolean isRunning = false;
     protected List<GameObject> gameObjects;
+    protected Renderer renderer;
     
     public Scene() {
         this.gameObjects = new ArrayList<>();
+        this.renderer = new Renderer();
     }
     
     public void init() {}
