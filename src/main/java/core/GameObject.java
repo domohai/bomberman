@@ -26,8 +26,8 @@ public class GameObject {
      * @param dt delta time.
      */
     public void update(double dt) {
-        for (int i = 0; i < this.components.size(); i++) {
-            this.components.get(i).update(dt);
+        for (Component component : this.components) {
+            component.update(dt);
         }
     }
     
