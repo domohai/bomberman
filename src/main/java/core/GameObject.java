@@ -7,6 +7,7 @@ import java.util.List;
 
 public class GameObject {
     private List<Component> components;
+    private Transform transform = null; // remember to set this after creating gameObject
     
     public GameObject() {
         this.components = new ArrayList<>();
@@ -90,5 +91,13 @@ public class GameObject {
         // after adding the component to this gameObject,
         // we'll set the reference gameObject of the component to this gameObject
         newComponent.setGameObject(this);
+    }
+    
+    public Transform getTransform() {
+        return transform;
+    }
+    
+    public void setTransform(Transform transform) {
+        this.transform = transform;
     }
 }
