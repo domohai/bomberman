@@ -1,13 +1,14 @@
-package components;
+package core.GameObject.components;
 
-import core.GameObject;
+import core.GameObject.GameObject;
 import java.awt.Graphics2D;
 
 public abstract class Component {
     /**
      * this gameObject is the gameObject that are having this component
-     * it'll be helpful when we want components of the gameObject
+     * it'll be helpful when we want core.GameObject.components of the gameObject
      * to communicate with each other
+     * (reference to the superclass aka gameObject contain this component)
      */
     protected transient GameObject gameObject = null;
     

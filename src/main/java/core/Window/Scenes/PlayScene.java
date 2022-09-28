@@ -1,6 +1,6 @@
-package scenes;
+package core.Window.Scenes;
 
-import core.GameObject;
+import core.GameObject.GameObject;
 import java.awt.Graphics2D;
 
 public class PlayScene extends Scene {

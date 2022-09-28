@@ -1,4 +1,4 @@
-import core.Window;
+import core.Window.Window;
 
 public class Main {
 	public static void main(String[] args) {

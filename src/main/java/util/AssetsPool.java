@@ -1,6 +1,6 @@
 package util;
 
-import components.SpriteSheet;
+import core.GameObject.components.SpriteSheet;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;

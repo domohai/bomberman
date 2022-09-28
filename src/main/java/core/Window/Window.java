@@ -1,9 +1,11 @@
-package core;
+package core.Window;
 
-import scenes.MenuScene;
-import scenes.PlayScene;
-import scenes.Scene;
-import enums.SceneType;
+import core.KeyController;
+import core.MouseController;
+import core.Window.Scenes.MenuScene;
+import core.Window.Scenes.PlayScene;
+import core.Window.Scenes.Scene;
+import core.Window.Scenes.SceneType;
 import util.Const;
 import util.Time;
 import javax.swing.JFrame;

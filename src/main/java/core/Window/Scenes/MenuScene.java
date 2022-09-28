@@ -1,4 +1,4 @@
-package scenes;
+package core.Window.Scenes;
 
 import java.awt.Graphics2D;
 

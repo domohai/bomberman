@@ -1,4 +1,4 @@
-package components;
+package core.GameObject.components;
 
 import util.Const;
 import util.Prefabs;

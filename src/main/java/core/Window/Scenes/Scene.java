@@ -1,7 +1,6 @@
-package scenes;
+package core.Window.Scenes;
 
-import core.GameObject;
-import core.Renderer;
+import core.GameObject.GameObject;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
