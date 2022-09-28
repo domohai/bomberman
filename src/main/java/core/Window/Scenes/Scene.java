@@ -17,6 +17,7 @@ public abstract class Scene {
     }
     
     public void init() {}
+    public void load_resources() {}
     
     public void start() {
         for (GameObject g : this.gameObjects) {
@@ -31,5 +32,6 @@ public abstract class Scene {
     public void addGameObject(GameObject newGameObject) {
         this.gameObjects.add(newGameObject);
         if (this.isRunning) newGameObject.start();
+        this.renderer.submit(newGameObject);
     }
 }

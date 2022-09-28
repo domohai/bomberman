@@ -1,7 +1,5 @@
 package core.GameObject.components;
 
-import util.Const;
-
 import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +13,12 @@ public class StateMachine extends Component {
     public StateMachine() {
         this.states = new HashMap<>();
         this.triggerMap = new HashMap<>();
+        this.currentState = null;
     }
     
     public void changeState(String triggerKey) {
-        State newState = states.get(triggerMap.get(new Trigger(currentState.getState(), triggerKey)));
+//        State newState = states.get(triggerMap.get(new Trigger(currentState.getState(), triggerKey)));
+        State newState = states.get(triggerKey);
         if(newState != null) currentState = newState;
     }
     
@@ -29,7 +29,7 @@ public class StateMachine extends Component {
     
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(currentState.getCurrentFrameImage(), gameObject.getPositionX(), gameObject.getPositionY(), Const.TILE_W, Const.TILE_H, null);
+        g2D.drawImage(currentState.getCurrentFrameImage(), gameObject.getPositionX(), gameObject.getPositionY(), 64, 64, null);
     }
     
     /**

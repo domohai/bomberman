@@ -97,6 +97,7 @@ public class Window extends JFrame implements Runnable {
             case PLAY_SCENE -> Window.currentScene = new PlayScene();
             default -> System.out.println("Invalid scene!");
         }
+        Window.currentScene.load_resources();
         Window.currentScene.init();
         Window.currentScene.start();
     }
