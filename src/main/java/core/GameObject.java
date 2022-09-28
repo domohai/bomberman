@@ -100,4 +100,12 @@ public class GameObject {
     public void setTransform(Transform transform) {
         this.transform = transform;
     }
+    
+    public int getPositionX() {
+        return (int) this.transform.getPosition().getX();
+    }
+    
+    public int getPositionY() {
+        return (int) this.transform.getPosition().getY();
+    }
 }

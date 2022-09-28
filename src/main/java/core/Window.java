@@ -7,6 +7,7 @@ import enums.SceneType;
 import util.Const;
 import util.Time;
 import javax.swing.JFrame;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -49,6 +50,7 @@ public class Window extends JFrame implements Runnable {
     public void init() {
         bufferImage = createImage(getWidth(), getHeight());
         bufferGraphics = bufferImage.getGraphics();
+        bufferGraphics.setColor(Color.BLACK);
         Window.changeScene(SceneType.PLAY_SCENE);
     }
 
@@ -78,6 +80,7 @@ public class Window extends JFrame implements Runnable {
      */
     public void renderOffScreen(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
+        g2D.fillRect(0, 0, getWidth(), getHeight());
         Window.currentScene.draw(g2D);
     }
     

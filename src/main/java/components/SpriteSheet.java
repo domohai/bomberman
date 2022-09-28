@@ -20,6 +20,10 @@ public class SpriteSheet {
         }
     }
     
+    public List<BufferedImage> getSheet() {
+        return sheet;
+    }
+    
     public String getPath() {
         return path;
     }
