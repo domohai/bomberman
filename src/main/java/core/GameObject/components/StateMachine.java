@@ -1,5 +1,7 @@
 package core.GameObject.components;
 
+import util.Const;
+
 import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class StateMachine extends Component {
     
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(currentState.getCurrentFrameImage(), gameObject.getPositionX(), gameObject.getPositionY(), 64, 64, null);
+        g2D.drawImage(currentState.getCurrentFrameImage(), gameObject.getPositionX(), gameObject.getPositionY(), Const.TILE_W, Const.TILE_H, null);
     }
     
     /**
