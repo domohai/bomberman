@@ -1,6 +1,5 @@
 package core.GameObject.components;
 
-import util.Const;
 import util.Prefabs;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class SpriteSheet {
         BufferedImage parent = Prefabs.readImage(this.path);
         if (parent == null) return;
         for(int i = 0; i < numberOfSprites; i++) {
-            this.sheet.add(parent.getSubimage(cordX + i * Const.TILE_W, cordY, Const.TILE_W, Const.TILE_H));
+            this.sheet.add(parent.getSubimage(cordX + i * 64, cordY, 64, 64));
         }
     }
     

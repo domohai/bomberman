@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class State {
-    private String path;
     private List<Frame> frames;
     private String state;
     private boolean loop = false;
@@ -13,7 +12,7 @@ public class State {
     private transient double tracker = 0.0;
     
     public State() {}
-    public State(String state, String path) {
+    public State(String state) {
         this.state = state;
         this.frames = new ArrayList<>();
     }
@@ -44,9 +43,5 @@ public class State {
     
     public String getState() {
         return this.state;
-    }
-    
-    public String getPath() {
-        return path;
     }
 }
