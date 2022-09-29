@@ -7,10 +7,14 @@ import core.GameObject.components.PlayerMovement;
 import core.GameObject.components.SpriteSheet;
 import core.GameObject.components.State;
 import core.GameObject.components.StateMachine;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class Prefabs {
     public static BufferedImage readImage(String path) {
@@ -23,7 +27,43 @@ public class Prefabs {
         }
         return parent;
     }
-    
+
+    public static char[][] loadMap(String path) {
+        char[][] a = null;
+        try {
+            FileReader fileReader = new FileReader(path);
+            BufferedReader reader = new BufferedReader(fileReader);
+            String line = reader.readLine();
+            StringTokenizer st = new StringTokenizer(line);
+            int row = Integer.parseInt(st.nextToken());
+            int col = Integer.parseInt(st.nextToken());
+            a = new char[row][col];
+            for (int i = 0; i < row; i++) {
+                line = reader.readLine();
+                for (int j = 0; j < line.length(); j++)
+                    a[i][j] = line.charAt(j);
+            }
+            reader.close();
+        } catch(IOException e) {
+            System.out.println("Cant load map");
+            e.printStackTrace();
+        }
+        return a;
+    }
+
+    public static GameObject generateBlock() {
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Wall.png");
+        GameObject block = new GameObject();
+        StateMachine machine = new StateMachine();
+        State idle = new State("idle");
+        idle.setLoop(false);
+        idle.addFrame(new Frame(sheet.getSheet().get(0), -1));
+        machine.addState(idle);
+        machine.setDefaultState("idle");
+        block.addComponent(machine);
+        return block;
+    }
+
     public static GameObject generatePlayer() {
         SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/DoctorBombLeft.png");
         SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/DoctorBombRight.png");
@@ -31,7 +71,7 @@ public class Prefabs {
         SpriteSheet runDownSheet = AssetsPool.getSpriteSheet("src/main/resources/DoctorBombDown.png");
         // check
         if (runLeftSheet == null || runDownSheet == null
-        || runRightSheet == null || runUpSheet == null) {
+                || runRightSheet == null || runUpSheet == null) {
             System.out.println("Forgot to load doctorBomb spriteSheet!");
             return null;
         }
