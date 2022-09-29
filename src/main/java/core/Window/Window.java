@@ -71,7 +71,7 @@ public class Window extends JFrame implements Runnable {
     
     public void draw(Graphics g) {
         renderOffScreen(bufferGraphics);
-        g.drawImage(bufferImage, 0, 30, getWidth(), getHeight(), null);
+        g.drawImage(bufferImage, 7, 30, getWidth(), getHeight(), null);
     }
     
     /**

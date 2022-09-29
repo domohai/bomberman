@@ -78,7 +78,7 @@ public class Prefabs {
         // create new game object
         GameObject player = new GameObject();
         // set position
-        player.setTransform(new Transform(new Vector2D(50, 50), 0));
+        player.setTransform(new Transform(new Vector2D(0, 50), 0));
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);

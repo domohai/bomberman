@@ -26,8 +26,4 @@ public class Transform {
     public int getzIndex() {
         return zIndex;
     }
-    
-    public void setzIndex(int zIndex) {
-        this.zIndex = zIndex;
-    }
 }
