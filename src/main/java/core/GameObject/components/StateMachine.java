@@ -3,22 +3,18 @@ package core.GameObject.components;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class StateMachine extends Component {
     private Map<String, State> states;
     private transient State currentState;
-    private Map<Trigger, String> triggerMap;
     
     public StateMachine() {
         this.states = new HashMap<>();
-        this.triggerMap = new HashMap<>();
         this.currentState = null;
     }
     
-    public void changeState(String triggerKey) {
-//        State newState = states.get(triggerMap.get(new Trigger(currentState.getState(), triggerKey)));
-        State newState = states.get(triggerKey);
+    public void changeState(String newStateTitle) {
+        State newState = states.get(newStateTitle);
         if(newState != null) currentState = newState;
     }
     
@@ -41,49 +37,11 @@ public class StateMachine extends Component {
         this.currentState = this.states.get(state);
     }
     
-    public void addTriggerMap(String srcState, String trigger, String desState) {
-        this.triggerMap.putIfAbsent(new Trigger(srcState, trigger), desState);
-    }
-    
     public void addState(State state) {
         this.states.putIfAbsent(state.getState(), state);
     }
     
     public Map<String, State> getStates() {
         return states;
-    }
-    
-    private class Trigger {
-        private String state;
-        private String triggerKey;
-        
-        public Trigger() {
-        }
-        
-        public Trigger(String state, String triggerKey) {
-            this.state = state;
-            this.triggerKey = triggerKey;
-        }
-        
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Trigger trigger = (Trigger) o;
-            return Objects.equals(state, trigger.state) && Objects.equals(triggerKey, trigger.triggerKey);
-        }
-        
-        @Override
-        public int hashCode() {
-            return Objects.hash(state, triggerKey);
-        }
-        
-        public String getState() {
-            return state;
-        }
-        
-        public String getTriggerKey() {
-            return triggerKey;
-        }
     }
 }
