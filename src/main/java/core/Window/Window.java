@@ -9,10 +9,7 @@ import core.Window.Scenes.SceneType;
 import util.Const;
 import util.Time;
 import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 
 /**
  * We are implementing a system called Entity component system (ECS)
@@ -38,12 +35,13 @@ public class Window extends JFrame implements Runnable {
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setTitle(Const.SCREEN_TITLE);
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addMouseListener(MouseController.get()); // add mouseListener
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
+        this.setMaximumSize(new Dimension(Const.SCREEN_WIDTH,Const.SCREEN_HEIGHT));
     }
     
     /**
@@ -122,5 +120,9 @@ public class Window extends JFrame implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Scene getCurrentScene() {
+        return currentScene;
     }
 }

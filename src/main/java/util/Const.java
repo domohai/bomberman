@@ -10,7 +10,7 @@ public class Const {
     public static final int MIN_Z_INDEX = -10;
     public static final int MAX_Z_INDEX = 10;
     
-    public static final double DEFAULT_FRAME_TIME = 0.2;
+    public static final double DEFAULT_FRAME_TIME = 0.05;
     
     public static final int PLAYER_SPEED = 150;
 
