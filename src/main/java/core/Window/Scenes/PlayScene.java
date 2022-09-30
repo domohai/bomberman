@@ -67,4 +67,8 @@ public class PlayScene extends Scene {
             }
         }
     }
+
+    public char[][] getMap() {
+        return map;
+    }
 }
