@@ -24,6 +24,8 @@ public class PlayScene extends Scene {
     public void init() {
         test = Prefabs.generatePlayer();
         this.addGameObject(test);
+        test = Prefabs.generateBot();
+        this.addGameObject(test);
     }
     
     @Override
@@ -37,6 +39,14 @@ public class PlayScene extends Scene {
         AssetsPool.addSpriteSheet(doctorBombRunRight.getPath(), doctorBombRunRight);
         SpriteSheet doctorBombRunDown = new SpriteSheet("src/main/resources/DoctorBombDown.png", 0, 0, 9);
         AssetsPool.addSpriteSheet(doctorBombRunDown.getPath(), doctorBombRunDown);
+        SpriteSheet redOverlordRunUp = new SpriteSheet("src/main/resources/RedOverlordUp.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunUp.getPath(), redOverlordRunUp);
+        SpriteSheet redOverlordRunLeft = new SpriteSheet("src/main/resources/RedOverlordLeft.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunLeft.getPath(), redOverlordRunLeft);
+        SpriteSheet redOverlordRunRight = new SpriteSheet("src/main/resources/RedOverlordRight.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunRight.getPath(), redOverlordRunRight);
+        SpriteSheet redOverlordRunDown = new SpriteSheet("src/main/resources/RedOverlordDown.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunDown.getPath(), redOverlordRunDown);
         SpriteSheet wall = new SpriteSheet("src/main/resources/Wall.png", 0, 0, 1);
         AssetsPool.addSpriteSheet(wall.getPath(), wall);
         loadMap();

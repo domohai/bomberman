@@ -37,7 +37,13 @@ public class Collision {
         v.setY(y - spy);
     }
 
+    /*
+    check surrounding tile
+        ###
+        #*#
+        ###
+    */
     public static boolean movingObject(Vector2D v, double dx, double dy) {
-
+        return true;
     }
 }
