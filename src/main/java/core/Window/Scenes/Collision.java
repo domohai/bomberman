@@ -43,7 +43,18 @@ public class Collision {
         #*#
         ###
     */
-    public static boolean movingObject(Vector2D v, double dx, double dy) {
-        return true;
-    }
+    /*
+        Collide class:
+            Vector2D for adjusted position
+            Boolean for hit
+            Boolean for enemy hit
+
+     */
+//    public static boolean movingObject(Vector2D v, double dx, double dy, char[][] map) {
+//        if(dx < 0) {
+//            int i = (int) v.getY() / Const.TILE_H;
+//            int j = (int) v.getX() / Const.TILE_W;
+//            if('1' <= map[i-1][j-1] && map[i-1][j-1] <= '9')
+//        }
+//    }
 }

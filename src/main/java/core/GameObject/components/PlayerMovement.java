@@ -6,7 +6,6 @@ import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
-
 import java.awt.event.KeyEvent;
 
 public class PlayerMovement extends Component {

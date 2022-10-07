@@ -27,15 +27,16 @@ public class BotMovement extends Component{
         map = scene.getMap();
     }
 
-    private static int dir;
-    private static double lastUpdTime;
+    private int dir;
+    private double lastUpdTime;
+
     @Override
     public void update(double dt) {
         if(Time.getTime() - lastUpdTime >= 2) {
             dir = (int)Math.floor(Math.random()*5); //0 1 2 3 4 = idle up down left right
             lastUpdTime = Time.getTime();
         }
-        switch (dir){
+        switch (dir) {
             case 1:
                 stateMachine.changeState("runUp");
                 Collision.stillObject(transform.getPosition(), 0, -(Const.PLAYER_SPEED * dt), map);

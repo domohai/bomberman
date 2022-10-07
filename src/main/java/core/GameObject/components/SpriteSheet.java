@@ -20,8 +20,12 @@ public class SpriteSheet {
         }
     }
     
-    public List<BufferedImage> getSheet() {
-        return sheet;
+    public BufferedImage getSprite(int index) {
+        return sheet.get(index);
+    }
+
+    public int size() {
+        return sheet.size();
     }
     
     public String getPath() {
