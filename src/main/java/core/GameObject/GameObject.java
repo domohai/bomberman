@@ -1,17 +1,19 @@
 package core.GameObject;
 
 import core.GameObject.components.Component;
-
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameObject {
     private List<Component> components;
-    private Transform transform = null; // remember to set this after creating gameObject
+    private Transform transform; // remember to set this after creating gameObject
+    private boolean alive;
     
     public GameObject() {
         this.components = new ArrayList<>();
+        alive = true;
+        transform = null;
     }
     
     /**
@@ -108,5 +110,13 @@ public class GameObject {
     
     public int getPositionY() {
         return (int) this.transform.getPosition().getY();
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }
