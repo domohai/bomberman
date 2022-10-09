@@ -32,7 +32,6 @@ public class StateMachine extends Component {
     
     /**
      * set default state.
-     *
      * @param state state's name.
      */
     public void setDefaultState(String state) {

@@ -1,6 +1,7 @@
 package util;
 
 import core.GameObject.GameObject;
+import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.*;
 
@@ -41,7 +42,7 @@ public class Prefabs {
             }
             reader.close();
         } catch(IOException e) {
-            System.out.println("Cant load map");
+            System.out.println("Can't load map");
             e.printStackTrace();
         }
         return a;
@@ -76,7 +77,7 @@ public class Prefabs {
             return null;
         }
         // create new game object
-        GameObject player = new GameObject();
+        GameObject player = new GameObject(ObjectType.PLAYER);
         // set position
         player.setTransform(new Transform(new Vector2D(64, 64), 0));
         // idle left state
@@ -152,9 +153,7 @@ public class Prefabs {
             return null;
         }
         // create new game object
-        GameObject bot = new GameObject();
-        // set position
-        bot.setTransform(new Transform(new Vector2D(64, 64), 0));
+        GameObject bot = new GameObject(ObjectType.MOVING);
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);

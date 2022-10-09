@@ -1,7 +1,6 @@
 package core.Window.Scenes;
 
 import core.GameObject.GameObject;
-
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.List;
 public abstract class Scene {
     protected boolean isRunning = false;
     protected List<GameObject> gameObjects;
+    
     protected Renderer renderer;
     
     public Scene() {

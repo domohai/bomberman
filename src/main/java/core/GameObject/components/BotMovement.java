@@ -1,20 +1,19 @@
 package core.GameObject.components;
 
 import core.GameObject.Transform;
-import core.KeyController;
 import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
 import util.Time;
 
-import java.awt.event.KeyEvent;
-
 public class BotMovement extends Component{
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
     private Transform transform;
     private char[][] map;
+    private int dir;
+    private double lastUpdTime;
 
     public BotMovement() {
     }
@@ -26,9 +25,6 @@ public class BotMovement extends Component{
         PlayScene scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
     }
-
-    private int dir;
-    private double lastUpdTime;
 
     @Override
     public void update(double dt) {
@@ -66,5 +62,6 @@ public class BotMovement extends Component{
                 }
                 break;
         }
+        map[(gameObject.getPositionY() + 32) / Const.TILE_H][(gameObject.getPositionX() + 32) / Const.TILE_W] = 'b';
     }
 }

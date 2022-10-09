@@ -5,12 +5,12 @@ import util.Const;
 import util.Vector2D;
 
 public class Collision {
-    public static final double pw = 32; //player size
-    public static final double ph = 50;
+    public static final double pw = 30; //player size
+    public static final double ph = 42;
     public static final double spx = 16; //sprite offset
-    public static final double spy = 13;
+    public static final double spy = 15;
 
-    private static int c1,c2,r1,r2;
+    private static int c1, c2, r1, r2;
     //dx xor dy != 0
     public static void stillObject(Vector2D v, double dx, double dy, char[][] map) {
         double x = v.getX() + spx;
@@ -36,6 +36,8 @@ public class Collision {
         v.setX(x - spx);
         v.setY(y - spy);
     }
+    
+    
 
     /*
     check surrounding tile
@@ -50,11 +52,13 @@ public class Collision {
             Boolean for enemy hit
 
      */
-//    public static boolean movingObject(Vector2D v, double dx, double dy, char[][] map) {
-//        if(dx < 0) {
-//            int i = (int) v.getY() / Const.TILE_H;
-//            int j = (int) v.getX() / Const.TILE_W;
-//            if('1' <= map[i-1][j-1] && map[i-1][j-1] <= '9')
-//        }
-//    }
+    public static boolean movingObject(GameObject player, GameObject bot) {
+        // c1, c2 is the center of player
+        c1 = player.getPositionX() + 32;
+        c2 = player.getPositionY() + 32;
+        // r1, r2 is the center of bot
+        r1 = bot.getPositionX() + 32;
+        r2 = bot.getPositionY() + 32;
+        return (Math.abs(c1 - r1) - pw) <= 0 && (Math.abs(c2 - r2) - ph) <= 0;
+    }
 }
