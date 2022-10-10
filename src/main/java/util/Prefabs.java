@@ -47,6 +47,44 @@ public class Prefabs {
         }
         return a;
     }
+    
+    public static GameObject generateBomb() {
+        SpriteSheet bombSprite = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
+        // create bomb
+        GameObject bomb = new GameObject(ObjectType.UNSTABLE);
+        // state
+        State countDown = new State("count");
+        countDown.setLoop(false);
+        for (int i = 0; i < bombSprite.size(); i++) {
+            countDown.addFrame(new Frame(bombSprite.getSprite(i), 0.8));
+        }
+        // machine
+        StateMachine machine = new StateMachine();
+        machine.addState(countDown);
+        machine.setDefaultState("count");
+        bomb.addComponent(machine);
+        bomb.addComponent(new Bomb());
+        return bomb;
+    }
+    
+    public static GameObject generateExplosion() {
+        SpriteSheet explosion = AssetsPool.getSpriteSheet("src/main/resources/Explosion.png");
+        // create explosion
+        GameObject ex = new GameObject(ObjectType.UNSTABLE);
+        // State
+        State exState = new State("idle");
+        exState.setLoop(false);
+        for (int i = 0; i < explosion.size(); i++) {
+            exState.addFrame(new Frame(explosion.getSprite(i), 0.08));
+        }
+        // machine
+        StateMachine machine = new StateMachine();
+        machine.addState(exState);
+        machine.setDefaultState("idle");
+        ex.addComponent(machine);
+        ex.addComponent(new Explosion());
+        return ex;
+    }
 
     public static GameObject generateBlock() {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Wall.png");

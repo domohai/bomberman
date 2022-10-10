@@ -8,6 +8,8 @@ import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
+import util.Prefabs;
+import util.Vector2D;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -16,10 +18,10 @@ public class PlayerMovement extends Component {
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
     private Map<ObjectType, List<GameObject>> gameObjectMap = null;
-    private Transform transform;
+    private Transform transform = null;
     private char[][] map;
-    private int x = 0;
-    private int y = 0;
+    private PlayScene scene = null;
+    private double cooldown = 1.0;
 
     public PlayerMovement() {
     }
@@ -28,15 +30,14 @@ public class PlayerMovement extends Component {
     public void start() {
         stateMachine = gameObject.getComponent(StateMachine.class);
         transform = gameObject.getTransform();
-        PlayScene scene = (PlayScene) Window.getCurrentScene();
+        scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
         gameObjectMap = scene.getGameObject();
     }
 
     @Override
     public void update(double dt) {
-        x = ((gameObject.getPositionY() + 32) / Const.TILE_H);
-        y = ((gameObject.getPositionX() + 32) / Const.TILE_W);
+        cooldown -= dt;
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
             Collision.stillObject(transform.getPosition(), 0, -(Const.PLAYER_SPEED * dt), map);
@@ -61,7 +62,19 @@ public class PlayerMovement extends Component {
                 case RIGHT -> stateMachine.changeState("idleRight");
             }
         }
-        map[x][y] = 'p';
+        int i = ((gameObject.getPositionY() + 32) / Const.TILE_H);
+        int j = ((gameObject.getPositionX() + 32) / Const.TILE_W);
+        // check if space key is pressed
+        if (cooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
+            GameObject newBomb = Prefabs.generateBomb();
+            newBomb.setTransform(new Transform(new Vector2D(j * Const.TILE_W, i * Const.TILE_H), -1));
+            scene.addGameObject(newBomb);
+//            GameObject obj = Prefabs.generateExplosion();
+//            obj.setTransform(new Transform(new Vector2D(gameObject.getPositionX(), gameObject.getPositionY()), -1));
+//            scene.addGameObject(obj);
+            cooldown = 2.0;
+        }
+        map[i][j] = 'p';
         for (GameObject bot : gameObjectMap.get(ObjectType.MOVING)) {
             if (Collision.movingObject(gameObject, bot)) {
                 System.out.println("colliding");

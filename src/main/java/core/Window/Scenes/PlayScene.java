@@ -9,6 +9,7 @@ import util.Const;
 import util.Prefabs;
 import util.Vector2D;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ public class PlayScene extends Scene {
     private char[][] map;
     private Map<ObjectType, List<GameObject>> gameObject;
     private List<GameObject> toBeRemove;
+    private BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
     
     public PlayScene() {
         super();
@@ -74,9 +76,12 @@ public class PlayScene extends Scene {
             }
         }
         for (ObjectType type : gameObject.keySet()) {
-            for (GameObject g : gameObject.get(type)) {
-                g.update(dt);
-                if (!g.isAlive()) toBeRemove.add(g);
+            List<GameObject> temp = gameObject.get(type);
+            for (int i = 0; i < temp.size(); i++) {
+                temp.get(i).update(dt);
+                if (!temp.get(i).isAlive()) {
+                    toBeRemove.add(temp.get(i));
+                }
             }
         }
         if (toBeRemove.size() > 0) {
@@ -89,6 +94,7 @@ public class PlayScene extends Scene {
     
     @Override
     public void draw(Graphics2D g2D) {
+        g2D.drawImage(background, 0, 0, background.getWidth(), background.getHeight(), null);
         renderer.render(g2D);
     }
     
@@ -141,6 +147,10 @@ public class PlayScene extends Scene {
         AssetsPool.addSpriteSheet(redOverlordRunDown.getPath(), redOverlordRunDown);
         SpriteSheet wall = new SpriteSheet("src/main/resources/Wall.png", 0, 0, 1);
         AssetsPool.addSpriteSheet(wall.getPath(), wall);
+        SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0 , 40, 52, 6);
+        AssetsPool.addSpriteSheet(bomb.getPath(), bomb);
+        SpriteSheet explosion = new SpriteSheet("src/main/resources/Explosion.png", 0, 0, 48, 48, 18);
+        AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
     }
 
     public char[][] getMap() {
