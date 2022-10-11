@@ -56,6 +56,7 @@ public class PlayScene extends Scene {
                 g.start();
             }
         }
+        isRunning = true;
     }
     
     @Override
@@ -79,9 +80,7 @@ public class PlayScene extends Scene {
             List<GameObject> temp = gameObject.get(type);
             for (int i = 0; i < temp.size(); i++) {
                 temp.get(i).update(dt);
-                if (!temp.get(i).isAlive()) {
-                    toBeRemove.add(temp.get(i));
-                }
+                if (!temp.get(i).isAlive()) toBeRemove.add(temp.get(i));
             }
         }
         if (toBeRemove.size() > 0) {

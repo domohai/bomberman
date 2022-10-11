@@ -14,7 +14,6 @@ public abstract class Scene {
     public Scene() {
         this.gameObjects = new ArrayList<>();
         this.renderer = new Renderer();
-        this.isRunning = true;
     }
     
     public void init() {}
@@ -24,6 +23,7 @@ public abstract class Scene {
         for (GameObject g : this.gameObjects) {
             g.start();
         }
+        this.isRunning = true;
     }
     
     public abstract void update(double dt);
