@@ -1,9 +1,9 @@
 package core.GameObject.components;
 
-public class Explosion extends Component {
+public class Flame extends Component {
     private double countDownTime = 3.0;
     
-    public Explosion() {
+    public Flame() {
     
     }
     

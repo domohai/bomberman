@@ -67,8 +67,8 @@ public class Prefabs {
         return bomb;
     }
     
-    public static GameObject generateExplosion() {
-        SpriteSheet explosion = AssetsPool.getSpriteSheet("src/main/resources/Explosion.png");
+    public static GameObject generateFlame() {
+        SpriteSheet explosion = AssetsPool.getSpriteSheet("src/main/resources/Flame.png");
         // create explosion
         GameObject ex = new GameObject(ObjectType.UNSTABLE);
         // State
@@ -82,7 +82,7 @@ public class Prefabs {
         machine.addState(exState);
         machine.setDefaultState("idle");
         ex.addComponent(machine);
-        ex.addComponent(new Explosion());
+        ex.addComponent(new Flame());
         return ex;
     }
 
@@ -117,7 +117,7 @@ public class Prefabs {
         // create new game object
         GameObject player = new GameObject(ObjectType.PLAYER);
         // set position
-        player.setTransform(new Transform(new Vector2D(64, 64), 0));
+        player.setTransform(new Transform(new Box2D(64, 64,30,42,16,15), 0));
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);
@@ -192,6 +192,8 @@ public class Prefabs {
         }
         // create new game object
         GameObject bot = new GameObject(ObjectType.MOVING);
+        // set position
+        bot.setTransform(new Transform(new Box2D(5*64, 64,30,42,16,15), 0));
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);

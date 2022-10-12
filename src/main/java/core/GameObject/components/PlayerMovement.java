@@ -9,7 +9,8 @@ import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
 import util.Prefabs;
-import util.Vector2D;
+import util.Box2D;
+
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class PlayerMovement extends Component {
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
     private Map<ObjectType, List<GameObject>> gameObjectMap = null;
-    private Transform transform = null;
+    private Box2D box2d;
     private char[][] map;
     private PlayScene scene = null;
     private double cooldown = 1.0;
@@ -29,7 +30,7 @@ public class PlayerMovement extends Component {
     @Override
     public void start() {
         stateMachine = gameObject.getComponent(StateMachine.class);
-        transform = gameObject.getTransform();
+        box2d = gameObject.getTransform().getPosition();
         scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
         gameObjectMap = scene.getGameObject();
@@ -37,22 +38,22 @@ public class PlayerMovement extends Component {
 
     @Override
     public void update(double dt) {
-        cooldown -= dt;
+        //System.out.println((int) box2d.getCenterY() / 64 + " " + (int) box2d.getCenterX() / 64);
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
-            Collision.stillObject(transform.getPosition(), 0, -(Const.PLAYER_SPEED * dt), map);
+            Collision.stillObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
             previousDirection = Direction.UP;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_DOWN)) {
             stateMachine.changeState("runDown");
-            Collision.stillObject(transform.getPosition(), 0, (Const.PLAYER_SPEED * dt), map);
+            Collision.stillObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
             previousDirection = Direction.DOWN;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_LEFT)) {
             stateMachine.changeState("runLeft");
-            Collision.stillObject(transform.getPosition(), -(Const.PLAYER_SPEED * dt), 0, map);
+            Collision.stillObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
             previousDirection = Direction.LEFT;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_RIGHT)) {
             stateMachine.changeState("runRight");
-            Collision.stillObject(transform.getPosition(), (Const.PLAYER_SPEED * dt), 0, map);
+            Collision.stillObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
             previousDirection = Direction.RIGHT;
         } else {
             switch (previousDirection) {
@@ -62,21 +63,20 @@ public class PlayerMovement extends Component {
                 case RIGHT -> stateMachine.changeState("idleRight");
             }
         }
-        int i = ((gameObject.getPositionY() + 32) / Const.TILE_H);
-        int j = ((gameObject.getPositionX() + 32) / Const.TILE_W);
+        int i = (int) box2d.getCenterY() / Const.TILE_H;
+        int j = (int) box2d.getCenterX() / Const.TILE_W;
         // check if space key is pressed
+        cooldown -= dt;
         if (cooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             GameObject newBomb = Prefabs.generateBomb();
-            newBomb.setTransform(new Transform(new Vector2D(j * Const.TILE_W, i * Const.TILE_H), -1));
+            newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
+                    i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H)), -1));
             scene.addGameObject(newBomb);
-//            GameObject obj = Prefabs.generateExplosion();
-//            obj.setTransform(new Transform(new Vector2D(gameObject.getPositionX(), gameObject.getPositionY()), -1));
-//            scene.addGameObject(obj);
             cooldown = 2.0;
         }
         map[i][j] = 'p';
         for (GameObject bot : gameObjectMap.get(ObjectType.MOVING)) {
-            if (Collision.movingObject(gameObject, bot)) {
+            if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
                 System.out.println("colliding");
                 gameObject.setAlive(false);
             }
