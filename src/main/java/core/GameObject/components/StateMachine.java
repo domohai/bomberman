@@ -27,12 +27,12 @@ public class StateMachine extends Component {
     
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(currentState.getCurrentFrameImage(), gameObject.getPositionX(), gameObject.getPositionY(), Const.TILE_W, Const.TILE_H, null);
+        g2D.drawImage(currentState.getCurrentFrameImage(), gameObject.getPositionX(), gameObject.getPositionY(),
+        currentState.getCurrentFrameImage().getWidth(), currentState.getCurrentFrameImage().getHeight(), null);
     }
     
     /**
      * set default state.
-     *
      * @param state state's name.
      */
     public void setDefaultState(String state) {

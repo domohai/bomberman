@@ -20,6 +20,18 @@ public class SpriteSheet {
         }
     }
     
+    public SpriteSheet(String file_path, int cordX, int cordY, int width, int height, int numberOfSprites) {
+        this.sheet = new ArrayList<>();
+        this.path = file_path;
+        BufferedImage parent = Prefabs.readImage(this.path);
+        if (parent == null) return;
+        for(int i = 0; i < numberOfSprites; i++) {
+            this.sheet.add(parent.getSubimage(cordX + i * width, cordY, width, height));
+        }
+    }
+    
+    
+    
     public BufferedImage getSprite(int index) {
         return sheet.get(index);
     }

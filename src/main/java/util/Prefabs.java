@@ -1,6 +1,7 @@
 package util;
 
 import core.GameObject.GameObject;
+import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.*;
 
@@ -41,10 +42,48 @@ public class Prefabs {
             }
             reader.close();
         } catch(IOException e) {
-            System.out.println("Cant load map");
+            System.out.println("Can't load map");
             e.printStackTrace();
         }
         return a;
+    }
+    
+    public static GameObject generateBomb() {
+        SpriteSheet bombSprite = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
+        // create bomb
+        GameObject bomb = new GameObject(ObjectType.UNSTABLE);
+        // state
+        State countDown = new State("count");
+        countDown.setLoop(false);
+        for (int i = 0; i < bombSprite.size(); i++) {
+            countDown.addFrame(new Frame(bombSprite.getSprite(i), 0.8));
+        }
+        // machine
+        StateMachine machine = new StateMachine();
+        machine.addState(countDown);
+        machine.setDefaultState("count");
+        bomb.addComponent(machine);
+        bomb.addComponent(new Bomb());
+        return bomb;
+    }
+    
+    public static GameObject generateExplosion() {
+        SpriteSheet explosion = AssetsPool.getSpriteSheet("src/main/resources/Explosion.png");
+        // create explosion
+        GameObject ex = new GameObject(ObjectType.UNSTABLE);
+        // State
+        State exState = new State("idle");
+        exState.setLoop(false);
+        for (int i = 0; i < explosion.size(); i++) {
+            exState.addFrame(new Frame(explosion.getSprite(i), 0.08));
+        }
+        // machine
+        StateMachine machine = new StateMachine();
+        machine.addState(exState);
+        machine.setDefaultState("idle");
+        ex.addComponent(machine);
+        ex.addComponent(new Explosion());
+        return ex;
     }
 
     public static GameObject generateBlock() {
@@ -76,7 +115,7 @@ public class Prefabs {
             return null;
         }
         // create new game object
-        GameObject player = new GameObject();
+        GameObject player = new GameObject(ObjectType.PLAYER);
         // set position
         player.setTransform(new Transform(new Vector2D(64, 64), 0));
         // idle left state
@@ -152,9 +191,7 @@ public class Prefabs {
             return null;
         }
         // create new game object
-        GameObject bot = new GameObject();
-        // set position
-        bot.setTransform(new Transform(new Vector2D(64, 64), 0));
+        GameObject bot = new GameObject(ObjectType.MOVING);
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);
