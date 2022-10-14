@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 public class KeyController extends KeyAdapter {
     private static KeyController instance = null;
-    private boolean[] keyPressed = new boolean[350];
+    private boolean[] keyPressed = new boolean[600];
     
     private KeyController() {}
     
