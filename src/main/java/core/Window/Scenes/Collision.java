@@ -18,22 +18,17 @@ public class Collision {
         int c2 = (int) (x + pw) / Const.TILE_W;
         int r1 = (int) y / Const.TILE_H;
         int r2 = (int) (y + ph) / Const.TILE_H;
-        System.out.println("checking " + c1 + " " + c2 + " " + r1 + " " + r2);
         if (dx < 0 && (map[r1][c1] == '#' || map[r2][c1] == '#')) {
             x = (c1 + 1) * Const.TILE_W + 1;
-            System.out.println("eehhhh left");
         }
         if (dx > 0 && (map[r1][c2] == '#' || map[r2][c2] == '#')) {
             x = c2 * Const.TILE_W - pw - 1;
-            System.out.println("eehhhh right");
         }
         if (dy < 0 && (map[r1][c1] == '#' || map[r1][c2] == '#')) {
             y = (r1 + 1) * Const.TILE_H + 1;
-            System.out.println("eehhhh up");
         }
         if (dy > 0 && (map[r2][c1] == '#' || map[r2][c2] == '#')) {
             y = r2 * Const.TILE_H - ph - 1;
-            System.out.println("eehhhh down");
         }
         box2d.setX(x - spx);
         box2d.setY(y - spy);

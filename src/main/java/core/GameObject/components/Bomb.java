@@ -33,7 +33,7 @@ public class Bomb extends Component {
 
     private void addFlame(double x, double y) {
         GameObject newFlame = Prefabs.generateFlame();
-        System.out.println("flame spawned at" + x / Const.TILE_W + " " + y / Const.TILE_H);
+        //System.out.println("flame spawned at " + (int) y / Const.TILE_H + " " + (int) x / Const.TILE_W);
         newFlame.setTransform(new Transform(new Box2D(x + Const.HALF_TILE_W - Const.HALF_FLAME_SIZE,
                 y + Const.HALF_TILE_H - Const.HALF_FLAME_SIZE), 0));
         scene.addGameObject(newFlame);
@@ -48,9 +48,10 @@ public class Bomb extends Component {
 
             int i = (int) box2d.getY() / Const.TILE_H;
             int j = (int) box2d.getX() / Const.TILE_W;
-            addFlame(box2d.getX(), box2d.getY());
-            int flameLength = 1; //=scene.getPlayerStat().getFlameLength();
-            for (int ip = i + 1; ip <= Math.min(i + flameLength, 20); ip++)
+            //System.out.println("Adding flame at:");
+            addFlame(j * Const.TILE_W, i * Const.TILE_H);
+            int flameLength = 10; //=scene.getPlayerStat().getFlameLength();
+            for (int ip = i + 1; ip <= Math.min(i + flameLength, 12); ip++)
                 if (map[ip][j] != '#') {
                     addFlame(j * Const.TILE_W, ip * Const.TILE_H);
                 } else {
@@ -62,8 +63,9 @@ public class Bomb extends Component {
                 } else {
                     break;
                 }
-            for (int jp = j + 1; jp <= Math.min(j + flameLength, 12); jp++)
+            for (int jp = j + 1; jp <= Math.min(j + flameLength, 20); jp++)
                 if (map[i][jp] != '#') {
+
                     addFlame(jp * Const.TILE_W, i * Const.TILE_H);
                 } else {
                     break;

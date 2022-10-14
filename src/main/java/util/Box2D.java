@@ -44,8 +44,8 @@ public class Box2D {
     }
 
     public void updateCenter() {
-        centerX = x + width / 2;
-        centerY = y + height / 2;
+        centerX = x + spriteOffsetX + width / 2;
+        centerY = y + spriteOffsetY + height / 2;
     }
 
     public double getSpriteOffsetX() {

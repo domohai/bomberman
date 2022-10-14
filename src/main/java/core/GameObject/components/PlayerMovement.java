@@ -63,6 +63,7 @@ public class PlayerMovement extends Component {
                 case RIGHT -> stateMachine.changeState("idleRight");
             }
         }
+        box2d.updateCenter();
         int i = (int) box2d.getCenterY() / Const.TILE_H;
         int j = (int) box2d.getCenterX() / Const.TILE_W;
         // check if space key is pressed
