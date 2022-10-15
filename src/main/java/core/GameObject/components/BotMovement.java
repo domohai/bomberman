@@ -1,16 +1,16 @@
 package core.GameObject.components;
 
-import core.GameObject.Transform;
 import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
 import util.Time;
+import util.Box2D;
 
-public class BotMovement extends Component{
+public class BotMovement extends Component {
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
-    private Transform transform;
+    private Box2D box2d = null;
     private char[][] map;
     private int dir;
     private double lastUpdTime;
@@ -21,36 +21,36 @@ public class BotMovement extends Component{
     @Override
     public void start() {
         stateMachine = gameObject.getComponent(StateMachine.class);
-        transform = gameObject.getTransform();
+        box2d = gameObject.getTransform().getPosition();
         PlayScene scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
     }
 
     @Override
     public void update(double dt) {
-        if(Time.getTime() - lastUpdTime >= 2) {
-            dir = (int)Math.floor(Math.random()*5); //0 1 2 3 4 = idle up down left right
+        if (Time.getTime() - lastUpdTime >= 2) {
+            dir = (int) Math.floor(Math.random() * 5); //0 1 2 3 4 = idle up down left right
             lastUpdTime = Time.getTime();
         }
         switch (dir) {
             case 1:
                 stateMachine.changeState("runUp");
-                Collision.stillObject(transform.getPosition(), 0, -(Const.PLAYER_SPEED * dt), map);
+                Collision.stillObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
                 previousDirection = Direction.UP;
                 break;
             case 2:
                 stateMachine.changeState("runDown");
-                Collision.stillObject(transform.getPosition(), 0, (Const.PLAYER_SPEED * dt), map);
+                Collision.stillObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
                 previousDirection = Direction.DOWN;
                 break;
             case 3:
                 stateMachine.changeState("runLeft");
-                Collision.stillObject(transform.getPosition(), -(Const.PLAYER_SPEED * dt), 0, map);
+                Collision.stillObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
                 previousDirection = Direction.LEFT;
                 break;
             case 4:
                 stateMachine.changeState("runRight");
-                Collision.stillObject(transform.getPosition(), (Const.PLAYER_SPEED * dt), 0, map);
+                Collision.stillObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
                 previousDirection = Direction.RIGHT;
                 break;
             case 0:
@@ -62,6 +62,10 @@ public class BotMovement extends Component{
                 }
                 break;
         }
-        map[(gameObject.getPositionY() + 32) / Const.TILE_H][(gameObject.getPositionX() + 32) / Const.TILE_W] = 'b';
+        map[(int) box2d.getCenterY() / Const.TILE_H][(int) box2d.getCenterX() / Const.TILE_W] = 'b';
+    }
+
+    public void pathFinding(Box2D v, char[][] map) {
+
     }
 }

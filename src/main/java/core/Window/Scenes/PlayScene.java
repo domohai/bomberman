@@ -7,7 +7,7 @@ import core.GameObject.components.SpriteSheet;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
-import util.Vector2D;
+import util.Box2D;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -45,7 +45,6 @@ public class PlayScene extends Scene {
             System.out.println("Can not generate bot!");
             return;
         }
-        bot.setTransform(new Transform(new Vector2D(64 * 3, 64 * 4), 0));
         addGameObject(bot);
     }
     
@@ -69,18 +68,20 @@ public class PlayScene extends Scene {
     @Override
     public void update(double dt) {
         // reset the map
+        //flag !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] != '#' && map[i][j] != '*' && map[i][j] != ' ') {
+                if (map[i][j] != '#' && map[i][j] != '*') {
                     map[i][j] = ' ';
                 }
             }
         }
         for (ObjectType type : gameObject.keySet()) {
-            List<GameObject> temp = gameObject.get(type);
-            for (int i = 0; i < temp.size(); i++) {
-                temp.get(i).update(dt);
-                if (!temp.get(i).isAlive()) toBeRemove.add(temp.get(i));
+            if(type == ObjectType.MOVING) continue;
+            List<GameObject> list = gameObject.get(type);
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).update(dt);
+                if (!list.get(i).isAlive()) toBeRemove.add(list.get(i));
             }
         }
         if (toBeRemove.size() > 0) {
@@ -119,7 +120,7 @@ public class PlayScene extends Scene {
                         System.out.println("Error when generate block");
                         return;
                     }
-                    block.setTransform(new Transform(new Vector2D(Const.TILE_W * j, Const.TILE_H * i), 0));
+                    block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i), 0));
                     block.setType(ObjectType.STILL);
                     super.addGameObject(block);
                 }
@@ -148,7 +149,7 @@ public class PlayScene extends Scene {
         AssetsPool.addSpriteSheet(wall.getPath(), wall);
         SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0 , 40, 52, 6);
         AssetsPool.addSpriteSheet(bomb.getPath(), bomb);
-        SpriteSheet explosion = new SpriteSheet("src/main/resources/Explosion.png", 0, 0, 48, 48, 18);
+        SpriteSheet explosion = new SpriteSheet("src/main/resources/Flame.png", 0, 0, 48, 48, 18);
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
     }
 
