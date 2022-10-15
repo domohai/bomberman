@@ -1,7 +1,4 @@
 package core.GameObject.components;
-
-import util.Const;
-
 import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;

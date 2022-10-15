@@ -15,10 +15,6 @@ public class Transform {
         this.zIndex = zIndex;
     }
     
-    public void move(double dx, double dy) {
-        this.position.move(dx, dy);
-    }
-    
     public Box2D getPosition() {
         return position;
     }

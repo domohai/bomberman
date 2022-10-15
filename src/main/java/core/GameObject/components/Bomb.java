@@ -8,7 +8,6 @@ import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,6 @@ public class Bomb extends Component {
     private Box2D box2d = null;
 
     public Bomb() {
-
     }
 
     @Override
@@ -33,9 +31,7 @@ public class Bomb extends Component {
 
     private void addFlame(double x, double y) {
         GameObject newFlame = Prefabs.generateFlame();
-        //System.out.println("flame spawned at " + (int) y / Const.TILE_H + " " + (int) x / Const.TILE_W);
-        newFlame.setTransform(new Transform(new Box2D(x + Const.HALF_TILE_W - Const.HALF_FLAME_SIZE,
-                y + Const.HALF_TILE_H - Const.HALF_FLAME_SIZE), 0));
+        newFlame.setTransform(new Transform(new Box2D(x + 8, y + 8), 0));
         scene.addGameObject(newFlame);
     }
 
@@ -48,34 +44,24 @@ public class Bomb extends Component {
 
             int i = (int) box2d.getY() / Const.TILE_H;
             int j = (int) box2d.getX() / Const.TILE_W;
-            //System.out.println("Adding flame at:");
             addFlame(j * Const.TILE_W, i * Const.TILE_H);
             int flameLength = 10; //=scene.getPlayerStat().getFlameLength();
             for (int ip = i + 1; ip <= Math.min(i + flameLength, 12); ip++)
                 if (map[ip][j] != '#') {
                     addFlame(j * Const.TILE_W, ip * Const.TILE_H);
-                } else {
-                    break;
-                }
+                } else break;
             for (int ip = i - 1; ip >= Math.max(i - flameLength, 0); ip--)
                 if (map[ip][j] != '#') {
                     addFlame(j * Const.TILE_W, ip * Const.TILE_H);
-                } else {
-                    break;
-                }
+                } else break;
             for (int jp = j + 1; jp <= Math.min(j + flameLength, 20); jp++)
                 if (map[i][jp] != '#') {
-
                     addFlame(jp * Const.TILE_W, i * Const.TILE_H);
-                } else {
-                    break;
-                }
+                } else break;
             for (int jp = j - 1; jp >= Math.max(j - flameLength, 0); jp--)
                 if (map[i][jp] != '#') {
                     addFlame(jp * Const.TILE_W, i * Const.TILE_H);
-                } else {
-                    break;
-                }
+                } else break;
         }
     }
 }
