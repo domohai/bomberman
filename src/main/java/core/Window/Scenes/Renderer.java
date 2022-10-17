@@ -23,7 +23,9 @@ public class Renderer {
         this.gameObjects.get(newGameObject.getTransform().getzIndex()).add(newGameObject);
     }
     
-    // todo: add destroy function
+    public void remove(GameObject g) {
+        gameObjects.get(g.getTransform().getzIndex()).remove(g);
+    }
     
     public void render(Graphics2D g2D) {
         // draw each gameObject base on its zIndex

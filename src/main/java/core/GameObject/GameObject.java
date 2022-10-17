@@ -1,17 +1,25 @@
 package core.GameObject;
 
 import core.GameObject.components.Component;
-
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameObject {
     private List<Component> components;
-    private Transform transform = null; // remember to set this after creating gameObject
+    private Transform transform; // remember to set this after creating gameObject
+    private boolean alive;
+    private ObjectType type;
     
     public GameObject() {
+        this(ObjectType.OTHER);
+    }
+    
+    public GameObject(ObjectType type) {
         this.components = new ArrayList<>();
+        alive = true;
+        transform = null;
+        this.type = type;
     }
     
     /**
@@ -108,5 +116,21 @@ public class GameObject {
     
     public int getPositionY() {
         return (int) this.transform.getPosition().getY();
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+    
+    public ObjectType getType() {
+        return type;
+    }
+    
+    public void setType(ObjectType type) {
+        this.type = type;
     }
 }
