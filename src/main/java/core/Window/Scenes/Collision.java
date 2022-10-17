@@ -4,14 +4,14 @@ import util.Const;
 import util.Box2D;
 
 public class Collision {
-    //dx xor dy != 0
+    private static double pw, ph;
+    
+    // dx xor dy != 0
     public static void stillObject(Box2D box2d, double dx, double dy, char[][] map) {
-        double pw = box2d.getWidth();
-        double ph = box2d.getHeight();
-        double spx = box2d.getSpriteOffsetX();
-        double spy = box2d.getSpriteOffsetY();
-        double x = box2d.getX() + spx;
-        double y = box2d.getY() + spy;
+        pw = box2d.getWidth();
+        ph = box2d.getHeight();
+        double x = box2d.getX() + box2d.getSpriteOffsetX();
+        double y = box2d.getY() + box2d.getSpriteOffsetY();
         x += dx;
         y += dy;
         int c1 = (int) x / Const.TILE_W;
@@ -30,9 +30,8 @@ public class Collision {
         if (dy > 0 && (map[r2][c1] == '#' || map[r2][c2] == '#')) {
             y = r2 * Const.TILE_H - ph - 1;
         }
-        box2d.setX(x - spx);
-        box2d.setY(y - spy);
-        box2d.updateCenter();
+        box2d.setX(x - box2d.getSpriteOffsetX());
+        box2d.setY(y - box2d.getSpriteOffsetY());
     }
 
 
@@ -53,13 +52,13 @@ public class Collision {
         // c1, c2 is the center of player
         double px = playerBox2d.getCenterX();
         double py = playerBox2d.getCenterY();
-        double pw = playerBox2d.getWidth();
-        double ph = playerBox2d.getHeight();
+        pw = playerBox2d.getWidth();
+        ph = playerBox2d.getHeight();
         // r1, r2 is the center of bot
         double bx = botBox2D.getCenterX();
         double by = botBox2D.getCenterY();
         double bw = botBox2D.getWidth();
         double bh = botBox2D.getHeight();
-        return (Math.abs(px - bx) <= pw / 2 + bw / 2) && (Math.abs(py - by) <= ph / 2 + bh / 2);
+        return (Math.abs(px - bx) <= (pw + bw) / 2) && (Math.abs(py - by) <= (ph + bh) / 2);
     }
 }

@@ -10,7 +10,6 @@ import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,6 @@ public class PlayerMovement extends Component {
 
     @Override
     public void update(double dt) {
-        //System.out.println((int) box2d.getCenterY() / 64 + " " + (int) box2d.getCenterX() / 64);
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
             Collision.stillObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
@@ -76,9 +74,9 @@ public class PlayerMovement extends Component {
             cooldown = 2.0;
         }
         map[i][j] = 'p';
-        for (GameObject bot : typeListMap.get(ObjectType.MOVING)) {
+        List<GameObject> botList = gameObjectMap.get(ObjectType.MOVING);
+        for (GameObject bot : botList) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
-                System.out.println("colliding");
                 gameObject.setAlive(false);
             }
         }
