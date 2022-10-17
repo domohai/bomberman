@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Bomb extends Component {
     private double countDownTime = 3.0;
-    private Map<ObjectType, List<GameObject>> gameObjects = null;
+    private Map<ObjectType, List<GameObject>> typeListMap = null;
     private char[][] map = null;
     private PlayScene scene = null;
     private Box2D box2d = null;
@@ -24,7 +24,7 @@ public class Bomb extends Component {
     @Override
     public void start() {
         scene = (PlayScene) Window.getCurrentScene();
-        gameObjects = scene.getGameObject();
+        typeListMap = scene.getTypeListMap();
         map = scene.getMap();
         box2d = gameObject.getTransform().getPosition();
     }

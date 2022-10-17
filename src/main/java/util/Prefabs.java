@@ -54,14 +54,18 @@ public class Prefabs {
     }
     
     public static GameObject generateBomb() {
-        SpriteSheet bombSprite = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
+        if (sheet == null) {
+            System.out.println("Bomb sheet was not loaded");
+            return null;
+        }
         // create bomb
         GameObject bomb = new GameObject(ObjectType.UNSTABLE);
         // state
         State countDown = new State("count");
         countDown.setLoop(false);
-        for (int i = 0; i < bombSprite.size(); i++) {
-            countDown.addFrame(new Frame(bombSprite.getSprite(i), 0.8));
+        for (int i = 0; i < sheet.size(); i++) {
+            countDown.addFrame(new Frame(sheet.getSprite(i), 0.6));
         }
         // machine
         StateMachine machine = new StateMachine();
@@ -73,22 +77,26 @@ public class Prefabs {
     }
     
     public static GameObject generateFlame() {
-        SpriteSheet explosion = AssetsPool.getSpriteSheet("src/main/resources/Flame.png");
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Flame.png");
+        if (sheet == null) {
+            System.out.println("Flame sheet was not loaded");
+            return null;
+        }
         // create explosion
-        GameObject ex = new GameObject(ObjectType.UNSTABLE);
+        GameObject flame = new GameObject(ObjectType.FLAME);
         // State
-        State exState = new State("idle");
-        exState.setLoop(false);
-        for (int i = 0; i < explosion.size(); i++) {
-            exState.addFrame(new Frame(explosion.getSprite(i), 0.08));
+        State flameState = new State("idle");
+        flameState.setLoop(false);
+        for (int i = 0; i < sheet.size(); i++) {
+            flameState.addFrame(new Frame(sheet.getSprite(i), 0.08));
         }
         // machine
         StateMachine machine = new StateMachine();
-        machine.addState(exState);
+        machine.addState(flameState);
         machine.setDefaultState("idle");
-        ex.addComponent(machine);
-        ex.addComponent(new Flame());
-        return ex;
+        flame.addComponent(machine);
+        flame.addComponent(new Flame());
+        return flame;
     }
 
     public static GameObject generateBlock() {
