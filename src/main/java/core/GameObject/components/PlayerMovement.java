@@ -18,7 +18,7 @@ import java.util.Map;
 public class PlayerMovement extends Component {
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
-    private Map<ObjectType, List<GameObject>> gameObjectMap = null;
+    private Map<ObjectType, List<GameObject>> typeListMap = null;
     private Box2D box2d;
     private char[][] map;
     private PlayScene scene = null;
@@ -33,7 +33,7 @@ public class PlayerMovement extends Component {
         box2d = gameObject.getTransform().getPosition();
         scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
-        gameObjectMap = scene.getGameObject();
+        typeListMap = scene.getTypeListMap();
     }
 
     @Override
@@ -76,8 +76,14 @@ public class PlayerMovement extends Component {
             cooldown = 2.0;
         }
         map[i][j] = 'p';
-        for (GameObject bot : gameObjectMap.get(ObjectType.MOVING)) {
+        for (GameObject bot : typeListMap.get(ObjectType.MOVING)) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
+                System.out.println("colliding");
+                gameObject.setAlive(false);
+            }
+        }
+        for (GameObject flame : typeListMap.get(ObjectType.FLAME)) {
+            if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
                 System.out.println("colliding");
                 gameObject.setAlive(false);
             }

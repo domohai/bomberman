@@ -8,6 +8,7 @@ import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -18,20 +19,18 @@ import java.util.Map;
 public class PlayScene extends Scene {
     // test your code in this class
     private char[][] map;
-    private Map<ObjectType, List<GameObject>> gameObject;
+    private Map<ObjectType, List<GameObject>> typeListMap;
     private List<GameObject> toBeRemove;
     private BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
-    
+
     public PlayScene() {
         super();
         toBeRemove = new ArrayList<>();
-        gameObject = new HashMap<>();
-        gameObject.put(ObjectType.PLAYER, new ArrayList<>());
-        gameObject.put(ObjectType.MOVING, new ArrayList<>());
-        gameObject.put(ObjectType.UNSTABLE, new ArrayList<>());
-        gameObject.put(ObjectType.OTHER, new ArrayList<>());
+        typeListMap = new HashMap<>();
+        for (ObjectType type : ObjectType.values())
+            typeListMap.put(type, new ArrayList<>());
     }
-    
+
     @Override
     public void init() {
         GameObject player = Prefabs.generatePlayer();
@@ -47,24 +46,24 @@ public class PlayScene extends Scene {
         }
         addGameObject(bot);
     }
-    
+
     @Override
     public void start() {
-        for (ObjectType type : gameObject.keySet()) {
-            for (GameObject g : gameObject.get(type)) {
+        for (ObjectType type : typeListMap.keySet()) {
+            for (GameObject g : typeListMap.get(type)) {
                 g.start();
             }
         }
         isRunning = true;
     }
-    
+
     @Override
     public void load_resources() {
         // sprite sheet must be load first
         loadSpriteSheet();
         loadMap();
     }
-    
+
     @Override
     public void update(double dt) {
         // reset the map
@@ -76,9 +75,9 @@ public class PlayScene extends Scene {
                 }
             }
         }
-        for (ObjectType type : gameObject.keySet()) {
-            if(type == ObjectType.MOVING) continue;
-            List<GameObject> list = gameObject.get(type);
+        for (ObjectType type : typeListMap.keySet()) {
+            if (type == ObjectType.MOVING) continue;
+            List<GameObject> list = typeListMap.get(type);
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).update(dt);
                 if (!list.get(i).isAlive()) toBeRemove.add(list.get(i));
@@ -91,22 +90,22 @@ public class PlayScene extends Scene {
             toBeRemove.clear();
         }
     }
-    
+
     @Override
     public void draw(Graphics2D g2D) {
         g2D.drawImage(background, 0, 0, background.getWidth(), background.getHeight(), null);
         renderer.render(g2D);
     }
-    
+
     @Override
     public void addGameObject(GameObject object) {
-        gameObject.get(object.getType()).add(object);
+        typeListMap.get(object.getType()).add(object);
         if (isRunning) object.start();
         renderer.submit(object);
     }
-    
+
     public void remove(GameObject g) {
-        gameObject.get(g.getType()).remove(g);
+        typeListMap.get(g.getType()).remove(g);
         renderer.remove(g);
     }
 
@@ -147,7 +146,7 @@ public class PlayScene extends Scene {
         AssetsPool.addSpriteSheet(redOverlordRunDown.getPath(), redOverlordRunDown);
         SpriteSheet wall = new SpriteSheet("src/main/resources/Wall.png", 0, 0, 1);
         AssetsPool.addSpriteSheet(wall.getPath(), wall);
-        SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0 , 40, 52, 6);
+        SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0, 40, 52, 6);
         AssetsPool.addSpriteSheet(bomb.getPath(), bomb);
         SpriteSheet explosion = new SpriteSheet("src/main/resources/Flame.png", 0, 0, 48, 48, 18);
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
@@ -156,8 +155,8 @@ public class PlayScene extends Scene {
     public char[][] getMap() {
         return map;
     }
-    
-    public Map<ObjectType, List<GameObject>> getGameObject() {
-        return gameObject;
+
+    public Map<ObjectType, List<GameObject>> getTypeListMap() {
+        return typeListMap;
     }
 }
