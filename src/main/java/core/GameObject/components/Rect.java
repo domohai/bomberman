@@ -22,6 +22,8 @@ public class Rect extends Component {
 
     @Override
     public void start() {
+        x = gameObject.getPositionX();
+        y = gameObject.getPositionY();
         debounceX = x + width;
         debounceY = y + height;
         currentImage = idleImage;
@@ -39,6 +41,6 @@ public class Rect extends Component {
 
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(currentImage, x, y, width, height, null);
+        g2D.drawImage(currentImage, x, y, currentImage.getWidth(), currentImage.getHeight(), null);
     }
 }

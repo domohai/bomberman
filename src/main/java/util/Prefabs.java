@@ -2,11 +2,7 @@ package util;
 
 import core.GameObject.GameObject;
 import core.GameObject.Transform;
-import core.GameObject.components.Frame;
-import core.GameObject.components.PlayerMovement;
-import core.GameObject.components.SpriteSheet;
-import core.GameObject.components.State;
-import core.GameObject.components.StateMachine;
+import core.GameObject.components.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,11 +12,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import static javax.imageio.ImageIO.*;
+
 public class Prefabs {
     public static BufferedImage readImage(String path) {
         BufferedImage parent = null;
         try {
-            parent = ImageIO.read(new File(path));
+            parent = read(new File(path));
         } catch (IOException e) {
             System.out.println("Cannot load image!");
             e.printStackTrace();
@@ -44,7 +42,7 @@ public class Prefabs {
                     a[i][j] = line.charAt(j);
             }
             reader.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("Cant load map");
             e.printStackTrace();
         }
@@ -138,5 +136,13 @@ public class Prefabs {
         PlayerMovement movement = new PlayerMovement();
         player.addComponent(movement);
         return player;
+    }
+
+    public static GameObject generateButton(BufferedImage idleImage, BufferedImage hoverImage) {
+        GameObject button = new GameObject();
+        // set position
+        Rect menuRect = new Rect(0,0,idleImage.getHeight(), idleImage.getWidth(), idleImage, hoverImage);
+        button.addComponent(menuRect);
+        return button;
     }
 }
