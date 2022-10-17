@@ -8,7 +8,6 @@ import java.util.List;
 public abstract class Scene {
     protected boolean isRunning = false;
     protected List<GameObject> gameObjects;
-    
     protected Renderer renderer;
     
     public Scene() {

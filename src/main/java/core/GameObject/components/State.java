@@ -30,11 +30,11 @@ public class State {
     }
     
     public BufferedImage getCurrentFrameImage() {
-        return this.frames.get(currentFrame).getImage();
+        return frames.get(currentFrame).getImage();
     }
     
     public void addFrame(Frame frame) {
-        this.frames.add(frame);
+        frames.add(frame);
     }
     
     public void setLoop(boolean setLoop) {

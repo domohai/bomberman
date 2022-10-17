@@ -1,31 +1,23 @@
 package util;
 
 public class Box2D {
-    private double x; //sprite position
-    private double y;
-    private double width;
-    private double height;
+    private double x, y; //sprite position
+    private double width, height;
     private double spriteOffsetX;
     private double spriteOffsetY;
-    private double centerX;
-    private double centerY;
+    private double centerX, centerY;
+    private double wAndOffsetX, hAndOffsetY; // less calculation
 
     public Box2D() {
         this(0, 0, 0, 0);
-        updateCenter();
     }
 
     public Box2D(double x, double y) {
-        this.x = x;
-        this.y = y;
+        this(x, y,0,0);
     }
 
     public Box2D(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        updateCenter();
+        this(x, y, width, height, 0,0);
     }
 
     public Box2D(double x, double y, double width, double height, double spriteOffsetX, double spriteOffsetY) {
@@ -35,17 +27,14 @@ public class Box2D {
         this.height = height;
         this.spriteOffsetX = spriteOffsetX;
         this.spriteOffsetY = spriteOffsetY;
+        this.wAndOffsetX = spriteOffsetX + width / 2;
+        this.hAndOffsetY = spriteOffsetY + height / 2;
         updateCenter();
     }
 
-    public void move(double dx, double dy) {
-        this.x += dx;
-        this.y += dy;
-    }
-
     public void updateCenter() {
-        centerX = x + spriteOffsetX + width / 2;
-        centerY = y + spriteOffsetY + height / 2;
+        centerX = x + wAndOffsetX;
+        centerY = y + hAndOffsetY;
     }
 
     public double getSpriteOffsetX() {

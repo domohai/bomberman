@@ -4,11 +4,14 @@ import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.SpriteSheet;
+import core.KeyController;
+import core.Window.Sound;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +23,7 @@ public class PlayScene extends Scene {
     private char[][] map;
     private Map<ObjectType, List<GameObject>> gameObject;
     private List<GameObject> toBeRemove;
-    private BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
+    private static BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
     
     public PlayScene() {
         super();
@@ -29,6 +32,7 @@ public class PlayScene extends Scene {
         gameObject.put(ObjectType.PLAYER, new ArrayList<>());
         gameObject.put(ObjectType.MOVING, new ArrayList<>());
         gameObject.put(ObjectType.UNSTABLE, new ArrayList<>());
+        gameObject.put(ObjectType.FLAME, new ArrayList<>());
         gameObject.put(ObjectType.OTHER, new ArrayList<>());
     }
     
@@ -46,6 +50,7 @@ public class PlayScene extends Scene {
             return;
         }
         addGameObject(bot);
+        Sound.play(Const.BACKGROUND_AUDIO, 0.8f);
     }
     
     @Override
@@ -63,12 +68,12 @@ public class PlayScene extends Scene {
         // sprite sheet must be load first
         loadSpriteSheet();
         loadMap();
+        load_sound();
     }
     
     @Override
     public void update(double dt) {
         // reset the map
-        //flag !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] != '#' && map[i][j] != '*') {
@@ -77,7 +82,7 @@ public class PlayScene extends Scene {
             }
         }
         for (ObjectType type : gameObject.keySet()) {
-            if(type == ObjectType.MOVING) continue;
+            if (type == ObjectType.MOVING) continue;
             List<GameObject> list = gameObject.get(type);
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).update(dt);
@@ -89,6 +94,9 @@ public class PlayScene extends Scene {
                 remove(g);
             }
             toBeRemove.clear();
+        }
+        if (KeyController.is_keyPressed(KeyEvent.VK_H)) {
+            Sound.play(Const.TEST_AUDIO, 0.05f);
         }
     }
     
@@ -121,11 +129,15 @@ public class PlayScene extends Scene {
                         return;
                     }
                     block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i), 0));
-                    block.setType(ObjectType.STILL);
                     super.addGameObject(block);
                 }
             }
         }
+    }
+    
+    private void load_sound() {
+        AssetsPool.addAudio(Const.BACKGROUND_AUDIO, true);
+        AssetsPool.addAudio(Const.TEST_AUDIO, false);
     }
 
     private void loadSpriteSheet() {

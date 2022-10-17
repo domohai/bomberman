@@ -9,7 +9,10 @@ import core.Window.Scenes.SceneType;
 import util.Const;
 import util.Time;
 import javax.swing.JFrame;
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Graphics;
 
 /**
  * We are implementing a system called Entity component system (ECS)
@@ -41,7 +44,6 @@ public class Window extends JFrame implements Runnable {
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
-        this.setMaximumSize(new Dimension(Const.SCREEN_WIDTH,Const.SCREEN_HEIGHT));
     }
     
     /**
@@ -62,7 +64,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void update(double delta_time) {
-        //System.out.println(1/delta_time + "fps");
+//        System.out.println(1/delta_time + " fps");
         Window.currentScene.update(delta_time);
         this.draw(getGraphics());
     }
@@ -80,7 +82,7 @@ public class Window extends JFrame implements Runnable {
      */
     public void renderOffScreen(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
-        g2D.fillRect(0, 0, getWidth(), getHeight());
+//        g2D.fillRect(0, 0, getWidth(), getHeight());
         Window.currentScene.draw(g2D);
     }
     
@@ -89,7 +91,6 @@ public class Window extends JFrame implements Runnable {
      * @param type type of new scene
      */
     public static void changeScene(SceneType type) {
-        // enhanced switch case statement;)
         switch (type) {
             case MENU_SCENE -> Window.currentScene = new MenuScene();
             case PLAY_SCENE -> Window.currentScene = new PlayScene();
@@ -115,7 +116,7 @@ public class Window extends JFrame implements Runnable {
                 delta_time = time - lastFrameTime;
                 lastFrameTime = time;
                 update(delta_time);
-                Thread.sleep(16);
+                Thread.sleep(25);
             }
         } catch (Exception e) {
             e.printStackTrace();
