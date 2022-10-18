@@ -1,5 +1,7 @@
 package util;
 
+import java.awt.image.BufferedImage;
+
 public class Const {
     // General
     public static final int TILE_W = 64;
@@ -13,7 +15,7 @@ public class Const {
     public static final int MIN_Z_INDEX = -10;
     public static final int MAX_Z_INDEX = 10;
 
-    public static final double DEFAULT_FRAME_TIME = 0.06;
+    public static final double DEFAULT_FRAME_TIME = 0.08;
 
     // Player
     public static final int PLAYER_SPEED = 150;
@@ -29,4 +31,6 @@ public class Const {
     // audio paths
     public static final String BACKGROUND_AUDIO = "C:/Users/Asus/Videos/The_Quarry_Opening_Credits_Song.wav";
     public static final String TEST_AUDIO = "D:/videos/cuoi.wav";
+
+    public static final BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
 }

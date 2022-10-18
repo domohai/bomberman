@@ -10,10 +10,8 @@ import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,15 +22,15 @@ public class PlayScene extends Scene {
     private char[][] map;
     private Map<ObjectType, List<GameObject>> typeListMap;
     private List<GameObject> toBeRemove;
-    private static BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
 
     public PlayScene() {
         super();
         toBeRemove = new ArrayList<>();
         typeListMap = new HashMap<>();
-        for (ObjectType type : ObjectType.values())
+        for (ObjectType type : ObjectType.values()) {
             typeListMap.put(type, new ArrayList<>());
-
+        }
+    }
 
     @Override
     public void init() {
@@ -48,7 +46,7 @@ public class PlayScene extends Scene {
             return;
         }
         addGameObject(bot);
-        Sound.play(Const.BACKGROUND_AUDIO, 0.8f);
+//        Sound.play(Const.BACKGROUND_AUDIO, 0.8f);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class PlayScene extends Scene {
         // reset the map
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] != '#' && map[i][j] != '*') {
+                if (map[i][j] != '#' && map[i][j] != '*' && map[i][j] != 'o') {
                     map[i][j] = ' ';
                 }
             }
@@ -93,14 +91,14 @@ public class PlayScene extends Scene {
             }
             toBeRemove.clear();
         }
-        if (KeyController.is_keyPressed(KeyEvent.VK_H)) {
-            Sound.play(Const.TEST_AUDIO, 0.05f);
-        }
+//        if (KeyController.is_keyPressed(KeyEvent.VK_H)) {
+//            Sound.play(Const.TEST_AUDIO, 0.05f);
+//        }
     }
 
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(background, 0, 0, background.getWidth(), background.getHeight(), null);
+        g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
         renderer.render(g2D);
     }
 
@@ -126,7 +124,7 @@ public class PlayScene extends Scene {
                         System.out.println("Error when generate block");
                         return;
                     }
-                    block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i), 0));
+                    block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i,64,64), 0));
                     super.addGameObject(block);
                 }
             }
@@ -134,8 +132,8 @@ public class PlayScene extends Scene {
     }
     
     private void load_sound() {
-        AssetsPool.addAudio(Const.BACKGROUND_AUDIO, true);
-        AssetsPool.addAudio(Const.TEST_AUDIO, false);
+//        AssetsPool.addAudio(Const.BACKGROUND_AUDIO, true);
+//        AssetsPool.addAudio(Const.TEST_AUDIO, false);
     }
 
     private void loadSpriteSheet() {

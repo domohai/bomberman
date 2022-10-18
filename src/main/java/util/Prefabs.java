@@ -4,13 +4,7 @@ import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.*;
-
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -88,7 +82,7 @@ public class Prefabs {
         State flameState = new State("idle");
         flameState.setLoop(false);
         for (int i = 0; i < sheet.size(); i++) {
-            flameState.addFrame(new Frame(sheet.getSprite(i), 0.08));
+            flameState.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // machine
         StateMachine machine = new StateMachine();

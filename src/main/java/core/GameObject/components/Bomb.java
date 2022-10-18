@@ -8,6 +8,7 @@ import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
+
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class Bomb extends Component {
 
     private void addFlame(double x, double y) {
         GameObject newFlame = Prefabs.generateFlame();
-        newFlame.setTransform(new Transform(new Box2D(x + 8, y + 8), 0));
+        newFlame.setTransform(new Transform(new Box2D(x + 8, y + 8, Const.FLAME_SIZE, Const.FLAME_SIZE), 0));
         scene.addGameObject(newFlame);
     }
 
@@ -41,11 +42,10 @@ public class Bomb extends Component {
         if (countDownTime <= 0) {
             // spawn explosion
             gameObject.setAlive(false);
-
             int i = (int) box2d.getY() / Const.TILE_H;
             int j = (int) box2d.getX() / Const.TILE_W;
             addFlame(j * Const.TILE_W, i * Const.TILE_H);
-            int flameLength = 10; //=scene.getPlayerStat().getFlameLength();
+            int flameLength = 2; //=scene.getPlayerStat().getFlameLength();
             for (int ip = i + 1; ip <= Math.min(i + flameLength, 12); ip++)
                 if (map[ip][j] != '#') {
                     addFlame(j * Const.TILE_W, ip * Const.TILE_H);

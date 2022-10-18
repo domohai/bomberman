@@ -1,15 +1,20 @@
 package core.GameObject.components;
 
+import core.GameObject.GameObject;
+import core.GameObject.ObjectType;
 import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
 import util.Time;
 import util.Box2D;
+import java.util.List;
+import java.util.Map;
 
 public class BotMovement extends Component {
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
+    private Map<ObjectType, List<GameObject>> typeListMap = null;
     private Box2D box2d = null;
     private char[][] map;
     private int dir;
@@ -23,6 +28,7 @@ public class BotMovement extends Component {
         stateMachine = gameObject.getComponent(StateMachine.class);
         box2d = gameObject.getTransform().getPosition();
         PlayScene scene = (PlayScene) Window.getCurrentScene();
+        typeListMap = scene.getTypeListMap();
         map = scene.getMap();
     }
 
@@ -63,9 +69,18 @@ public class BotMovement extends Component {
                 break;
         }
         map[(int) box2d.getCenterY() / Const.TILE_H][(int) box2d.getCenterX() / Const.TILE_W] = 'b';
-    }
-
-    public void pathFinding(Box2D v, char[][] map) {
+        List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
+        for (GameObject flame : flameList) {
+            if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
+                gameObject.setAlive(false);
+            }
+        }
+        List<GameObject> unstableObjectList = typeListMap.get(ObjectType.UNSTABLE);
+        for (GameObject uObj : unstableObjectList) {
+            if (Collision.movingObject(box2d, uObj.getTransform().getPosition())) {
+                gameObject.setAlive(false);
+            }
+        }
 
     }
 }
