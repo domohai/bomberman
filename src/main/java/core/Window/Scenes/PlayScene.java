@@ -70,6 +70,7 @@ public class PlayScene extends Scene {
     @Override
     public void update(double dt) {
         // reset the map
+        //flag !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] != '#' && map[i][j] != '*' && map[i][j] != 'o') {

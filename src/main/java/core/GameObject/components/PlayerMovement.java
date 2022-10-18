@@ -44,31 +44,47 @@ static int ccc = 0;
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
             Collision.stillObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
-            Collision.unstableObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
-//            for (GameObject uObj : unstableObjectList)
-//                Collision.unstableObject(box2d, 0, -(Const.PLAYER_SPEED * dt), uObj.getTransform().getPosition());
+//            Collision.unstableObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
             previousDirection = Direction.UP;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_DOWN)) {
             stateMachine.changeState("runDown");
             Collision.stillObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
-            Collision.unstableObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
-//            for (GameObject uObj : unstableObjectList)
-//                Collision.unstableObject(box2d, 0, (Const.PLAYER_SPEED * dt), uObj.getTransform().getPosition());
+//            Collision.unstableObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
             previousDirection = Direction.DOWN;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_LEFT)) {
             stateMachine.changeState("runLeft");
             Collision.stillObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
-            Collision.unstableObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
-//            for (GameObject uObj : unstableObjectList)
-//                Collision.unstableObject(box2d, -(Const.PLAYER_SPEED * dt), 0, uObj.getTransform().getPosition());
+//            Collision.unstableObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
             previousDirection = Direction.LEFT;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_RIGHT)) {
             stateMachine.changeState("runRight");
             Collision.stillObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
-            Collision.unstableObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
+//            Collision.unstableObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
+            previousDirection = Direction.RIGHT;
+//        if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
+//            stateMachine.changeState("runUp");
+//            Collision.stillObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
+//            for (GameObject uObj : unstableObjectList)
+//                Collision.unstableObject(box2d, 0, -(Const.PLAYER_SPEED * dt), uObj.getTransform().getPosition());
+//            previousDirection = Direction.UP;
+//        } else if (KeyController.is_keyPressed(KeyEvent.VK_DOWN)) {
+//            stateMachine.changeState("runDown");
+//            Collision.stillObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
+//            for (GameObject uObj : unstableObjectList)
+//                Collision.unstableObject(box2d, 0, (Const.PLAYER_SPEED * dt), uObj.getTransform().getPosition());
+//            previousDirection = Direction.DOWN;
+//        } else if (KeyController.is_keyPressed(KeyEvent.VK_LEFT)) {
+//            stateMachine.changeState("runLeft");
+//            Collision.stillObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
+//            for (GameObject uObj : unstableObjectList)
+//                Collision.unstableObject(box2d, -(Const.PLAYER_SPEED * dt), 0, uObj.getTransform().getPosition());
+//            previousDirection = Direction.LEFT;
+//        } else if (KeyController.is_keyPressed(KeyEvent.VK_RIGHT)) {
+//            stateMachine.changeState("runRight");
+//            Collision.stillObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
 //            for (GameObject uObj : unstableObjectList)
 //                Collision.unstableObject(box2d, (Const.PLAYER_SPEED * dt), 0, uObj.getTransform().getPosition());
-            previousDirection = Direction.RIGHT;
+//            previousDirection = Direction.RIGHT;
         } else {
             switch (previousDirection) {
                 case UP -> stateMachine.changeState("idleUp");
@@ -89,7 +105,8 @@ static int ccc = 0;
         box2d.updateCenter();
         int i = (int) box2d.getCenterY() / Const.TILE_H;
         int j = (int) box2d.getCenterX() / Const.TILE_W;
-        map[i][j] = 'p'; // pos of player should be updated before bomb
+        if(map[i][j] == ' ')
+            map[i][j] = 'p'; // pos of player should be updated before bomb
         // check if space key is pressed
         BombCooldown -= dt;
         if (BombCooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
