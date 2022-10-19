@@ -10,7 +10,9 @@ import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
+
 import java.awt.event.KeyEvent;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +23,9 @@ public class PlayerMovement extends Component {
     private Box2D box2d;
     private char[][] map;
     private PlayScene scene = null;
-    private double cooldown = 1.0;
+    private double BombCooldown = 1.0;
 
+    private boolean debug = false;
     public PlayerMovement() {
     }
 
@@ -34,25 +37,54 @@ public class PlayerMovement extends Component {
         map = scene.getMap();
         typeListMap = scene.getTypeListMap();
     }
-
+static int ccc = 0;
     @Override
     public void update(double dt) {
+        List<GameObject> unstableObjectList = typeListMap.get(ObjectType.UNSTABLE);
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
             Collision.stillObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
+//            Collision.unstableObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
             previousDirection = Direction.UP;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_DOWN)) {
             stateMachine.changeState("runDown");
             Collision.stillObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
+//            Collision.unstableObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
             previousDirection = Direction.DOWN;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_LEFT)) {
             stateMachine.changeState("runLeft");
             Collision.stillObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
+//            Collision.unstableObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
             previousDirection = Direction.LEFT;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_RIGHT)) {
             stateMachine.changeState("runRight");
             Collision.stillObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
+//            Collision.unstableObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
             previousDirection = Direction.RIGHT;
+//        if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
+//            stateMachine.changeState("runUp");
+//            Collision.stillObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
+//            for (GameObject uObj : unstableObjectList)
+//                Collision.unstableObject(box2d, 0, -(Const.PLAYER_SPEED * dt), uObj.getTransform().getPosition());
+//            previousDirection = Direction.UP;
+//        } else if (KeyController.is_keyPressed(KeyEvent.VK_DOWN)) {
+//            stateMachine.changeState("runDown");
+//            Collision.stillObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
+//            for (GameObject uObj : unstableObjectList)
+//                Collision.unstableObject(box2d, 0, (Const.PLAYER_SPEED * dt), uObj.getTransform().getPosition());
+//            previousDirection = Direction.DOWN;
+//        } else if (KeyController.is_keyPressed(KeyEvent.VK_LEFT)) {
+//            stateMachine.changeState("runLeft");
+//            Collision.stillObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
+//            for (GameObject uObj : unstableObjectList)
+//                Collision.unstableObject(box2d, -(Const.PLAYER_SPEED * dt), 0, uObj.getTransform().getPosition());
+//            previousDirection = Direction.LEFT;
+//        } else if (KeyController.is_keyPressed(KeyEvent.VK_RIGHT)) {
+//            stateMachine.changeState("runRight");
+//            Collision.stillObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
+//            for (GameObject uObj : unstableObjectList)
+//                Collision.unstableObject(box2d, (Const.PLAYER_SPEED * dt), 0, uObj.getTransform().getPosition());
+//            previousDirection = Direction.RIGHT;
         } else {
             switch (previousDirection) {
                 case UP -> stateMachine.changeState("idleUp");
@@ -61,30 +93,44 @@ public class PlayerMovement extends Component {
                 case RIGHT -> stateMachine.changeState("idleRight");
             }
         }
+        if(KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {
+            debug = true;
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    System.out.print(map[i][j]);
+                }
+                System.out.println();
+            }
+        } else debug = false;
         box2d.updateCenter();
         int i = (int) box2d.getCenterY() / Const.TILE_H;
         int j = (int) box2d.getCenterX() / Const.TILE_W;
+        if(map[i][j] == ' ')
+            map[i][j] = 'p'; // pos of player should be updated before bomb
         // check if space key is pressed
-        cooldown -= dt;
-        if (cooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
+        BombCooldown -= dt;
+        if (BombCooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             GameObject newBomb = Prefabs.generateBomb();
             newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
-                    i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H)), -1));
+                                                        i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H),
+                                                        Const.BOMB_WIDTH,
+                                                        Const.BOMB_HEIGHT), -1));
             scene.addGameObject(newBomb);
-            cooldown = 2.0;
+            BombCooldown = 2.0;
+            map[i][j] = 'o';
         }
-        map[i][j] = 'p';
-        List<GameObject> botList = gameObjectMap.get(ObjectType.MOVING);
+        List<GameObject> botList = typeListMap.get(ObjectType.MOVING);
         for (GameObject bot : botList) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
                 gameObject.setAlive(false);
             }
         }
-        for (GameObject flame : typeListMap.get(ObjectType.FLAME)) {
+        List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
+        for (GameObject flame : flameList) {
             if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
-                System.out.println("colliding");
                 gameObject.setAlive(false);
             }
         }
+
     }
 }

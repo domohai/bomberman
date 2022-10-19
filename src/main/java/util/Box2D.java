@@ -12,9 +12,9 @@ public class Box2D {
         this(0, 0, 0, 0);
     }
 
-    public Box2D(double x, double y) {
-        this(x, y,0,0);
-    }
+//    public Box2D(double x, double y) {
+//        this(x, y,0,0);
+//    }
 
     public Box2D(double x, double y, double width, double height) {
         this(x, y, width, height, 0,0);
@@ -35,6 +35,21 @@ public class Box2D {
     public void updateCenter() {
         centerX = x + wAndOffsetX;
         centerY = y + hAndOffsetY;
+    }
+
+    public void fixOutOfBound() {
+        x = Math.max(x,0);
+        x = Math.min(x,Const.SCREEN_WIDTH-width);
+        y = Math.max(y,0);
+        y = Math.min(y,Const.SCREEN_HEIGHT-height-64);
+        updateCenter();
+    }
+
+    public int getCordX() {
+        return (int) centerX / Const.TILE_W;
+    }
+    public int getCordY() {
+        return (int) centerY / Const.TILE_W;
     }
 
     public double getSpriteOffsetX() {
@@ -70,17 +85,11 @@ public class Box2D {
         return centerX;
     }
 
-    public void setCenterX(double centerX) {
-        this.centerX = centerX;
-    }
 
     public double getCenterY() {
         return centerY;
     }
 
-    public void setCenterY(double centerY) {
-        this.centerY = centerY;
-    }
 
     public double getWidth() {
         return width;
