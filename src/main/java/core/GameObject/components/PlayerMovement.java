@@ -105,8 +105,8 @@ static int ccc = 0;
         box2d.updateCenter();
         int i = (int) box2d.getCenterY() / Const.TILE_H;
         int j = (int) box2d.getCenterX() / Const.TILE_W;
-        if(map[i][j] == ' ')
-            map[i][j] = 'p'; // pos of player should be updated before bomb
+        if(map[i][j] == ' ' || map[i][j] == 'p')
+            map[i][j] = 'P'; // pos of player should be updated before bomb
         // check if space key is pressed
         BombCooldown -= dt;
         if (BombCooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
