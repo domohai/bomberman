@@ -10,6 +10,7 @@ import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
+
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -73,13 +74,14 @@ public class PlayScene extends Scene {
         //flag !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] != '#' && map[i][j] != '*' && map[i][j] != 'o') {
+                if (map[i][j] != '#' && map[i][j] != '*' && map[i][j] != 'o' && map[i][j] != 'P') {
                     map[i][j] = ' ';
                 }
+                if (map[i][j] == 'P') map[i][j] = 'p';
             }
         }
         for (ObjectType type : typeListMap.keySet()) {
-            if (type == ObjectType.MOVING) continue;
+            //if (type == ObjectType.MOVING) continue;
             List<GameObject> list = typeListMap.get(type);
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).update(dt);
@@ -125,13 +127,13 @@ public class PlayScene extends Scene {
                         System.out.println("Error when generate block");
                         return;
                     }
-                    block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i,64,64), 0));
+                    block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
                     super.addGameObject(block);
                 }
             }
         }
     }
-    
+
     private void load_sound() {
 //        AssetsPool.addAudio(Const.BACKGROUND_AUDIO, true);
 //        AssetsPool.addAudio(Const.TEST_AUDIO, false);

@@ -49,7 +49,7 @@ public class Box2D {
         return (int) centerX / Const.TILE_W;
     }
     public int getCordY() {
-        return (int) centerY / Const.TILE_W;
+        return (int) centerY / Const.TILE_H;
     }
 
     public double getSpriteOffsetX() {

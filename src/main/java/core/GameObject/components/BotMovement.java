@@ -6,8 +6,11 @@ import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
+import util.PathFinder;
 import util.Time;
 import util.Box2D;
+
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +37,12 @@ public class BotMovement extends Component {
 
     @Override
     public void update(double dt) {
-        if (Time.getTime() - lastUpdTime >= 2) {
-            dir = (int) Math.floor(Math.random() * 5); //0 1 2 3 4 = idle up down left right
-            lastUpdTime = Time.getTime();
-        }
+//        if (Time.getTime() - lastUpdTime >= 2) {
+//            dir = (int) Math.floor(Math.random() * 5); //0 1 2 3 4 = idle up down left right
+//            lastUpdTime = Time.getTime();
+//        }
+        dir = PathFinder.pathFinder(box2d.getCordX(),box2d.getCordY(),map);
+        if(dir != 0)System.out.println(dir);
         switch (dir) {
             case 1:
                 stateMachine.changeState("runUp");
