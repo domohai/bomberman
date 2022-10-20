@@ -12,7 +12,6 @@ import util.Prefabs;
 import util.Box2D;
 
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +25,7 @@ public class PlayerMovement extends Component {
     private double BombCooldown = 1.0;
 
     private boolean debug = false;
+
     public PlayerMovement() {
     }
 
@@ -37,9 +37,10 @@ public class PlayerMovement extends Component {
         map = scene.getMap();
         typeListMap = scene.getTypeListMap();
     }
-static int ccc = 0;
+
     @Override
     public void update(double dt) {
+        map[box2d.getCordY()][box2d.getCordX()] = ' ';
         List<GameObject> unstableObjectList = typeListMap.get(ObjectType.UNSTABLE);
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
@@ -93,28 +94,21 @@ static int ccc = 0;
                 case RIGHT -> stateMachine.changeState("idleRight");
             }
         }
-        if(KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {
-            debug = true;
-            for (int i = 0; i < map.length; i++) {
-                for (int j = 0; j < map[i].length; j++) {
-                    System.out.print(map[i][j]);
-                }
-                System.out.println();
-            }
-        } else debug = false;
         box2d.updateCenter();
-        int i = (int) box2d.getCenterY() / Const.TILE_H;
-        int j = (int) box2d.getCenterX() / Const.TILE_W;
-        if(map[i][j] == ' ' || map[i][j] == 'p')
-            map[i][j] = 'P'; // pos of player should be updated before bomb
+        int i = box2d.getCordY();
+        int j = box2d.getCordX();
+
+        map[i][j] = 'p';
+//        if(map[i][j] == ' ' || map[i][j] == 'p')
+//            map[i][j] = 'P'; // pos of player should be updated before bomb
         // check if space key is pressed
         BombCooldown -= dt;
         if (BombCooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             GameObject newBomb = Prefabs.generateBomb();
             newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
-                                                        i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H),
-                                                        Const.BOMB_WIDTH,
-                                                        Const.BOMB_HEIGHT), -1));
+                    i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H),
+                    Const.BOMB_WIDTH,
+                    Const.BOMB_HEIGHT), -1));
             scene.addGameObject(newBomb);
             BombCooldown = 2.0;
             map[i][j] = 'o';
@@ -123,14 +117,26 @@ static int ccc = 0;
         for (GameObject bot : botList) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
                 gameObject.setAlive(false);
+                map[i][j] = ' ';
             }
         }
         List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
         for (GameObject flame : flameList) {
             if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
                 gameObject.setAlive(false);
+                map[i][j] = ' ';
             }
         }
 
+
+        if (KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {
+            debug = true;
+            for (int ii = 0; ii < map.length; ii++) {
+                for (int jj = 0; jj < map[ii].length; jj++) {
+                    System.out.print(map[ii][jj]);
+                }
+                System.out.println();
+            }
+        } else debug = false;
     }
 }
