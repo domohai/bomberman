@@ -3,16 +3,13 @@ package core.Window.Scenes;
 import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
+import core.GameObject.components.Breakable;
 import core.GameObject.components.SpriteSheet;
-import core.KeyController;
-import core.Window.Sound;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,13 +119,23 @@ public class PlayScene extends Scene {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] == '#') {
-                    GameObject block = Prefabs.generateBlock();
+                    GameObject block = Prefabs.generateBlock("src/main/resources/Wall.png");
                     if (block == null) {
                         System.out.println("Error when generate block");
                         return;
                     }
                     block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
                     super.addGameObject(block);
+                } else if (map[i][j] == '*') {
+                    GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
+                    if (rock == null) {
+                        System.out.println("Error when generate block");
+                        return;
+                    }
+                    rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
+                    rock.setType(ObjectType.UNSTABLE);
+                    rock.addComponent(new Breakable());
+                    addGameObject(rock);
                 }
             }
         }
@@ -162,6 +169,8 @@ public class PlayScene extends Scene {
         AssetsPool.addSpriteSheet(bomb.getPath(), bomb);
         SpriteSheet explosion = new SpriteSheet("src/main/resources/Flame.png", 0, 0, 48, 48, 18);
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
+        SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
+        AssetsPool.addSpriteSheet(rock.getPath(), rock);
     }
 
     public char[][] getMap() {

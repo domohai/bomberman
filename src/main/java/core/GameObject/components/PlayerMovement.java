@@ -93,13 +93,13 @@ static int ccc = 0;
                 case RIGHT -> stateMachine.changeState("idleRight");
             }
         }
-        if(KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {
+        if(KeyController.is_keyPressed(KeyEvent.VK_ENTER) && !debug) {
             debug = true;
             for (int i = 0; i < map.length; i++) {
                 for (int j = 0; j < map[i].length; j++) {
-                    System.out.print(map[i][j]);
+//                    System.out.print(map[i][j]);
                 }
-                System.out.println();
+//                System.out.println();
             }
         } else debug = false;
         box2d.updateCenter();
@@ -128,7 +128,7 @@ static int ccc = 0;
         List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
         for (GameObject flame : flameList) {
             if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
-                gameObject.setAlive(false);
+//                gameObject.setAlive(false);
             }
         }
 
