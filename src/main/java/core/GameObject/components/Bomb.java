@@ -44,6 +44,7 @@ public class Bomb extends Component {
             gameObject.setAlive(false);
             int i = (int) box2d.getY() / Const.TILE_H;
             int j = (int) box2d.getX() / Const.TILE_W;
+            map[i][j] = ' ';
             addFlame(j * Const.TILE_W, i * Const.TILE_H);
             int flameLength = 2; //=scene.getPlayerStat().getFlameLength();
             for (int ip = i + 1; ip <= Math.min(i + flameLength, 12); ip++)

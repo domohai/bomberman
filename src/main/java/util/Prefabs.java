@@ -125,8 +125,6 @@ public class Prefabs {
         }
         // create new game object
         GameObject player = new GameObject(ObjectType.PLAYER);
-        // set position
-        player.setTransform(new Transform(new Box2D(64, 64,30,42,16,15), 0));
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);
@@ -209,8 +207,6 @@ public class Prefabs {
         }
         // create new game object
         GameObject bot = new GameObject(ObjectType.MOVING);
-        // set position
-        bot.setTransform(new Transform(new Box2D(5*64, 64,30,42,16,15), 0));
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);

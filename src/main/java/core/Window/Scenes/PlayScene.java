@@ -30,22 +30,6 @@ public class PlayScene extends Scene {
         }
     }
 
-    @Override
-    public void init() {
-        GameObject player = Prefabs.generatePlayer();
-        if (player == null) {
-            System.out.println("Can not generate player!");
-            return;
-        }
-        addGameObject(player);
-        GameObject bot = Prefabs.generateBot();
-        if (bot == null) {
-            System.out.println("Can not generate bot!");
-            return;
-        }
-        addGameObject(bot);
-//        Sound.play(Const.BACKGROUND_AUDIO, 0.8f);
-    }
 
     @Override
     public void start() {
@@ -67,16 +51,6 @@ public class PlayScene extends Scene {
 
     @Override
     public void update(double dt) {
-        // reset the map
-        //flag !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] != '#' && map[i][j] != '*' && map[i][j] != 'o' && map[i][j] != 'P') {
-                    map[i][j] = ' ';
-                }
-                if (map[i][j] == 'P') map[i][j] = 'p';
-            }
-        }
         for (ObjectType type : typeListMap.keySet()) {
             //if (type == ObjectType.MOVING) continue;
             List<GameObject> list = typeListMap.get(type);
@@ -94,6 +68,11 @@ public class PlayScene extends Scene {
 //        if (KeyController.is_keyPressed(KeyEvent.VK_H)) {
 //            Sound.play(Const.TEST_AUDIO, 0.05f);
 //        }
+    }
+
+    @Override
+    public void init() {
+//        Sound.play(Const.BACKGROUND_AUDIO, 0.8f);
     }
 
     @Override
@@ -115,7 +94,7 @@ public class PlayScene extends Scene {
     }
 
     private void loadMap() {
-        map = Prefabs.loadMap("src/main/resources/Level1.txt");
+        map = Prefabs.loadMap("src/main/resources/Level0.txt");
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] == '#') {
@@ -136,6 +115,26 @@ public class PlayScene extends Scene {
                     rock.setType(ObjectType.UNSTABLE);
                     rock.addComponent(new Breakable());
                     addGameObject(rock);
+                }
+                if (map[i][j] == 'p') {
+                    GameObject player = Prefabs.generatePlayer();
+                    if (player == null) {
+                        System.out.println("Can not generate player!");
+                        return;
+                    }
+                    // set position
+                    player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                    addGameObject(player);
+                }
+                if (map[i][j] == 'b') {
+                    GameObject bot = Prefabs.generateBot();
+                    if (bot == null) {
+                        System.out.println("Can not generate bot!");
+                        return;
+                    }
+                    // set position
+                    bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                    addGameObject(bot);
                 }
             }
         }
