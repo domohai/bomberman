@@ -1,11 +1,11 @@
 package core.GameObject.components;
 
-import util.Vector2D;
+import util.Box2D;
 
 public class Bounds {
     private int width;
     private int height;
-    private Vector2D center;
+    private Box2D center;
     public Bounds(){
 
     }
@@ -29,11 +29,11 @@ public class Bounds {
         this.height = height;
     }
 
-    public Vector2D getCenter() {
+    public Box2D getCenter() {
         return center;
     }
 
-    public void setCenter(Vector2D center) {
+    public void setCenter(Box2D center) {
         this.center = center;
     }
 

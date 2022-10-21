@@ -95,8 +95,8 @@ public class Prefabs {
         return flame;
     }
 
-    public static GameObject generateBlock() {
-        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Wall.png");
+    public static GameObject generateBlock(String path) {
+        SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
         if (sheet == null) {
             System.out.println("Block sheet was not loaded");
             return null;

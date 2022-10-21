@@ -54,6 +54,7 @@ public class Window extends JFrame implements Runnable {
         bufferGraphics = bufferImage.getGraphics();
         bufferGraphics.setColor(Color.BLACK);
         Window.changeScene(SceneType.PLAY_SCENE);
+//        Window.changeScene(SceneType.MENU_SCENE);
     }
 
     public static Window get() {
