@@ -12,11 +12,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import static javax.imageio.ImageIO.*;
+
 public class Prefabs {
     public static BufferedImage readImage(String path) {
         BufferedImage parent = null;
         try {
-            parent = ImageIO.read(new File(path));
+            parent = read(new File(path));
         } catch (IOException e) {
             System.out.println("Cannot load image!");
             e.printStackTrace();
@@ -93,8 +95,8 @@ public class Prefabs {
         return flame;
     }
 
-    public static GameObject generateBlock() {
-        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Wall.png");
+    public static GameObject generateBlock(String path) {
+        SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
         if (sheet == null) {
             System.out.println("Block sheet was not loaded");
             return null;
@@ -184,6 +186,14 @@ public class Prefabs {
         return player;
     }
 
+    public static GameObject generateButton(BufferedImage idleImage, BufferedImage hoverImage) {
+        GameObject button = new GameObject();
+        // set position
+        Rect menuRect = new Rect(0,0,idleImage.getHeight(), idleImage.getWidth(), idleImage, hoverImage);
+        button.addComponent(menuRect);
+        return button;
+    }
+    
     public static GameObject generateBot() {
         SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordLeft.png");
         SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordRight.png");

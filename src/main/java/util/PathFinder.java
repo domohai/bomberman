@@ -22,9 +22,9 @@ public class PathFinder {
         int[][] f = new int[n][m];
         for (int i = 0; i < n; i++)
             for (int j = 0; j < m; j++)
-                f[i][j] = m * n + 7; //set to a large number (for path length)
+                f[i][j] = m * n + 7; // set to a large number (for path length)
         f[si][sj] = 0;
-        //min-path trace: trace[i][j] = previous direction to go to the current i j
+        // min-path trace: trace[i][j] = previous direction to go to the current i j
         int[][] trace = new int[n][m];
         for (int i = 0; i < n; i++)
             for (int j = 0; j < m; j++)
@@ -32,11 +32,11 @@ public class PathFinder {
         trace[si][sj] = 0;
         PriorityQueue<Waypoint> pq = new PriorityQueue<>(new PQcmp());
         pq.add(new Waypoint(si, sj, 0));
-        map[ti][tj] = ' ';//for easier checking legal path
+        map[ti][tj] = ' '; // for easier checking legal path
         while (!pq.isEmpty()) {
             Waypoint x = pq.poll();
             if (x.d > f[x.i][x.j]) continue;
-            //!!
+            // !!
             if (x.i == ti && x.j == tj) break;
             if (x.i - 1 >= 0 && map[x.i - 1][x.j] == ' ' && f[x.i - 1][x.j] > x.d + 1) {
                 pq.add(new Waypoint(x.i - 1, x.j, x.d + 1));
