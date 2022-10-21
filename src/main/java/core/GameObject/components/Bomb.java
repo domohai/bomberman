@@ -39,11 +39,12 @@ public class Bomb extends Component {
     @Override
     public void update(double dt) {
         countDownTime -= dt;
+        map[box2d.getCordY()][box2d.getCordX()] = 'o';
         if (countDownTime <= 0) {
             // spawn explosion
             gameObject.setAlive(false);
-            int i = (int) box2d.getY() / Const.TILE_H;
-            int j = (int) box2d.getX() / Const.TILE_W;
+            int i = box2d.getCordY();
+            int j = box2d.getCordX();
             map[i][j] = ' ';
             addFlame(j * Const.TILE_W, i * Const.TILE_H);
             int flameLength = 2; //=scene.getPlayerStat().getFlameLength();
