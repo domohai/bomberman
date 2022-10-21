@@ -29,8 +29,7 @@ public class PlayScene extends Scene {
             typeListMap.put(type, new ArrayList<>());
         }
     }
-
-
+    
     @Override
     public void start() {
         for (ObjectType type : typeListMap.keySet()) {
@@ -52,7 +51,6 @@ public class PlayScene extends Scene {
     @Override
     public void update(double dt) {
         for (ObjectType type : typeListMap.keySet()) {
-            //if (type == ObjectType.MOVING) continue;
             List<GameObject> list = typeListMap.get(type);
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).update(dt);
@@ -94,7 +92,7 @@ public class PlayScene extends Scene {
     }
 
     private void loadMap() {
-        map = Prefabs.loadMap("src/main/resources/Level0.txt");
+        map = Prefabs.loadMap("src/main/resources/Level1.txt");
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] == '#') {
@@ -115,8 +113,7 @@ public class PlayScene extends Scene {
                     rock.setType(ObjectType.UNSTABLE);
                     rock.addComponent(new Breakable());
                     addGameObject(rock);
-                }
-                if (map[i][j] == 'p') {
+                } else if (map[i][j] == 'p') {
                     GameObject player = Prefabs.generatePlayer();
                     if (player == null) {
                         System.out.println("Can not generate player!");
@@ -125,8 +122,7 @@ public class PlayScene extends Scene {
                     // set position
                     player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
                     addGameObject(player);
-                }
-                if (map[i][j] == 'b') {
+                } else if (map[i][j] == 'b') {
                     GameObject bot = Prefabs.generateBot();
                     if (bot == null) {
                         System.out.println("Can not generate bot!");

@@ -12,10 +12,6 @@ public class Box2D {
         this(0, 0, 0, 0);
     }
 
-//    public Box2D(double x, double y) {
-//        this(x, y,0,0);
-//    }
-
     public Box2D(double x, double y, double width, double height) {
         this(x, y, width, height, 0,0);
     }
