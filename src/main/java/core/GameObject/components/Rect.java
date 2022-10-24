@@ -1,8 +1,10 @@
 package core.GameObject.components;
 
 import core.MouseController;
-
+import core.Window.Scenes.PlayScene;
+import core.Window.Window;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Rect extends Component {
@@ -11,11 +13,11 @@ public class Rect extends Component {
     private int debounceX, debounceY;
     private BufferedImage idleImage, hoverImage, currentImage = null;
 
-    public Rect(int x, int y, int width, int height, BufferedImage idleImage, BufferedImage hoverImage) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    public Rect(BufferedImage idleImage, BufferedImage hoverImage) {
+        this.x = 0;
+        this.y = 0;
+        this.width = idleImage.getWidth();
+        this.height = idleImage.getHeight();
         this.idleImage = idleImage;
         this.hoverImage = hoverImage;
     }
@@ -25,15 +27,19 @@ public class Rect extends Component {
         x = gameObject.getPositionX();
         y = gameObject.getPositionY();
         debounceX = x + width;
-        debounceY = y + height;
+        debounceY = y + 30 + height;
         currentImage = idleImage;
     }
 
     @Override
     public void update(double dt) {
-        if (MouseController.getX() >= this.x && MouseController.getX() <= debounceX
-        && MouseController.getY() >= this.y && MouseController.getY() <= debounceY) {
+        if (MouseController.getX() >= x && MouseController.getX() <= debounceX
+        && MouseController.getY() >= y + 30 && MouseController.getY() <= debounceY) {
             currentImage = hoverImage;
+            if (MouseController.isMousePressed(MouseEvent.BUTTON1)) {
+                // todo: handle action
+                
+            }
         } else {
             currentImage = idleImage;
         }
@@ -41,6 +47,6 @@ public class Rect extends Component {
 
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(currentImage, x, y, currentImage.getWidth(), currentImage.getHeight(), null);
+        g2D.drawImage(currentImage, x, y, width, height, null);
     }
 }

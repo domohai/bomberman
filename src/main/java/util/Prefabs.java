@@ -2,9 +2,7 @@ package util;
 
 import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
-import core.GameObject.Transform;
 import core.GameObject.components.*;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,26 +25,24 @@ public class Prefabs {
     }
 
     public static char[][] loadMap(String path) {
-        char[][] a = null;
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader reader = new BufferedReader(fileReader);
+        char[][] map = null;
+        try (FileReader fileReader = new FileReader(path);
+            BufferedReader reader = new BufferedReader(fileReader)) {
             String line = reader.readLine();
             StringTokenizer st = new StringTokenizer(line);
             int row = Integer.parseInt(st.nextToken());
             int col = Integer.parseInt(st.nextToken());
-            a = new char[row][col];
+            map = new char[row][col];
             for (int i = 0; i < row; i++) {
                 line = reader.readLine();
                 for (int j = 0; j < line.length(); j++)
-                    a[i][j] = line.charAt(j);
+                    map[i][j] = line.charAt(j);
             }
-            reader.close();
         } catch(IOException e) {
             System.out.println("Can't load map");
             e.printStackTrace();
         }
-        return a;
+        return map;
     }
     
     public static GameObject generateBomb() {
@@ -188,8 +184,7 @@ public class Prefabs {
 
     public static GameObject generateButton(BufferedImage idleImage, BufferedImage hoverImage) {
         GameObject button = new GameObject();
-        // set position
-        Rect menuRect = new Rect(0,0,idleImage.getHeight(), idleImage.getWidth(), idleImage, hoverImage);
+        Rect menuRect = new Rect(idleImage, hoverImage);
         button.addComponent(menuRect);
         return button;
     }

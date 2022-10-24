@@ -4,48 +4,41 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MouseController extends MouseAdapter {
-    private static MouseController instance = null; // the only mouseController
+    private static MouseController instance = new MouseController(); // the only mouseController
     private double xPos, yPos, dx, dy;
     private boolean[] mouseButton = new boolean[9];
     private boolean mouseDragged;
     
     private MouseController() {
-        this.xPos = 0.0;
-        this.yPos = 0.0;
-        this.dx = 0.0;
-        this.dy = 0.0;
         this.mouseDragged = false;
     }
     
     public static MouseController get() {
-        if (MouseController.instance == null) {
-            MouseController.instance = new MouseController();
-        }
         return MouseController.instance;
     }
     
     public static boolean isMousePressed(int key) {
-        return get().mouseButton[key];
+        return instance.mouseButton[key];
     }
     
     public static double getX() {
-        return get().xPos;
+        return instance.xPos;
     }
     
     public static double getY() {
-        return get().yPos;
+        return instance.yPos;
     }
     
     public static double getDx() {
-        return get().dx;
+        return instance.dx;
     }
     
     public static double getDy() {
-        return get().dy;
+        return instance.dy;
     }
     
     public static boolean isDragging() {
-        return get().mouseDragged;
+        return instance.mouseDragged;
     }
     
     @Override
@@ -57,8 +50,8 @@ public class MouseController extends MouseAdapter {
     public void mouseReleased(MouseEvent e) {
         this.mouseButton[e.getButton()] = false;
         this.mouseDragged = false;
-        this.dx = 0.0;
-        this.dy = 0.0;
+        dx = 0;
+        dy = 0;
     }
     
     @Override
