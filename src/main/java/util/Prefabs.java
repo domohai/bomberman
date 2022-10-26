@@ -2,15 +2,7 @@ package util;
 
 import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
-import core.GameObject.Transform;
 import core.GameObject.components.*;
-
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,26 +25,24 @@ public class Prefabs {
     }
 
     public static char[][] loadMap(String path) {
-        char[][] a = null;
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader reader = new BufferedReader(fileReader);
+        char[][] map = null;
+        try (FileReader fileReader = new FileReader(path);
+            BufferedReader reader = new BufferedReader(fileReader)) {
             String line = reader.readLine();
             StringTokenizer st = new StringTokenizer(line);
             int row = Integer.parseInt(st.nextToken());
             int col = Integer.parseInt(st.nextToken());
-            a = new char[row][col];
+            map = new char[row][col];
             for (int i = 0; i < row; i++) {
                 line = reader.readLine();
                 for (int j = 0; j < line.length(); j++)
-                    a[i][j] = line.charAt(j);
+                    map[i][j] = line.charAt(j);
             }
-            reader.close();
         } catch(IOException e) {
             System.out.println("Can't load map");
             e.printStackTrace();
         }
-        return a;
+        return map;
     }
     
     public static GameObject generateBomb() {
@@ -90,7 +80,7 @@ public class Prefabs {
         State flameState = new State("idle");
         flameState.setLoop(false);
         for (int i = 0; i < sheet.size(); i++) {
-            flameState.addFrame(new Frame(sheet.getSprite(i), 0.08));
+            flameState.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // machine
         StateMachine machine = new StateMachine();
@@ -101,8 +91,8 @@ public class Prefabs {
         return flame;
     }
 
-    public static GameObject generateBlock() {
-        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Wall.png");
+    public static GameObject generateBlock(String path) {
+        SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
         if (sheet == null) {
             System.out.println("Block sheet was not loaded");
             return null;
@@ -131,8 +121,6 @@ public class Prefabs {
         }
         // create new game object
         GameObject player = new GameObject(ObjectType.PLAYER);
-        // set position
-        player.setTransform(new Transform(new Box2D(64, 64,30,42,16,15), 0));
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);
@@ -196,8 +184,7 @@ public class Prefabs {
 
     public static GameObject generateButton(BufferedImage idleImage, BufferedImage hoverImage) {
         GameObject button = new GameObject();
-        // set position
-        Rect menuRect = new Rect(0,0,idleImage.getHeight(), idleImage.getWidth(), idleImage, hoverImage);
+        Rect menuRect = new Rect(idleImage, hoverImage);
         button.addComponent(menuRect);
         return button;
     }
@@ -215,8 +202,6 @@ public class Prefabs {
         }
         // create new game object
         GameObject bot = new GameObject(ObjectType.MOVING);
-        // set position
-        bot.setTransform(new Transform(new Box2D(5*64, 64,30,42,16,15), 0));
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);

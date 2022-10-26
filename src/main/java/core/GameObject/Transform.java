@@ -7,7 +7,7 @@ public class Transform {
     private int zIndex;
     
     public Transform() {
-        this(new Box2D(0, 0), 0);
+        this(new Box2D(0, 0, 0 ,0), 0);
     }
     
     public Transform(Box2D position, int zIndex) {
