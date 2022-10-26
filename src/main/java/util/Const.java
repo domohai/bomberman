@@ -31,6 +31,7 @@ public class Const {
     // audio paths
     public static final String BACKGROUND_AUDIO = "C:/Users/Asus/Videos/The_Quarry_Opening_Credits_Song.wav";
     public static final String TEST_AUDIO = "D:/videos/cuoi.wav";
-
+    // background
     public static final BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
+    public static final BufferedImage blur_background = Prefabs.readImage("src/main/resources/blur_background.png");
 }

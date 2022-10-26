@@ -10,7 +10,6 @@ import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -69,10 +68,7 @@ public class PlayerMovement extends Component {
         box2d.updateCenter();
         int i = box2d.getCordY();
         int j = box2d.getCordX();
-
-
-        if(map[i][j] == ' ')
-            map[i][j] = 'p';
+        if(map[i][j] == ' ') map[i][j] = 'p';
         BombCooldown -= dt;
         if (BombCooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             GameObject newBomb = Prefabs.generateBomb();
@@ -83,20 +79,20 @@ public class PlayerMovement extends Component {
             scene.addGameObject(newBomb);
             BombCooldown = 2.0;
         }
-        List<GameObject> botList = typeListMap.get(ObjectType.MOVING);
-        for (GameObject bot : botList) {
-            if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
-                gameObject.setAlive(false);
-                map[i][j] = ' ';
-            }
-        }
-        List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
-        for (GameObject flame : flameList) {
-            if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
-                gameObject.setAlive(false);
-                map[i][j] = ' ';
-            }
-        }
+//        List<GameObject> botList = typeListMap.get(ObjectType.MOVING);
+//        for (GameObject bot : botList) {
+//            if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
+//                gameObject.setAlive(false);
+//                map[i][j] = ' ';
+//            }
+//        }
+//        List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
+//        for (GameObject flame : flameList) {
+//            if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
+//                gameObject.setAlive(false);
+//                map[i][j] = ' ';
+//            }
+//        }
 
 
         if (KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {

@@ -9,18 +9,24 @@ import java.util.List;
 import java.util.Map;
 
 public class Renderer {
-    private Map<Integer, List<GameObject>> gameObjects;
+    private final Map<Integer, List<GameObject>> gameObjects;
+    private final List<GameObject> buttons;
     private int currentValue;
     
     public Renderer() {
-        this.gameObjects = new HashMap<>();
-        this.currentValue = 0;
+        gameObjects = new HashMap<>();
+        buttons = new ArrayList<>();
+        currentValue = 0;
     }
     
     public void submit(GameObject newGameObject) {
         //compute = put but with function execution inside
-        this.gameObjects.computeIfAbsent(newGameObject.getTransform().getzIndex(), (x) -> new ArrayList<>());
-        this.gameObjects.get(newGameObject.getTransform().getzIndex()).add(newGameObject);
+        gameObjects.computeIfAbsent(newGameObject.getTransform().getzIndex(), (x) -> new ArrayList<>());
+        gameObjects.get(newGameObject.getTransform().getzIndex()).add(newGameObject);
+    }
+    
+    public void submitButton(GameObject gameObject) {
+        buttons.add(gameObject);
     }
     
     public void remove(GameObject g) {
@@ -29,13 +35,20 @@ public class Renderer {
     
     public void render(Graphics2D g2D) {
         // draw each gameObject base on its zIndex
-        for (currentValue = Const.MIN_Z_INDEX ;currentValue <= Const.MAX_Z_INDEX;currentValue++) {
+        for (currentValue = Const.MIN_Z_INDEX; currentValue <= Const.MAX_Z_INDEX;currentValue++) {
             if (gameObjects.get(currentValue) == null) {
                 continue;
             }
-            for (GameObject g : gameObjects.get(currentValue)) {
+            List<GameObject> list = gameObjects.get(currentValue);
+            for (GameObject g : list) {
                 g.draw(g2D);
             }
+        }
+    }
+    
+    public void renderButton(Graphics2D g2D) {
+        for (GameObject g : buttons) {
+            g.draw(g2D);
         }
     }
 }

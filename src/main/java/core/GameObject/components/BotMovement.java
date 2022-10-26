@@ -17,6 +17,7 @@ public class BotMovement extends Component {
     private Map<ObjectType, List<GameObject>> typeListMap = null;
     private Box2D box2d = null;
     private char[][] map;
+    private int dir;
 
     public BotMovement() {
     }
@@ -33,7 +34,7 @@ public class BotMovement extends Component {
     @Override
     public void update(double dt) {
         map[box2d.getCordY()][box2d.getCordX()] = ' ';
-        int dir = PathFinder.pathFinderBFS(box2d.getCordY(), box2d.getCordX(), map);
+        dir = PathFinder.pathFinderBFS(box2d.getCordY(), box2d.getCordX(), map);
         double sp = (Const.PLAYER_SPEED * dt);
         if (dir == 3 || dir == 4) {
             if ((int) box2d.getY() > box2d.getCordY() * Const.TILE_H) {

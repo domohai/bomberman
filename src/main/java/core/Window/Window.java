@@ -1,11 +1,13 @@
 package core.Window;
 
+import core.GameObject.components.SpriteSheet;
 import core.KeyController;
 import core.MouseController;
 import core.Window.Scenes.MenuScene;
 import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.Scene;
 import core.Window.Scenes.SceneType;
+import util.AssetsPool;
 import util.Const;
 import util.Time;
 import javax.swing.JFrame;
@@ -23,9 +25,9 @@ import java.awt.Graphics;
  * have it your way:)
  */
 public class Window extends JFrame implements Runnable {
-    private static Window window = null; // the only window
+    private static Window window = new Window(); // the only window
     private boolean isRunning;
-    private static Scene currentScene = null;
+    private Scene currentScene = null;
     private Image bufferImage = null;
     private Graphics bufferGraphics = null;
     
@@ -41,6 +43,7 @@ public class Window extends JFrame implements Runnable {
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addMouseListener(MouseController.get()); // add mouseListener
+        this.addMouseMotionListener(MouseController.get());
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
@@ -50,6 +53,7 @@ public class Window extends JFrame implements Runnable {
      * initialize stuff:)
      */
     public void init() {
+        load_resources();
         bufferImage = createImage(getWidth(), getHeight());
         bufferGraphics = bufferImage.getGraphics();
         bufferGraphics.setColor(Color.BLACK);
@@ -58,15 +62,12 @@ public class Window extends JFrame implements Runnable {
     }
 
     public static Window get() {
-        if (Window.window == null) {
-            Window.window = new Window();
-        }
         return Window.window;
     }
 
     public void update(double delta_time) {
 //        System.out.println(1/delta_time + " fps");
-        Window.currentScene.update(delta_time);
+        window.currentScene.update(delta_time);
         this.draw(getGraphics());
     }
     
@@ -84,7 +85,7 @@ public class Window extends JFrame implements Runnable {
     public void renderOffScreen(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
 //        g2D.fillRect(0, 0, getWidth(), getHeight());
-        Window.currentScene.draw(g2D);
+        window.currentScene.draw(g2D);
     }
     
     /**
@@ -93,13 +94,12 @@ public class Window extends JFrame implements Runnable {
      */
     public static void changeScene(SceneType type) {
         switch (type) {
-            case MENU_SCENE -> Window.currentScene = new MenuScene();
-            case PLAY_SCENE -> Window.currentScene = new PlayScene();
+            case MENU_SCENE -> window.currentScene = new MenuScene();
+            case PLAY_SCENE -> window.currentScene = new PlayScene();
             default -> System.out.println("Invalid scene!");
         }
-        Window.currentScene.load_resources();
-        Window.currentScene.init();
-        Window.currentScene.start();
+        window.currentScene.init();
+        window.currentScene.start();
     }
     
     /**
@@ -125,6 +125,42 @@ public class Window extends JFrame implements Runnable {
     }
 
     public static Scene getCurrentScene() {
-        return currentScene;
+        return window.currentScene;
+    }
+    
+    public void load_resources() {
+        // game sprites
+        SpriteSheet doctorBombRunUp = new SpriteSheet("src/main/resources/DoctorBombUp.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(doctorBombRunUp.getPath(), doctorBombRunUp);
+        SpriteSheet doctorBombRunLeft = new SpriteSheet("src/main/resources/DoctorBombLeft.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(doctorBombRunLeft.getPath(), doctorBombRunLeft);
+        SpriteSheet doctorBombRunRight = new SpriteSheet("src/main/resources/DoctorBombRight.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(doctorBombRunRight.getPath(), doctorBombRunRight);
+        SpriteSheet doctorBombRunDown = new SpriteSheet("src/main/resources/DoctorBombDown.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(doctorBombRunDown.getPath(), doctorBombRunDown);
+        SpriteSheet redOverlordRunUp = new SpriteSheet("src/main/resources/RedOverlordUp.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunUp.getPath(), redOverlordRunUp);
+        SpriteSheet redOverlordRunLeft = new SpriteSheet("src/main/resources/RedOverlordLeft.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunLeft.getPath(), redOverlordRunLeft);
+        SpriteSheet redOverlordRunRight = new SpriteSheet("src/main/resources/RedOverlordRight.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunRight.getPath(), redOverlordRunRight);
+        SpriteSheet redOverlordRunDown = new SpriteSheet("src/main/resources/RedOverlordDown.png", 0, 0, 9);
+        AssetsPool.addSpriteSheet(redOverlordRunDown.getPath(), redOverlordRunDown);
+        SpriteSheet wall = new SpriteSheet("src/main/resources/Wall.png", 0, 0, 1);
+        AssetsPool.addSpriteSheet(wall.getPath(), wall);
+        SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0, 40, 52, 6);
+        AssetsPool.addSpriteSheet(bomb.getPath(), bomb);
+        SpriteSheet explosion = new SpriteSheet("src/main/resources/Flame.png", 0, 0, 48, 48, 18);
+        AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
+        SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
+        AssetsPool.addSpriteSheet(rock.getPath(), rock);
+        // menu sprites
+        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/square_settings.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
+        // maps
+        AssetsPool.addMap("src/main/resources/Level0.txt");
+        AssetsPool.addMap("src/main/resources/Level1.txt");
     }
 }

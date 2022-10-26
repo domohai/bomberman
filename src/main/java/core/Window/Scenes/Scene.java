@@ -16,7 +16,6 @@ public abstract class Scene {
     }
     
     public void init() {}
-    public void load_resources() {}
     
     public void start() {
         for (GameObject g : this.gameObjects) {
