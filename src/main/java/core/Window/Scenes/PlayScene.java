@@ -98,11 +98,11 @@ public class PlayScene extends Scene {
     
     private void createButton() {
         // setting button
-        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"));
-        setting.setType(ObjectType.OTHER);
-        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, 60, 60), 0));
-        addGameObject(setting);
+//        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
+//        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"));
+//        setting.setType(ObjectType.OTHER);
+//        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, 60, 60), 0));
+//        addGameObject(setting);
     }
 
     private void change_map(String path) {
