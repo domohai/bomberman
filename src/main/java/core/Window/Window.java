@@ -155,10 +155,10 @@ public class Window extends JFrame implements Runnable {
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
         // menu sprites
-        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
-        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
-        AssetsPool.addButton("src/main/resources/idle_buttons/square_settings.png");
-        AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
+//        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
+//        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
+//        AssetsPool.addButton("src/main/resources/idle_buttons/square_settings.png");
+//        AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
         // maps
         AssetsPool.addMap("src/main/resources/Level0.txt");
         AssetsPool.addMap("src/main/resources/Level1.txt");

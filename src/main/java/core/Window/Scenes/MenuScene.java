@@ -17,18 +17,7 @@ public class MenuScene extends Scene {
 
     @Override
     public void init() {
-        //init menu Start
-        GameObject menuStart = Prefabs.generateButton(Prefabs.readImage("src/main/resources/menuImg/hover_buttons/start.png"),
-                Prefabs.readImage("src/main/resources/menuImg/idle_buttons/start.png"));
-        menuStart.setTransform(new Transform(new Box2D(300, 300, 0, 0), 0));
-        addGameObject(menuStart);
 
-        //init menu Exit
-
-        GameObject menuExit = Prefabs.generateButton(Prefabs.readImage("src/main/resources/menuImg/hover_buttons/exit.png"),
-                Prefabs.readImage("src/main/resources/menuImg/idle_buttons/start.png"));
-        menuExit.setTransform(new Transform(new Box2D(300, 450, 0, 0), 0));
-        addGameObject(menuExit);
     }
 
     @Override
