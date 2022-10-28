@@ -28,8 +28,8 @@ public class Breakable extends Component {
                 gameObject.setAlive(false);
                 char[][] map = scene.getMap();
                 // update map before remove rock
-                map[gameObject.getTransform().getPosition().getCordY()]
-                    [gameObject.getTransform().getPosition().getCordX()] = ' ';
+                map[gameObject.getTransform().getPosition().getCoordY()]
+                    [gameObject.getTransform().getPosition().getCoordX()] = ' ';
             }
         }
     }

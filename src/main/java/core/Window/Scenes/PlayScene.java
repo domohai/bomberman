@@ -4,7 +4,6 @@ import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
-import core.MouseController;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
@@ -137,10 +136,19 @@ public class PlayScene extends Scene {
                     // set position
                     player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
                     addGameObject(player);
-                } else if (map[i][j] == 'b') {
-                    GameObject bot = Prefabs.generateBot();
+                } else if (map[i][j] == '1') {
+                    GameObject bot = Prefabs.generateBot("BoarGuard");
                     if (bot == null) {
-                        System.out.println("Can not generate bot!");
+                        System.out.println("Can not generate BoarGuard!");
+                        return;
+                    }
+                    // set position
+                    bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                    addGameObject(bot);
+                }else if (map[i][j] == '2') {
+                    GameObject bot = Prefabs.generateBot("RedLizard");
+                    if (bot == null) {
+                        System.out.println("Can not generate RedLizard!");
                         return;
                     }
                     // set position

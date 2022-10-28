@@ -130,22 +130,17 @@ public class Window extends JFrame implements Runnable {
     
     public void load_resources() {
         // game sprites
-        SpriteSheet doctorBombRunUp = new SpriteSheet("src/main/resources/DoctorBombUp.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(doctorBombRunUp.getPath(), doctorBombRunUp);
-        SpriteSheet doctorBombRunLeft = new SpriteSheet("src/main/resources/DoctorBombLeft.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(doctorBombRunLeft.getPath(), doctorBombRunLeft);
-        SpriteSheet doctorBombRunRight = new SpriteSheet("src/main/resources/DoctorBombRight.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(doctorBombRunRight.getPath(), doctorBombRunRight);
-        SpriteSheet doctorBombRunDown = new SpriteSheet("src/main/resources/DoctorBombDown.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(doctorBombRunDown.getPath(), doctorBombRunDown);
-        SpriteSheet redOverlordRunUp = new SpriteSheet("src/main/resources/RedOverlordUp.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(redOverlordRunUp.getPath(), redOverlordRunUp);
-        SpriteSheet redOverlordRunLeft = new SpriteSheet("src/main/resources/RedOverlordLeft.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(redOverlordRunLeft.getPath(), redOverlordRunLeft);
-        SpriteSheet redOverlordRunRight = new SpriteSheet("src/main/resources/RedOverlordRight.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(redOverlordRunRight.getPath(), redOverlordRunRight);
-        SpriteSheet redOverlordRunDown = new SpriteSheet("src/main/resources/RedOverlordDown.png", 0, 0, 9);
-        AssetsPool.addSpriteSheet(redOverlordRunDown.getPath(), redOverlordRunDown);
+        String[] nameList = {"DoctorBomb","BoarGuard","RedLizard"};
+        for(String name : nameList) {
+            SpriteSheet RunUp = new SpriteSheet("src/main/resources/" + name + "Up.png", 0, 0, 9);
+            AssetsPool.addSpriteSheet(RunUp.getPath(), RunUp);
+            SpriteSheet RunLeft = new SpriteSheet("src/main/resources/" + name + "Left.png", 0, 0, 9);
+            AssetsPool.addSpriteSheet(RunLeft.getPath(), RunLeft);
+            SpriteSheet RunRight = new SpriteSheet("src/main/resources/" + name + "Right.png", 0, 0, 9);
+            AssetsPool.addSpriteSheet(RunRight.getPath(), RunRight);
+            SpriteSheet RunDown = new SpriteSheet("src/main/resources/" + name + "Down.png", 0, 0, 9);
+            AssetsPool.addSpriteSheet(RunDown.getPath(), RunDown);
+        }
         SpriteSheet wall = new SpriteSheet("src/main/resources/Wall.png", 0, 0, 1);
         AssetsPool.addSpriteSheet(wall.getPath(), wall);
         SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0, 40, 52, 6);

@@ -157,7 +157,6 @@ public class PathFinder {
             if (dir == 3) tj++;
             if (dir == 4) tj--;
         }
-//        System.out.println("with dir = " + dir + ".......................");
         return dir;
     }
 }

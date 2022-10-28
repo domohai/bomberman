@@ -39,7 +39,7 @@ public class PlayerMovement extends Component {
 
     @Override
     public void update(double dt) {
-        map[box2d.getCordY()][box2d.getCordX()] = ' ';
+        map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
         List<GameObject> unstableObjectList = typeListMap.get(ObjectType.UNSTABLE);
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
@@ -66,8 +66,8 @@ public class PlayerMovement extends Component {
             }
         }
         box2d.updateCenter();
-        int i = box2d.getCordY();
-        int j = box2d.getCordX();
+        int i = box2d.getCoordY();
+        int j = box2d.getCoordX();
         if(map[i][j] == ' ') map[i][j] = 'p';
         BombCooldown -= dt;
         if (BombCooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {

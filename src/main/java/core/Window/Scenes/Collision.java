@@ -5,6 +5,7 @@ import util.Box2D;
 
 public class Collision {
 
+    private static final int slideOffset = 16;
     // dx xor dy != 0
     public static void mapObject(Box2D box2d, double dx, double dy, char[][] map) {
         double pw = box2d.getWidth();
@@ -17,17 +18,34 @@ public class Collision {
         int c2 = (int) (x + pw) / Const.TILE_W;
         int r1 = (int) y / Const.TILE_H;
         int r2 = (int) (y + ph) / Const.TILE_H;
+        //check collide if continue to move
         if (dx < 0 && (isAbleToCollide(map[r1][c1]) || isAbleToCollide(map[r2][c1]))) {
-            x = (c1 + 1) * Const.TILE_W + 1;
+            if (isAbleToCollide(map[r1][c1]) && !isAbleToCollide(map[r2][c1]) && y > (r1 + 1) * Const.TILE_H - slideOffset)
+                y = (r1 + 1) * Const.TILE_H;
+            else if (!isAbleToCollide(map[r1][c1]) && isAbleToCollide(map[r2][c1]) && y + ph - 1 < r2 * Const.TILE_H + slideOffset - 1)
+                y = r2 * Const.TILE_H - 1 - ph;
+            else x = (c1 + 1) * Const.TILE_W + 1;
         }
         if (dx > 0 && (isAbleToCollide(map[r1][c2]) || isAbleToCollide(map[r2][c2]))) {
-            x = c2 * Const.TILE_W - pw - 1;
+            if (isAbleToCollide(map[r1][c2]) && !isAbleToCollide(map[r2][c2]) && y > (r1 + 1) * Const.TILE_H - slideOffset)
+                y = (r1 + 1) * Const.TILE_H;
+            else if (!isAbleToCollide(map[r1][c2]) && isAbleToCollide(map[r2][c2]) && y + ph - 1 < r2 * Const.TILE_H + slideOffset - 1)
+                y = r2 * Const.TILE_H - 1 - ph;
+            else x = c2 * Const.TILE_W - 1 - pw;
         }
         if (dy < 0 && (isAbleToCollide(map[r1][c1]) || isAbleToCollide(map[r1][c2]))) {
-            y = (r1 + 1) * Const.TILE_H + 1;
+            if (isAbleToCollide(map[r1][c1]) && !isAbleToCollide(map[r1][c2]) && x > (c1 + 1) * Const.TILE_W - slideOffset)
+                x = (c1 + 1) * Const.TILE_W;
+            else if (!isAbleToCollide(map[r1][c1]) && isAbleToCollide(map[r1][c2]) && x + pw - 1 < c2 * Const.TILE_W + slideOffset - 1)
+                x = c2 * Const.TILE_W - 1 - pw;
+            else y = (r1 + 1) * Const.TILE_H + 1;
         }
         if (dy > 0 && (isAbleToCollide(map[r2][c1]) || isAbleToCollide(map[r2][c2]))) {
-            y = r2 * Const.TILE_H - ph - 1;
+            if (isAbleToCollide(map[r2][c1]) && !isAbleToCollide(map[r2][c2]) && x > (c1 + 1) * Const.TILE_W - slideOffset)
+                x = (c1 + 1) * Const.TILE_W;
+            else if (!isAbleToCollide(map[r2][c1]) && isAbleToCollide(map[r2][c2]) && x + pw - 1 < c2 * Const.TILE_W + slideOffset - 1)
+                x = c2 * Const.TILE_W - 1 - pw;
+            else y = r2 * Const.TILE_H - 1 - ph;
         }
         box2d.setX(x - box2d.getSpriteOffsetX());
         box2d.setY(y - box2d.getSpriteOffsetY());
@@ -41,6 +59,7 @@ public class Collision {
     public static boolean isAbleToCollide(char x) {
         return x == '#' || x == 'o' || x == '*';
     }
+
     public static boolean boxCollision(Box2D box1, Box2D box2) {
         double px = box1.getX() + box1.getSpriteOffsetX();
         double py = box1.getY() + box1.getSpriteOffsetY();
@@ -57,6 +76,17 @@ public class Collision {
     }
 
     public static boolean sameTile(Box2D box1, Box2D box2) {
-        return (box1.getCordX() == box2.getCordX()) && (box1.getCordY() == box2.getCordY());
+        return (box1.getCoordX() == box2.getCoordX()) && (box1.getCoordY() == box2.getCoordY());
     }
+
+//    public static void slide(Box2D box, char[][] map) {
+//        if (box.isInbound()) return;
+//        int i = box.getCoordY();
+//        int j = box.getCoordX();
+//        double x = box.getX() + box.getSpriteOffsetX();
+//        double y = box.getY() + box.getSpriteOffsetY();
+//        if (x < j * Const.TILE_W) {
+//            if (map[i][j])
+//        }
+//    }
 }

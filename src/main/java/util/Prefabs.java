@@ -189,15 +189,15 @@ public class Prefabs {
         return button;
     }
     
-    public static GameObject generateBot() {
-        SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordLeft.png");
-        SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordRight.png");
-        SpriteSheet runUpSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordUp.png");
-        SpriteSheet runDownSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordDown.png");
+    public static GameObject generateBot(String botName) {
+        SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Left.png");
+        SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Right.png");
+        SpriteSheet runUpSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Up.png");
+        SpriteSheet runDownSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Down.png");
         // check
         if (runLeftSheet == null || runDownSheet == null
                 || runRightSheet == null || runUpSheet == null) {
-            System.out.println("Forgot to load RedOverlord spriteSheet!");
+            System.out.println("Forgot to load " + botName + " spriteSheet!");
             return null;
         }
         // create new game object
@@ -258,7 +258,11 @@ public class Prefabs {
         machine.setDefaultState(idleDown.getState());
         bot.addComponent(machine);
         // bot movement
-        BotMovement movement = new BotMovement();
+        Component movement = switch (botName) {
+            case "RedLizard" -> new RedLizardMovement();
+            case "BoarGuard" -> new BoarGuardMovement();
+            default -> null;
+        };
         bot.addComponent(movement);
         return bot;
     }
