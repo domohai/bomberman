@@ -7,10 +7,10 @@ import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
 import util.Box2D;
+import util.RandomMove;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class BoarGuardMovement extends Component {
     private StateMachine stateMachine = null;
@@ -19,7 +19,8 @@ public class BoarGuardMovement extends Component {
     private Box2D box2d = null;
     private char[][] map;
     private int dir = 0;
-    private final static Random rnd = new Random();
+    private boolean wasCollided = false;
+    private double sp;
 
     public BoarGuardMovement() {
     }
@@ -35,36 +36,31 @@ public class BoarGuardMovement extends Component {
 
     @Override
     public void update(double dt) {
-        if(dt != 0) return;
         map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
-        if (turnAble(box2d)) {
-            int p = Math.abs(rnd.nextInt()) % 10;
-            //60% will keep direction
-//            if (p <= 5) dir = 0;//60% will stay still
-            if (p == 6) dir = 1;
-            if (p == 7) dir = 2;
-            if (p == 8) dir = 3;
-            if (p == 9) dir = 4;
+        int turnBit = RandomMove.getTurnBit(box2d,map);
+        if (turnBit != 0) {
+            dir = RandomMove.randomDirection(dir,wasCollided,turnBit);
         }
+        sp = Const.PLAYER_SPEED * dt;
         switch (dir) {
             case 1:
                 stateMachine.changeState("runUp");
-                Collision.mapObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
+                wasCollided = Collision.mapObject(box2d, 0, -sp, map);
                 previousDirection = Direction.UP;
                 break;
             case 2:
                 stateMachine.changeState("runDown");
-                Collision.mapObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
+                wasCollided = Collision.mapObject(box2d, 0, sp, map);
                 previousDirection = Direction.DOWN;
                 break;
             case 3:
                 stateMachine.changeState("runLeft");
-                Collision.mapObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
+                wasCollided = Collision.mapObject(box2d, -sp, 0, map);
                 previousDirection = Direction.LEFT;
                 break;
             case 4:
                 stateMachine.changeState("runRight");
-                Collision.mapObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
+                wasCollided = Collision.mapObject(box2d, sp, 0, map);
                 previousDirection = Direction.RIGHT;
                 break;
             case 0:
@@ -86,10 +82,4 @@ public class BoarGuardMovement extends Component {
         }
     }
 
-    public boolean turnAble(Box2D box) {
-        int i = box.getCoordY();
-        int j = box.getCoordX();
-        if (!box.isInbound()) return false;
-        return (map[i - 1][j] == ' ' || map[i + 1][j] == ' ' || map[i][j - 1] == ' ' || map[i][j + 1] == ' ');
-    }
 }

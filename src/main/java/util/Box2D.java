@@ -46,8 +46,13 @@ public class Box2D {
         int tileY = getCoordY() * Const.TILE_H;
 
         if (x + spriteOffsetX < tileX || y + spriteOffsetX < tileY) return false;
-        if (x + spriteOffsetX + width > tileX + Const.TILE_W || y + spriteOffsetY + height > tileY + Const.TILE_H) return false;
+        if (x + spriteOffsetX + width > tileX + Const.TILE_W || y + spriteOffsetY + height > tileY + Const.TILE_H)
+            return false;
         return true;
+    }
+
+    public double euclideanDistance(Box2D box) {
+        return Math.sqrt((x - box.getX()) * (x - box.getX()) + (y - box.getY()) * (y - box.getY()));
     }
 
     public int getCoordX() {
