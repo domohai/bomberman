@@ -35,7 +35,7 @@ public class Renderer {
     
     public void render(Graphics2D g2D) {
         // draw each gameObject base on its zIndex
-        for (currentValue = Const.MIN_Z_INDEX; currentValue <= Const.MAX_Z_INDEX;currentValue++) {
+        for (currentValue = Const.MIN_Z_INDEX; currentValue <= Const.MAX_Z_INDEX; currentValue++) {
             if (gameObjects.get(currentValue) == null) {
                 continue;
             }

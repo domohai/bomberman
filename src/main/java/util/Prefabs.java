@@ -182,9 +182,9 @@ public class Prefabs {
         return player;
     }
 
-    public static GameObject generateButton(BufferedImage idleImage, BufferedImage hoverImage) {
+    public static GameObject generateButton(BufferedImage idleImage, BufferedImage hoverImage, ButtonType type) {
         GameObject button = new GameObject();
-        Rect menuRect = new Rect(idleImage, hoverImage);
+        Rect menuRect = new Rect(idleImage, hoverImage, type);
         button.addComponent(menuRect);
         return button;
     }

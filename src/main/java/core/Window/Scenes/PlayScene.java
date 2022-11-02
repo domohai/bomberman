@@ -4,7 +4,7 @@ import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
-import core.MouseController;
+import core.GameObject.components.ButtonType;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
@@ -91,6 +91,12 @@ public class PlayScene extends Scene {
         renderer.submit(object);
     }
 
+    private void addButton(GameObject button) {
+        button.start();
+        pauseMenu.add(button);
+        renderer.submitButton(button);
+    }
+
     public void remove(GameObject g) {
         typeListMap.get(g.getType()).remove(g);
         renderer.remove(g);
@@ -98,11 +104,22 @@ public class PlayScene extends Scene {
     
     private void createButton() {
         // setting button
-//        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-//        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"));
-//        setting.setType(ObjectType.OTHER);
-//        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, 60, 60), 0));
-//        addGameObject(setting);
+        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+        setting.setType(ObjectType.OTHER);
+        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 0));
+        addGameObject(setting);
+        // Add to Game Object Menu
+        GameObject resume = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/resume.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/resume.png"), ButtonType.RESUME);
+        resume.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        addButton(resume);
+        // quit
+        GameObject quit = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/quit.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/quit.png"), ButtonType.QUIT);
+        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + 105, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        addButton(quit);
+
     }
 
     private void change_map(String path) {

@@ -2,6 +2,7 @@ package core.GameObject.components;
 
 import core.MouseController;
 import core.Window.Scenes.PlayScene;
+import core.Window.Scenes.SceneType;
 import core.Window.Window;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -12,14 +13,16 @@ public class Rect extends Component {
     private int width, height;
     private int debounceX, debounceY;
     private BufferedImage idleImage, hoverImage, currentImage = null;
+    private ButtonType type;
 
-    public Rect(BufferedImage idleImage, BufferedImage hoverImage) {
+    public Rect(BufferedImage idleImage, BufferedImage hoverImage, ButtonType type) {
         this.x = 0;
         this.y = 0;
         this.width = idleImage.getWidth();
         this.height = idleImage.getHeight();
         this.idleImage = idleImage;
         this.hoverImage = hoverImage;
+        this.type = type;
     }
 
     @Override
@@ -38,10 +41,21 @@ public class Rect extends Component {
             currentImage = hoverImage;
             if (MouseController.isMousePressed(MouseEvent.BUTTON1)) {
                 // todo: handle action
-                
+                handleAction(type);
             }
         } else {
             currentImage = idleImage;
+        }
+    }
+
+    // Function Button
+    private static void handleAction(ButtonType type){
+        switch (type) {
+            case SETTING -> ((PlayScene)Window.getCurrentScene()).setPause(true);
+            case PLAY -> Window.changeScene(SceneType.PLAY_SCENE);
+            case QUIT -> Window.get().exit();
+            case RESUME -> ((PlayScene)Window.getCurrentScene()).setPause(false);
+
         }
     }
 

@@ -72,6 +72,7 @@ public class Window extends JFrame implements Runnable {
     }
     
     public void draw(Graphics g) {
+        if(g == null) return;
         renderOffScreen(bufferGraphics);
         g.drawImage(bufferImage, 7, 30, getWidth(), getHeight(), null);
     }
@@ -161,9 +162,18 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/quit.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/quit.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/resume.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/resume.png");
+
 
         // maps
         AssetsPool.addMap("src/main/resources/Level0.txt");
         AssetsPool.addMap("src/main/resources/Level1.txt");
+    }
+
+    public void exit() {
+        isRunning = false;
+        window.setVisible(false);
+        window.dispose();
     }
 }
