@@ -8,6 +8,7 @@ import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
+
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class PlayScene extends Scene {
         }
         pause = false;
     }
-    
+
     @Override
     public void start() {
         for (ObjectType type : typeListMap.keySet()) {
@@ -42,7 +43,7 @@ public class PlayScene extends Scene {
         }
         isRunning = true;
     }
-    
+
     @Override
     public void init() {
         change_map("src/main/resources/Level1.txt");
@@ -54,7 +55,7 @@ public class PlayScene extends Scene {
         if (!pause) updateGame(dt);
         else updateMenuPause(dt);
     }
-    
+
     private void updateGame(double dt) {
         for (ObjectType type : typeListMap.keySet()) {
             List<GameObject> list = typeListMap.get(type);
@@ -68,7 +69,7 @@ public class PlayScene extends Scene {
             toBeRemove.clear();
         }
     }
-    
+
     private void updateMenuPause(double dt) {
         for (GameObject g : pauseMenu) g.update(dt);
     }
@@ -78,7 +79,7 @@ public class PlayScene extends Scene {
         g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
         renderer.render(g2D);
         if (pause) {
-            g2D.drawImage(Const.blur_background, 0,0, Const.blur_background.getWidth(), Const.blur_background.getHeight(), null);
+            g2D.drawImage(Const.blur_background, 0, 0, Const.blur_background.getWidth(), Const.blur_background.getHeight(), null);
             renderer.renderButton(g2D);
         }
     }
@@ -94,7 +95,7 @@ public class PlayScene extends Scene {
         typeListMap.get(g.getType()).remove(g);
         renderer.remove(g);
     }
-    
+
     private void createButton() {
         // setting button
 //        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
@@ -109,51 +110,73 @@ public class PlayScene extends Scene {
         if (map == null) return;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == '#') {
-                    GameObject block = Prefabs.generateBlock("src/main/resources/Wall.png");
-                    if (block == null) {
-                        System.out.println("Error when generate block");
-                        return;
+                switch (map[i][j]) {
+                    case '#': {
+                        GameObject block = Prefabs.generateBlock("src/main/resources/Wall.png");
+                        if (block == null) {
+                            System.out.println("Error when generate block");
+                            return;
+                        }
+                        block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
+                        super.addGameObject(block);
+                        break;
                     }
-                    block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
-                    super.addGameObject(block);
-                } else if (map[i][j] == '*') {
-                    GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
-                    if (rock == null) {
-                        System.out.println("Error when generate block");
-                        return;
+                    case '*': {
+                        GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
+                        if (rock == null) {
+                            System.out.println("Error when generate block");
+                            return;
+                        }
+                        rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
+                        rock.setType(ObjectType.UNSTABLE);
+                        rock.addComponent(new Breakable());
+                        addGameObject(rock);
+                        break;
                     }
-                    rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
-                    rock.setType(ObjectType.UNSTABLE);
-                    rock.addComponent(new Breakable());
-                    addGameObject(rock);
-                } else if (map[i][j] == 'p') {
-                    GameObject player = Prefabs.generatePlayer();
-                    if (player == null) {
-                        System.out.println("Can not generate player!");
-                        return;
+                    case 'p': {
+                        GameObject player = Prefabs.generatePlayer();
+                        if (player == null) {
+                            System.out.println("Can not generate player!");
+                            return;
+                        }
+                        // set position
+                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        addGameObject(player);
+                        break;
                     }
-                    // set position
-                    player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
-                    addGameObject(player);
-                } else if (map[i][j] == '1') {
-                    GameObject bot = Prefabs.generateBot("BoarGuard");
-                    if (bot == null) {
-                        System.out.println("Can not generate BoarGuard!");
-                        return;
+                    case '1': {
+                        GameObject bot = Prefabs.generateBot("BoarGuard");
+                        if (bot == null) {
+                            System.out.println("Can not generate BoarGuard!");
+                            return;
+                        }
+                        // set position
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        addGameObject(bot);
+                        break;
                     }
-                    // set position
-                    bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
-                    addGameObject(bot);
-                }else if (map[i][j] == '2') {
-                    GameObject bot = Prefabs.generateBot("RedLizard");
-                    if (bot == null) {
-                        System.out.println("Can not generate RedLizard!");
-                        return;
+                    case '2': {
+                        GameObject bot = Prefabs.generateBot("RedLizard");
+                        if (bot == null) {
+                            System.out.println("Can not generate RedLizard!");
+                            return;
+                        }
+                        // set position
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        addGameObject(bot);
+                        break;
                     }
-                    // set position
-                    bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
-                    addGameObject(bot);
+                    case 'b': {
+                        GameObject item = Prefabs.generateItem("BombPU");
+                        if (item == null) {
+                            System.out.println("Can not generate BombPU");
+                            return;
+                        }
+                        // set position
+                        item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), 0));
+                        addGameObject(item);
+                        break;
+                    }
                 }
             }
         }
@@ -166,7 +189,7 @@ public class PlayScene extends Scene {
     public Map<ObjectType, List<GameObject>> getTypeListMap() {
         return typeListMap;
     }
-    
+
     public void setPause(boolean pause) {
         this.pause = pause;
     }

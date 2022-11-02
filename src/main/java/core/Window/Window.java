@@ -149,6 +149,15 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
+        //PowerUps
+        SpriteSheet bombPU = new SpriteSheet("src/main/resources/BombPU-sheet.png",0,0,50,64,6);
+        AssetsPool.addSpriteSheet(bombPU.getPath(),bombPU);
+        SpriteSheet speedPU = new SpriteSheet("src/main/resources/SpeedPU.png",0,0,50,64,1);
+        AssetsPool.addSpriteSheet(speedPU.getPath(),speedPU);
+        SpriteSheet flamePU = new SpriteSheet("src/main/resources/FlamePU.png",0,0,50,64,1);
+        AssetsPool.addSpriteSheet(flamePU.getPath(),flamePU);
+
+
         // menu sprites
 //        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
 //        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
