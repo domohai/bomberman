@@ -57,8 +57,8 @@ public class Window extends JFrame implements Runnable {
         bufferImage = createImage(getWidth(), getHeight());
         bufferGraphics = bufferImage.getGraphics();
         bufferGraphics.setColor(Color.BLACK);
-        Window.changeScene(SceneType.PLAY_SCENE);
-//        Window.changeScene(SceneType.MENU_SCENE);
+        //Window.changeScene(SceneType.PLAY_SCENE);
+        Window.changeScene(SceneType.MENU_SCENE);
     }
 
     public static Window get() {
@@ -84,7 +84,7 @@ public class Window extends JFrame implements Runnable {
      */
     public void renderOffScreen(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
-//        g2D.fillRect(0, 0, getWidth(), getHeight());
+//       g2D.fillRect(0, 0, getWidth(), getHeight());
         window.currentScene.draw(g2D);
     }
     
@@ -155,10 +155,13 @@ public class Window extends JFrame implements Runnable {
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
         // menu sprites
-//        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
-//        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
-//        AssetsPool.addButton("src/main/resources/idle_buttons/square_settings.png");
-//        AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/square_settings.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/quit.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/quit.png");
+
         // maps
         AssetsPool.addMap("src/main/resources/Level0.txt");
         AssetsPool.addMap("src/main/resources/Level1.txt");

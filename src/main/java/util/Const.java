@@ -34,4 +34,7 @@ public class Const {
     // background
     public static final BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
     public static final BufferedImage blur_background = Prefabs.readImage("src/main/resources/blur_background.png");
+    public static final int SQUARE_BUTTON = 60;
+    public static final int BUTTON_WIDTH = 300;
+    public static final int BUTTON_HEIGHT = 100;
 }
