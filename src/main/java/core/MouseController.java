@@ -2,6 +2,7 @@ package core;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 public class MouseController extends MouseAdapter {
     private static MouseController instance = new MouseController(); // the only mouseController
@@ -65,5 +66,9 @@ public class MouseController extends MouseAdapter {
         this.mouseDragged = true;
         this.dx = e.getX() - this.xPos;
         this.dy = e.getY() - this.yPos;
+    }
+
+    public void reset() {
+        Arrays.fill(mouseButton, false);
     }
 }

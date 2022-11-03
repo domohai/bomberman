@@ -31,10 +31,22 @@ public class Const {
     // audio paths
     public static final String BACKGROUND_AUDIO = "C:/Users/Asus/Videos/The_Quarry_Opening_Credits_Song.wav";
     public static final String TEST_AUDIO = "D:/videos/cuoi.wav";
+    // map paths
+    public static final String LEVEL_1 = "src/main/resources/Level1.txt";
     // background
     public static final BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
     public static final BufferedImage blur_background = Prefabs.readImage("src/main/resources/blur_background.png");
+
+    // buttons
     public static final int SQUARE_BUTTON = 60;
     public static final int BUTTON_WIDTH = 300;
     public static final int BUTTON_HEIGHT = 100;
+    public static final int BUTTON_OFFSET = 105;
+
+    // volume
+    public static final float DEFAULT_VOLUME = 0.4f;
+    public static final float MUTE_VOLUME = 0.0f;
+    public static final float MAX_VOLUME = 1.0f;
+
+
 }

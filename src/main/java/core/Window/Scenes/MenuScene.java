@@ -25,8 +25,8 @@ public class MenuScene extends Scene {
         AssetsPool.getButton("src/main/resources/hover_buttons/quit.png"), ButtonType.QUIT);
         // setting position for button on menu scene
         play.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 0));
-        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 , (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + 105, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 0));
-        //home.setTransform(new Transform(new Box2D(465 + 100, 352 + 60, 60, 60), 0));
+        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 , (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 0));
+        
         // add object
         addGameObject(play);
         addGameObject(quit);

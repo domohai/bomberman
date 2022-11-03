@@ -201,7 +201,7 @@ public class Prefabs {
             return null;
         }
         // create new game object
-        GameObject bot = new GameObject(ObjectType.MOVING);
+        GameObject bot = new GameObject(ObjectType.BOT);
         // idle left state
         State idleLeft = new State("idleLeft");
         idleLeft.setLoop(false);

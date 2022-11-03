@@ -40,7 +40,6 @@ public class Rect extends Component {
         && MouseController.getY() >= y + 30 && MouseController.getY() <= debounceY) {
             currentImage = hoverImage;
             if (MouseController.isMousePressed(MouseEvent.BUTTON1)) {
-                // todo: handle action
                 handleAction(type);
             }
         } else {
@@ -55,6 +54,7 @@ public class Rect extends Component {
             case PLAY -> Window.changeScene(SceneType.PLAY_SCENE);
             case QUIT -> Window.get().exit();
             case RESUME -> ((PlayScene)Window.getCurrentScene()).setPause(false);
+            case MENU -> Window.changeScene(SceneType.MENU_SCENE);
 
         }
     }
