@@ -44,9 +44,11 @@ public class RedLizardMovement extends Component {
         map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
         prevDir = dir;
         sp = (Const.PLAYER_SPEED * dt);
+        dir = 0;
         if (box2d.euclideanDistance(playerBox) <= RANGE) {
             dir = PathFinder.pathFinderBFS(box2d.getCoordY(), box2d.getCoordX(), map);
-        } else {
+        }
+        if(dir == 0){
             dir = RandomMove.randomDirection(dir,wasCollided,box2d,map);
         }
 

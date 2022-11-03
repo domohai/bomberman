@@ -81,7 +81,7 @@ public class Prefabs {
         State flameState = new State("idle");
         flameState.setLoop(false);
         for (int i = 0; i < sheet.size(); i++) {
-            flameState.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
+            flameState.addFrame(new Frame(sheet.getSprite(i), Const.FLAME_TIME));
         }
         // machine
         StateMachine machine = new StateMachine();
@@ -269,14 +269,14 @@ public class Prefabs {
     }
 
     public static GameObject generateItem(String itemName) {
-        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + itemName + "-sheet.png");
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + itemName + ".png");
         // check
         if (sheet == null) {
             System.out.println("Forgot to load " + itemName + " spriteSheet!");
             return null;
         }
         // create new game object
-        GameObject item = new GameObject(ObjectType.MOVING);
+        GameObject item = new GameObject(ObjectType.ITEM);
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
@@ -299,7 +299,7 @@ public class Prefabs {
             return null;
         }
         // create new game object
-        GameObject obj = new GameObject(ObjectType.MOVING);
+        GameObject obj = new GameObject(ObjectType.OTHER);
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
