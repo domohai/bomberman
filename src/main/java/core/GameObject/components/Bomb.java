@@ -3,7 +3,9 @@ package core.GameObject.components;
 import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
+import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
+import core.Window.Scenes.Stats;
 import core.Window.Window;
 import util.Const;
 import util.Prefabs;
@@ -15,9 +17,10 @@ public class Bomb extends Component {
     private double countDownTime = 3.0;
     private Map<ObjectType, List<GameObject>> typeListMap = null;
     private char[][] map = null;
+    private boolean[][] placedBombs;
     private PlayScene scene = null;
     private Box2D box2d = null;
-    
+
     public Bomb() {
     }
     
@@ -26,6 +29,7 @@ public class Bomb extends Component {
         scene = (PlayScene) Window.getCurrentScene();
         typeListMap = scene.getTypeListMap();
         map = scene.getMap();
+        placedBombs = scene.getPlacedBombs();
         box2d = gameObject.getTransform().getPosition();
     }
     
@@ -37,16 +41,24 @@ public class Bomb extends Component {
     
     @Override
     public void update(double dt) {
+        System.out.println("bomb up");
         countDownTime -= dt;
-        map[box2d.getCordY()][box2d.getCordX()] = 'o';
+        map[box2d.getCoordY()][box2d.getCoordX()] = 'o';
+        List<GameObject> flame = typeListMap.get(ObjectType.FLAME);
+        for(GameObject obj : flame) {
+            if(Collision.boxCollision(obj.getTransform().getPosition(),box2d))
+                countDownTime = Math.min(0.05, countDownTime);
+        }
         if (countDownTime <= 0) {
             // spawn explosion
             gameObject.setAlive(false);
-            int i = box2d.getCordY();
-            int j = box2d.getCordX();
+            Stats.increaseBombNumber();
+            int i = box2d.getCoordY();
+            int j = box2d.getCoordX();
             map[i][j] = ' ';
+            placedBombs[i][j] = false;
             addFlame(j * Const.TILE_W, i * Const.TILE_H);
-            int flameLength = 2; //=scene.getPlayerStat().getFlameLength();
+            int flameLength = Stats.get().getFlameSize();
             int ip, jp;
             for (ip = i + 1; ip <= Math.min(i + flameLength, 12); ip++)
                 if (map[ip][j] != '#' && map[ip][j] != '*') {

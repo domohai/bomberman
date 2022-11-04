@@ -16,6 +16,7 @@ public class Const {
     public static final int MAX_Z_INDEX = 10;
 
     public static final double DEFAULT_FRAME_TIME = 0.08;
+    public static final double FLAME_TIME = 0.04;
 
     // Player
     public static final int PLAYER_SPEED = 150;

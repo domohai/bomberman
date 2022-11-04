@@ -6,20 +6,23 @@ import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Window;
 import util.Const;
-import util.PathFinder;
 import util.Box2D;
+import util.RandomMove;
+
 import java.util.List;
 import java.util.Map;
 
-public class BotMovement extends Component {
+public class BoarGuardMovement extends Component {
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
     private Map<ObjectType, List<GameObject>> typeListMap = null;
     private Box2D box2d = null;
     private char[][] map;
-    private int dir;
+    private int dir = 0;
+    private boolean wasCollided = false;
+    private double sp;
 
-    public BotMovement() {
+    public BoarGuardMovement() {
     }
 
     @Override
@@ -33,46 +36,31 @@ public class BotMovement extends Component {
 
     @Override
     public void update(double dt) {
-        map[box2d.getCordY()][box2d.getCordX()] = ' ';
-        dir = PathFinder.pathFinderBFS(box2d.getCordY(), box2d.getCordX(), map);
-        double sp = (Const.PLAYER_SPEED * dt);
-        if (dir == 3 || dir == 4) {
-            if ((int) box2d.getY() > box2d.getCordY() * Const.TILE_H) {
-                box2d.setY((int) box2d.getY() - sp);
-                return;
-            } else if ((int) box2d.getY() < box2d.getCordY() * Const.TILE_H) {
-                box2d.setY((int) box2d.getY() + sp);
-                return;
-            }
+        map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
+        int turnBit = RandomMove.getTurnBit(box2d,map);
+        if (turnBit != 0) {
+            dir = RandomMove.randomDirection(dir,wasCollided,turnBit);
         }
-        if (dir == 1 || dir == 2) {
-            if ((int) box2d.getX() > box2d.getCordX() * Const.TILE_W) {
-                box2d.setX((int) box2d.getX() - sp);
-                return;
-            } else if ((int) box2d.getX() < box2d.getCordX() * Const.TILE_W) {
-                box2d.setX((int) box2d.getX() + sp);
-                return;
-            }
-        }
+        sp = Const.PLAYER_SPEED * dt;
         switch (dir) {
             case 1:
                 stateMachine.changeState("runUp");
-                Collision.mapObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
+                wasCollided = Collision.mapObject(box2d, 0, -sp, map);
                 previousDirection = Direction.UP;
                 break;
             case 2:
                 stateMachine.changeState("runDown");
-                Collision.mapObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
+                wasCollided = Collision.mapObject(box2d, 0, sp, map);
                 previousDirection = Direction.DOWN;
                 break;
             case 3:
                 stateMachine.changeState("runLeft");
-                Collision.mapObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
+                wasCollided = Collision.mapObject(box2d, -sp, 0, map);
                 previousDirection = Direction.LEFT;
                 break;
             case 4:
                 stateMachine.changeState("runRight");
-                Collision.mapObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
+                wasCollided = Collision.mapObject(box2d, sp, 0, map);
                 previousDirection = Direction.RIGHT;
                 break;
             case 0:
@@ -84,7 +72,8 @@ public class BotMovement extends Component {
                 }
                 break;
         }
-        map[box2d.getCordY()][box2d.getCordX()] = 'b';
+        box2d.updateCenter();
+        map[box2d.getCoordY()][box2d.getCoordX()] = '1';
         List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
         for (GameObject flame : flameList) {
             if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
@@ -92,4 +81,5 @@ public class BotMovement extends Component {
             }
         }
     }
+
 }

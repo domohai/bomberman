@@ -3,6 +3,7 @@ package util;
 import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.components.*;
+
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,7 +28,7 @@ public class Prefabs {
     public static char[][] loadMap(String path) {
         char[][] map = null;
         try (FileReader fileReader = new FileReader(path);
-            BufferedReader reader = new BufferedReader(fileReader)) {
+             BufferedReader reader = new BufferedReader(fileReader)) {
             String line = reader.readLine();
             StringTokenizer st = new StringTokenizer(line);
             int row = Integer.parseInt(st.nextToken());
@@ -38,13 +39,13 @@ public class Prefabs {
                 for (int j = 0; j < line.length(); j++)
                     map[i][j] = line.charAt(j);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("Can't load map");
             e.printStackTrace();
         }
         return map;
     }
-    
+
     public static GameObject generateBomb() {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
         if (sheet == null) {
@@ -67,7 +68,7 @@ public class Prefabs {
         bomb.addComponent(new Bomb());
         return bomb;
     }
-    
+
     public static GameObject generateFlame() {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Flame.png");
         if (sheet == null) {
@@ -80,7 +81,7 @@ public class Prefabs {
         State flameState = new State("idle");
         flameState.setLoop(false);
         for (int i = 0; i < sheet.size(); i++) {
-            flameState.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
+            flameState.addFrame(new Frame(sheet.getSprite(i), Const.FLAME_TIME));
         }
         // machine
         StateMachine machine = new StateMachine();
@@ -173,7 +174,7 @@ public class Prefabs {
         machine.addState(runUp);
         machine.addState(runRight);
         machine.addState(runLeft);
-        // add triggers and set default
+        //set default
         machine.setDefaultState(idleDown.getState());
         player.addComponent(machine);
         // player movement
@@ -188,16 +189,16 @@ public class Prefabs {
         button.addComponent(menuRect);
         return button;
     }
-    
-    public static GameObject generateBot() {
-        SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordLeft.png");
-        SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordRight.png");
-        SpriteSheet runUpSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordUp.png");
-        SpriteSheet runDownSheet = AssetsPool.getSpriteSheet("src/main/resources/RedOverlordDown.png");
+
+    public static GameObject generateBot(String botName) {
+        SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Left.png");
+        SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Right.png");
+        SpriteSheet runUpSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Up.png");
+        SpriteSheet runDownSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Down.png");
         // check
         if (runLeftSheet == null || runDownSheet == null
                 || runRightSheet == null || runUpSheet == null) {
-            System.out.println("Forgot to load RedOverlord spriteSheet!");
+            System.out.println("Forgot to load " + botName + " spriteSheet!");
             return null;
         }
         // create new game object
@@ -254,12 +255,64 @@ public class Prefabs {
         machine.addState(runUp);
         machine.addState(runRight);
         machine.addState(runLeft);
-        // add triggers and set default
+        //set default
         machine.setDefaultState(idleDown.getState());
         bot.addComponent(machine);
         // bot movement
-        BotMovement movement = new BotMovement();
+        Component movement = switch (botName) {
+            case "RedLizard" -> new RedLizardMovement();
+            case "BoarGuard" -> new BoarGuardMovement();
+            default -> null;
+        };
         bot.addComponent(movement);
         return bot;
+    }
+
+    public static GameObject generateItem(String itemName) {
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + itemName + ".png");
+        // check
+        if (sheet == null) {
+            System.out.println("Forgot to load " + itemName + " spriteSheet!");
+            return null;
+        }
+        // create new game object
+        GameObject item = new GameObject(ObjectType.ITEM);
+        //create item component
+        Component itemType = new Item(itemName);
+        item.addComponent(itemType);
+        // create state machine
+        StateMachine machine = new StateMachine();
+        // add idle states
+        State idle = new State("idle");
+        idle.setLoop(true);
+        for (int i = 0; i < sheet.size(); i++)
+            idle.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
+        machine.addState(idle);
+        //set default
+        machine.setDefaultState(idle.getState());
+        item.addComponent(machine);
+        return item;
+    }
+
+    public static GameObject devGenerateImage(String imgName) {
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + imgName + ".png");
+        // check
+        if (sheet == null) {
+            System.out.println("Forgot to load " + imgName + " spriteSheet!");
+            return null;
+        }
+        // create new game object
+        GameObject obj = new GameObject(ObjectType.OTHER);
+        // create state machine
+        StateMachine machine = new StateMachine();
+        // add idle states
+        State idle = new State("idle");
+        idle.setLoop(true);
+        idle.addFrame(new Frame(sheet.getSprite(0), -1));
+        machine.addState(idle);
+        //set default
+        machine.setDefaultState(idle.getState());
+        obj.addComponent(machine);
+        return obj;
     }
 }

@@ -4,7 +4,7 @@
 # # # #*# # #*#*# #
 #   *     ***  *  #
 # # # # # #*# # #*#
-#           b**  *#
+#           2**  *#
 # # # # # # # # # #
 #*  *      *  *   #
 # # # # #*# # # #*#
@@ -25,9 +25,9 @@ Tiles:
 x - Portal
 
 Character:
-p - Bomber
-1 - Balloon
-2 - Oneal
+p - DoctorBomber
+1 - BoarGuard
+2 - RedLizard
 
 Items:
 b - Bomb Item

@@ -3,7 +3,7 @@ package core.GameObject.components;
 import util.Const;
 
 public class Flame extends Component {
-    private double countDownTime = 18 * Const.DEFAULT_FRAME_TIME;
+    private double countDownTime = 18 * Const.FLAME_TIME;
     
     public Flame() {
     }

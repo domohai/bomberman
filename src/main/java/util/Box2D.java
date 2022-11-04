@@ -13,7 +13,7 @@ public class Box2D {
     }
 
     public Box2D(double x, double y, double width, double height) {
-        this(x, y, width, height, 0,0);
+        this(x, y, width, height, 0, 0);
     }
 
     public Box2D(double x, double y, double width, double height, double spriteOffsetX, double spriteOffsetY) {
@@ -34,17 +34,32 @@ public class Box2D {
     }
 
     public void fixOutOfBound() {
-        x = Math.max(x,0);
-        x = Math.min(x,Const.SCREEN_WIDTH-width);
-        y = Math.max(y,0);
-        y = Math.min(y,Const.SCREEN_HEIGHT-height-64);
+        x = Math.max(x, 0);
+        x = Math.min(x, Const.SCREEN_WIDTH - width);
+        y = Math.max(y, 0);
+        y = Math.min(y, Const.SCREEN_HEIGHT - height - 64);
         updateCenter();
     }
 
-    public int getCordX() {
+    public boolean isInbound() {
+        int tileX = getCoordX() * Const.TILE_W;
+        int tileY = getCoordY() * Const.TILE_H;
+
+        if (x + spriteOffsetX < tileX || y + spriteOffsetX < tileY) return false;
+        if (x + spriteOffsetX + width > tileX + Const.TILE_W || y + spriteOffsetY + height > tileY + Const.TILE_H)
+            return false;
+        return true;
+    }
+
+    public double euclideanDistance(Box2D box) {
+        return Math.sqrt((x - box.getX()) * (x - box.getX()) + (y - box.getY()) * (y - box.getY()));
+    }
+
+    public int getCoordX() {
         return (int) centerX / Const.TILE_W;
     }
-    public int getCordY() {
+
+    public int getCoordY() {
         return (int) centerY / Const.TILE_H;
     }
 
