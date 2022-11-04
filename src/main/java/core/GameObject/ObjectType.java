@@ -1,5 +1,5 @@
 package core.GameObject;
 
 public enum ObjectType {
-    PLAYER, MOVING, UNSTABLE, FLAME, ITEM, OTHER
+    PLAYER, BOT, UNSTABLE, FLAME, ITEM, OTHER
 }

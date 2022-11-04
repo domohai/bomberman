@@ -4,12 +4,15 @@ import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
+import core.GameObject.components.ButtonType;
+import core.KeyController;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +25,7 @@ public class PlayScene extends Scene {
     private List<GameObject> toBeRemove;
     private boolean pause;
     private List<GameObject> pauseMenu;
+    private int currentLevel = 1;
 
 
     public PlayScene() {
@@ -48,7 +52,7 @@ public class PlayScene extends Scene {
 
     @Override
     public void init() {
-        change_map("src/main/resources/Level1.txt");
+        change_map("src/main/resources/Level0.txt");
         createButton();
     }
 
@@ -69,6 +73,10 @@ public class PlayScene extends Scene {
         if (toBeRemove.size() > 0) {
             for (GameObject g : toBeRemove) remove(g);
             toBeRemove.clear();
+        }
+        // todo: change map when all bots die
+        if (KeyController.is_keyPressed(KeyEvent.VK_G)) {
+            change_map(Const.LEVEL_1);
         }
     }
 
@@ -93,6 +101,12 @@ public class PlayScene extends Scene {
         renderer.submit(object);
     }
 
+    private void addButton(GameObject button) {
+        button.start();
+        pauseMenu.add(button);
+        renderer.submitButton(button);
+    }
+
     public void remove(GameObject g) {
         typeListMap.get(g.getType()).remove(g);
         renderer.remove(g);
@@ -100,14 +114,48 @@ public class PlayScene extends Scene {
 
     private void createButton() {
         // setting button
-//        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-//        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"));
-//        setting.setType(ObjectType.OTHER);
-//        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, 60, 60), 0));
-//        addGameObject(setting);
+        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+        setting.setType(ObjectType.OTHER);
+        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 0));
+        addGameObject(setting);
+        //Add menu Board
+        GameObject board = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/pause_menu_bg.png"),
+        AssetsPool.getButton("src/main/resources/pause_menu_bg.png"), ButtonType.BOARD);
+        board.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - 600)/2.0, (Const.SCREEN_HEIGHT - 636)/2.0, 600, 636), 1));
+        addButton(board);
+        // Add to Game Object Menu
+        GameObject resume = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/resume.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/resume.png"), ButtonType.RESUME);
+        resume.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        addButton(resume);
+        // quit
+        GameObject quit = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/quit.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/quit.png"), ButtonType.QUIT);
+        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET * 2, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        addButton(quit);
+        // menu button
+        GameObject menu = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/menu.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/menu.png"), ButtonType.MENU);
+        menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET * 1, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        addButton(menu);
+
     }
 
     private void change_map(String path) {
+        // clear old map
+        for (ObjectType type : ObjectType.values()) {
+            typeListMap.get(type).clear();
+        }
+        gameObjects.clear();
+        toBeRemove.clear();
+        renderer.clear();
+        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+        setting.setType(ObjectType.OTHER);
+        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
+        addGameObject(setting);
+        // load new map
         map = AssetsPool.getMap(path);
         if (map == null) return;
         for (int i = 0; i < map.length; i++) {
