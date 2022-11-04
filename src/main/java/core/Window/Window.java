@@ -25,7 +25,7 @@ import java.awt.Graphics;
  * have it your way:)
  */
 public class Window extends JFrame implements Runnable {
-    private static Window window = new Window(); // the only window
+    private static final Window window = new Window(); // the only window
     private boolean isRunning;
     private Scene currentScene = null;
     private Image bufferImage = null;
@@ -40,13 +40,14 @@ public class Window extends JFrame implements Runnable {
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setTitle(Const.SCREEN_TITLE);
         this.setLocationRelativeTo(null);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addMouseListener(MouseController.get()); // add mouseListener
         this.addMouseMotionListener(MouseController.get());
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
+
     }
     
     /**
@@ -57,8 +58,8 @@ public class Window extends JFrame implements Runnable {
         bufferImage = createImage(getWidth(), getHeight());
         bufferGraphics = bufferImage.getGraphics();
         bufferGraphics.setColor(Color.BLACK);
-        Window.changeScene(SceneType.PLAY_SCENE);
-//        Window.changeScene(SceneType.MENU_SCENE);
+        //Window.changeScene(SceneType.PLAY_SCENE);
+        Window.changeScene(SceneType.MENU_SCENE);
     }
 
     public static Window get() {
@@ -67,11 +68,13 @@ public class Window extends JFrame implements Runnable {
 
     public void update(double delta_time) {
 //        System.out.println(1/delta_time + " fps");
+        window.setTitle("Bomberman | " + (int)(1/delta_time) + " fps");
         window.currentScene.update(delta_time);
         this.draw(getGraphics());
     }
     
     public void draw(Graphics g) {
+        if (g == null) return;
         renderOffScreen(bufferGraphics);
         g.drawImage(bufferImage, 7, 30, getWidth(), getHeight(), null);
     }
@@ -84,7 +87,7 @@ public class Window extends JFrame implements Runnable {
      */
     public void renderOffScreen(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
-//        g2D.fillRect(0, 0, getWidth(), getHeight());
+        g2D.fillRect(0, 0, getWidth(), getHeight());
         window.currentScene.draw(g2D);
     }
     
@@ -93,6 +96,7 @@ public class Window extends JFrame implements Runnable {
      * @param type type of new scene
      */
     public static void changeScene(SceneType type) {
+        MouseController.get().reset();
         switch (type) {
             case MENU_SCENE -> window.currentScene = new MenuScene();
             case PLAY_SCENE -> window.currentScene = new PlayScene();
@@ -155,12 +159,27 @@ public class Window extends JFrame implements Runnable {
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
         // menu sprites
-//        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
-//        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
-//        AssetsPool.addButton("src/main/resources/idle_buttons/square_settings.png");
-//        AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/square_settings.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/square_settings.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/quit.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/quit.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/resume.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/resume.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/menu.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/menu.png");
+        AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
+
+
         // maps
         AssetsPool.addMap("src/main/resources/Level0.txt");
         AssetsPool.addMap("src/main/resources/Level1.txt");
+    }
+
+    public void exit() {
+        isRunning = false;
+        window.setVisible(false);
+        window.dispose();
     }
 }

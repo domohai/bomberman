@@ -35,14 +35,17 @@ public class Renderer {
     
     public void render(Graphics2D g2D) {
         // draw each gameObject base on its zIndex
-        for (currentValue = Const.MIN_Z_INDEX; currentValue <= Const.MAX_Z_INDEX;currentValue++) {
-            if (gameObjects.get(currentValue) == null) {
-                continue;
-            }
+        for (currentValue = Const.MIN_Z_INDEX; currentValue <= Const.MAX_Z_INDEX; currentValue++) {
+            if (gameObjects.get(currentValue) == null) continue;
             List<GameObject> list = gameObjects.get(currentValue);
-            for (GameObject g : list) {
-                g.draw(g2D);
-            }
+            for (GameObject g : list) g.draw(g2D);
+        }
+    }
+
+    public void clear() {
+        for (currentValue = Const.MIN_Z_INDEX; currentValue <= Const.MAX_Z_INDEX; currentValue++) {
+            if (gameObjects.get(currentValue) == null) continue;
+            gameObjects.get(currentValue).clear();
         }
     }
     
