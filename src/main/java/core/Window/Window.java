@@ -40,7 +40,7 @@ public class Window extends JFrame implements Runnable {
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setTitle(Const.SCREEN_TITLE);
         this.setLocationRelativeTo(null);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addMouseListener(MouseController.get()); // add mouseListener
         this.addMouseMotionListener(MouseController.get());
@@ -150,12 +150,12 @@ public class Window extends JFrame implements Runnable {
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
         //PowerUps
-        SpriteSheet bombPU = new SpriteSheet("src/main/resources/BombPU-sheet.png",0,0,50,64,6);
+        SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png",0,0,50,64,6);
         AssetsPool.addSpriteSheet(bombPU.getPath(),bombPU);
-        SpriteSheet speedPU = new SpriteSheet("src/main/resources/SpeedPU.png",0,0,50,64,1);
-        AssetsPool.addSpriteSheet(speedPU.getPath(),speedPU);
-        SpriteSheet flamePU = new SpriteSheet("src/main/resources/FlamePU.png",0,0,50,64,1);
+        SpriteSheet flamePU = new SpriteSheet("src/main/resources/PUFlame.png",0,0,50,64,6);
         AssetsPool.addSpriteSheet(flamePU.getPath(),flamePU);
+        SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png",0,0,50,64,6);
+        AssetsPool.addSpriteSheet(speedPU.getPath(),speedPU);
 
 
         // menu sprites

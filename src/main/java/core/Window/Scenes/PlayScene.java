@@ -17,10 +17,12 @@ import java.util.Map;
 
 public class PlayScene extends Scene {
     private char[][] map;
+    private boolean[][] placedBombs = new boolean[12][20];
     private Map<ObjectType, List<GameObject>> typeListMap;
     private List<GameObject> toBeRemove;
     private boolean pause;
     private List<GameObject> pauseMenu;
+
 
     public PlayScene() {
         super();
@@ -111,29 +113,27 @@ public class PlayScene extends Scene {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 switch (map[i][j]) {
-                    case '#': {
+                    case '#' -> {
                         GameObject block = Prefabs.generateBlock("src/main/resources/Wall.png");
                         if (block == null) {
-                            System.out.println("Error when generate block");
+                            System.out.println("Can not generate block");
                             return;
                         }
                         block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
                         super.addGameObject(block);
-                        break;
                     }
-                    case '*': {
+                    case '*' -> {
                         GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
                         if (rock == null) {
-                            System.out.println("Error when generate block");
+                            System.out.println("Can not generate block");
                             return;
                         }
                         rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
                         rock.setType(ObjectType.UNSTABLE);
                         rock.addComponent(new Breakable());
                         addGameObject(rock);
-                        break;
                     }
-                    case 'p': {
+                    case 'p' -> {
                         GameObject player = Prefabs.generatePlayer();
                         if (player == null) {
                             System.out.println("Can not generate player!");
@@ -142,9 +142,8 @@ public class PlayScene extends Scene {
                         // set position
                         player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
                         addGameObject(player);
-                        break;
                     }
-                    case '1': {
+                    case '1' -> {
                         GameObject bot = Prefabs.generateBot("BoarGuard");
                         if (bot == null) {
                             System.out.println("Can not generate BoarGuard!");
@@ -153,9 +152,8 @@ public class PlayScene extends Scene {
                         // set position
                         bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
                         addGameObject(bot);
-                        break;
                     }
-                    case '2': {
+                    case '2' -> {
                         GameObject bot = Prefabs.generateBot("RedLizard");
                         if (bot == null) {
                             System.out.println("Can not generate RedLizard!");
@@ -164,18 +162,20 @@ public class PlayScene extends Scene {
                         // set position
                         bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
                         addGameObject(bot);
-                        break;
                     }
-                    case 'b': {
-                        GameObject item = Prefabs.generateItem("BombPU");
+                    case 'b', 'f', 's' -> {
+                        String type = "PUBomb";
+                        if (map[i][j] == 'b') type = "PUBomb";
+                        if (map[i][j] == 'f') type = "PUFlame";
+                        if (map[i][j] == 's') type = "PUSpeed";
+                        GameObject item = Prefabs.generateItem(type);
                         if (item == null) {
-                            System.out.println("Can not generate BombPU");
+                            System.out.println("Can not generate " + type);
                             return;
                         }
                         // set position
                         item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), 0));
                         addGameObject(item);
-                        break;
                     }
                 }
             }
@@ -184,6 +184,10 @@ public class PlayScene extends Scene {
 
     public char[][] getMap() {
         return map;
+    }
+
+    public boolean[][] getPlacedBombs() {
+        return placedBombs;
     }
 
     public Map<ObjectType, List<GameObject>> getTypeListMap() {

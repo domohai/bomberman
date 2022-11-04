@@ -6,10 +6,12 @@ import core.GameObject.Transform;
 import core.KeyController;
 import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
+import core.Window.Scenes.Stats;
 import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
+
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +22,12 @@ public class PlayerMovement extends Component {
     private Map<ObjectType, List<GameObject>> typeListMap = null;
     private Box2D box2d;
     private char[][] map;
+    private boolean[][] placedBombs;
     private PlayScene scene = null;
-    private double BombCooldown = 1.0;
+    private double sp;
+    private boolean bombCooldown = true;
 
-    private boolean debug = false;
+//    private boolean debug = false;
 
     public PlayerMovement() {
     }
@@ -35,27 +39,28 @@ public class PlayerMovement extends Component {
         scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
         typeListMap = scene.getTypeListMap();
+        placedBombs = scene.getPlacedBombs();
     }
 
     @Override
     public void update(double dt) {
         map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
-        List<GameObject> unstableObjectList = typeListMap.get(ObjectType.UNSTABLE);
+        sp = (Const.PLAYER_SPEED * dt) * Stats.get().getSpeedMultiplier();
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
-            Collision.mapObject(box2d, 0, -(Const.PLAYER_SPEED * dt), map);
+            Collision.mapObject(box2d, 0, -sp, map);
             previousDirection = Direction.UP;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_DOWN)) {
             stateMachine.changeState("runDown");
-            Collision.mapObject(box2d, 0, (Const.PLAYER_SPEED * dt), map);
+            Collision.mapObject(box2d, 0, sp, map);
             previousDirection = Direction.DOWN;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_LEFT)) {
             stateMachine.changeState("runLeft");
-            Collision.mapObject(box2d, -(Const.PLAYER_SPEED * dt), 0, map);
+            Collision.mapObject(box2d, -sp, 0, map);
             previousDirection = Direction.LEFT;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_RIGHT)) {
             stateMachine.changeState("runRight");
-            Collision.mapObject(box2d, (Const.PLAYER_SPEED * dt), 0, map);
+            Collision.mapObject(box2d, sp, 0, map);
             previousDirection = Direction.RIGHT;
         } else {
             switch (previousDirection) {
@@ -68,41 +73,60 @@ public class PlayerMovement extends Component {
         box2d.updateCenter();
         int i = box2d.getCoordY();
         int j = box2d.getCoordX();
-        if(map[i][j] == ' ') map[i][j] = 'p';
-        BombCooldown -= dt;
-        if (BombCooldown <= 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
+        if (map[i][j] == ' ')
+            map[i][j] = 'p';
+
+        if (bombCooldown && !placedBombs[i][j] && Stats.get().getBombNumber() > 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
+            placedBombs[i][j] = true;
+            System.out.println("bomb placed");
             GameObject newBomb = Prefabs.generateBomb();
             newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
                     i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H),
                     Const.BOMB_WIDTH,
                     Const.BOMB_HEIGHT), -1));
             scene.addGameObject(newBomb);
-            BombCooldown = 2.0;
+            Stats.decreaseBombNumber();
+            bombCooldown = false;
         }
-//        List<GameObject> botList = typeListMap.get(ObjectType.MOVING);
-//        for (GameObject bot : botList) {
-//            if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
-//                gameObject.setAlive(false);
-//                map[i][j] = ' ';
-//            }
-//        }
-//        List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
-//        for (GameObject flame : flameList) {
-//            if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
-//                gameObject.setAlive(false);
-//                map[i][j] = ' ';
-//            }
-//        }
+        if(!KeyController.is_keyPressed(KeyEvent.VK_SPACE))
+            bombCooldown = true;
+        List<GameObject> botList = typeListMap.get(ObjectType.MOVING);
+        for (GameObject bot : botList) {
+            if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
 
-
-        if (KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {
-            debug = true;
-            for (int ii = 0; ii < map.length; ii++) {
-                for (int jj = 0; jj < map[ii].length; jj++) {
-                    System.out.print(map[ii][jj]);
-                }
-                System.out.println();
+                gameObject.setAlive(false);
+                map[i][j] = ' ';
             }
-        } else debug = false;
+        }
+        List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
+        for (GameObject flame : flameList) {
+            if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
+                Stats.decreaseHP();
+                gameObject.setAlive(false);
+                map[i][j] = ' ';
+            }
+        }
+        List<GameObject> itemList = typeListMap.get(ObjectType.ITEM);
+        for (GameObject item : itemList) {
+            if (Collision.boxCollision(box2d, item.getTransform().getPosition())) {
+                switch (item.getComponent(Item.class).getType()) {
+                    case 1 -> Stats.increaseBombNumber();
+                    case 2 -> Stats.increaseFlameSize();
+                    case 3 -> Stats.increaseSpeedMultiplier();
+                }
+                item.setAlive(false);
+            }
+        }
+
+
+//        if (KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {
+//            debug = true;
+//            for (int ii = 0; ii < map.length; ii++) {
+//                for (int jj = 0; jj < map[ii].length; jj++) {
+//                    System.out.print(map[ii][jj]);
+//                }
+//                System.out.println();
+//            }
+//        } else debug = false;
     }
 }

@@ -277,6 +277,9 @@ public class Prefabs {
         }
         // create new game object
         GameObject item = new GameObject(ObjectType.ITEM);
+        //create item component
+        Component itemType = new Item(itemName);
+        item.addComponent(itemType);
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
