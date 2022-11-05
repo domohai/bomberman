@@ -78,7 +78,6 @@ public class PlayerMovement extends Component {
 
         if (bombCooldown && !placedBombs[i][j] && Stats.get().getBombNumber() > 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             placedBombs[i][j] = true;
-            System.out.println("bomb placed");
             GameObject newBomb = Prefabs.generateBomb();
             newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
                     i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H),

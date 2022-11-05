@@ -26,6 +26,7 @@ public class PlayScene extends Scene {
     private boolean pause;
     private List<GameObject> pauseMenu;
     private int currentLevel = 1;
+    private String level1;
 
 
     public PlayScene() {
@@ -52,7 +53,7 @@ public class PlayScene extends Scene {
 
     @Override
     public void init() {
-        change_map("src/main/resources/Level1.txt");
+        change_map("src/main/resources/Levels/Level3.txt");
         createButton();
     }
 
@@ -76,7 +77,7 @@ public class PlayScene extends Scene {
         }
         // todo: change map when all bots die
         if (KeyController.is_keyPressed(KeyEvent.VK_G)) {
-            change_map(Const.LEVEL_1);
+            change_map(level1);
         }
     }
 
@@ -115,14 +116,14 @@ public class PlayScene extends Scene {
     private void createButton() {
         // setting button
         GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+                AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
         setting.setType(ObjectType.OTHER);
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 0));
         addGameObject(setting);
         //Add menu Board
         GameObject board = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/pause_menu_bg.png"),
-        AssetsPool.getButton("src/main/resources/pause_menu_bg.png"), ButtonType.BOARD);
-        board.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - 600)/2.0, (Const.SCREEN_HEIGHT - 636)/2.0, 600, 636), 1));
+                AssetsPool.getButton("src/main/resources/pause_menu_bg.png"), ButtonType.BOARD);
+        board.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - 600) / 2.0, (Const.SCREEN_HEIGHT - 636) / 2.0, 600, 636), 1));
         addButton(board);
         // Add to Game Object Menu
         GameObject resume = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/resume.png"),
@@ -151,7 +152,7 @@ public class PlayScene extends Scene {
         toBeRemove.clear();
         renderer.clear();
         GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+                AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
         setting.setType(ObjectType.OTHER);
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
@@ -170,7 +171,7 @@ public class PlayScene extends Scene {
                         block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
                         super.addGameObject(block);
                     }
-                    case '*' -> {
+                    case '*', 'B', 'F', 'S', 'X' -> {
                         GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
                         if (rock == null) {
                             System.out.println("Can not generate block");
