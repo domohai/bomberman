@@ -47,7 +47,6 @@ public class Window extends JFrame implements Runnable {
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
-
     }
     
     /**
@@ -57,6 +56,7 @@ public class Window extends JFrame implements Runnable {
         load_resources();
         bufferImage = createImage(getWidth(), getHeight());
         bufferGraphics = bufferImage.getGraphics();
+        Sound.play(Const.BACKGROUND_MUSIC);
         bufferGraphics.setColor(Color.BLACK);
         //Window.changeScene(SceneType.PLAY_SCENE);
         Window.changeScene(SceneType.MENU_SCENE);
@@ -153,15 +153,14 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
-        //PowerUps
+        // PowerUps
         SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png",0,0,50,64,6);
         AssetsPool.addSpriteSheet(bombPU.getPath(),bombPU);
         SpriteSheet flamePU = new SpriteSheet("src/main/resources/PUFlame.png",0,0,50,64,6);
         AssetsPool.addSpriteSheet(flamePU.getPath(),flamePU);
         SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png",0,0,50,64,6);
         AssetsPool.addSpriteSheet(speedPU.getPath(),speedPU);
-
-
+        
         // menu sprites
         AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
@@ -173,16 +172,21 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/idle_buttons/resume.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/menu.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/menu.png");
+
+        // audios
+        AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.DEFAULT_VOLUME);
+
         AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/controls.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/controls.png");
-
 
         // maps
         AssetsPool.addMap("src/main/resources/Levels/Level0.txt");
         AssetsPool.addMap("src/main/resources/Levels/Level1.txt");
         AssetsPool.addMap("src/main/resources/Levels/Level2.txt");
         AssetsPool.addMap("src/main/resources/Levels/Level3.txt");
+        
     }
 
     public void exit() {

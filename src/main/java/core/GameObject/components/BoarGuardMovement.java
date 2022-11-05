@@ -8,7 +8,6 @@ import core.Window.Window;
 import util.Const;
 import util.Box2D;
 import util.RandomMove;
-
 import java.util.List;
 import java.util.Map;
 
