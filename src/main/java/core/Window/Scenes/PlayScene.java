@@ -52,7 +52,7 @@ public class PlayScene extends Scene {
 
     @Override
     public void init() {
-        change_map("src/main/resources/Level0.txt");
+        change_map("src/main/resources/Level1.txt");
         createButton();
     }
 
@@ -127,18 +127,23 @@ public class PlayScene extends Scene {
         // Add to Game Object Menu
         GameObject resume = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/resume.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/resume.png"), ButtonType.RESUME);
-        resume.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        resume.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/4.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(resume);
         // quit
         GameObject quit = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/quit.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/quit.png"), ButtonType.QUIT);
-        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET * 2, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/4.0 + Const.BUTTON_OFFSET * 3, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(quit);
         // menu button
         GameObject menu = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/menu.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/menu.png"), ButtonType.MENU);
-        menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET * 1, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/4.0 + Const.BUTTON_OFFSET, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(menu);
+        // controls button
+        GameObject controls = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/controls.png"),
+        AssetsPool.getButton("src/main/resources/hover_buttons/controls.png"), ButtonType.CONTROLS);
+        controls.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/4.0 + Const.BUTTON_OFFSET * 2, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        addButton(controls);
 
     }
 
