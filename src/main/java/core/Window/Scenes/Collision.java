@@ -6,6 +6,7 @@ import util.Box2D;
 public class Collision {
 
     private static final int slideOffset = 16;
+
     // dx xor dy != 0
     public static boolean mapObject(Box2D box2d, double dx, double dy, char[][] map) {
         double pw = box2d.getWidth();
@@ -71,7 +72,7 @@ public class Collision {
     }
 
     public static boolean isAbleToCollide(char x) {
-        return x == '#' || x == 'o' || x == '*';
+        return x == '#' || x == 'o' || x == '*' || x == 'B' || x == 'F' || x == 'S' || x == 'X';
     }
 
     public static boolean boxCollision(Box2D box1, Box2D box2) {

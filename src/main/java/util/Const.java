@@ -30,8 +30,7 @@ public class Const {
     public static final String EXPLOSION_SOUND = "src/main/resources/audio/Explosion4.wav";
     public static final String BACKGROUND_MUSIC = "src/main/resources/audio/Dungeon1.wav";
     // map paths
-    public static final String LEVEL_1 = "src/main/resources/Level1.txt";
-    
+    public static final String LEVEL_1 = "src/main/resources/Levels/Level1.txt";
     // background
     public static final BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
     public static final BufferedImage blur_background = Prefabs.readImage("src/main/resources/blur_background.png");

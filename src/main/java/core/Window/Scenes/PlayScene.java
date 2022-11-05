@@ -27,6 +27,9 @@ public class PlayScene extends Scene {
     private List<GameObject> toBeRemove;
     private boolean pause, lose, win;
     private List<GameObject> pauseMenu;
+    private int currentLevel = 1;
+    private String level1;
+
 
     public PlayScene() {
         super();
@@ -52,7 +55,7 @@ public class PlayScene extends Scene {
 
     @Override
     public void init() {
-        change_map("src/main/resources/Levels/Level1.txt");
+        change_map("src/main/resources/Levels/Level3.txt");
         createButton();
     }
 
@@ -82,7 +85,7 @@ public class PlayScene extends Scene {
         }
         // todo: change map when all bots die
         if (KeyController.is_keyPressed(KeyEvent.VK_G)) {
-            change_map(Const.LEVEL_1);
+            change_map(level1);
         }
     }
 
@@ -129,17 +132,17 @@ public class PlayScene extends Scene {
         // Add to Game Object Menu
         GameObject resume = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/resume.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/resume.png"), ButtonType.RESUME);
-        resume.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        resume.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 + 20, (Const.SCREEN_HEIGHT - 3* Const.BUTTON_HEIGHT)/2.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(resume);
         // quit
         GameObject quit = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/quit.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/quit.png"), ButtonType.QUIT);
-        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET * 2, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 + 20, (Const.SCREEN_HEIGHT - 3* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET * 2, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(quit);
         // menu button
         GameObject menu = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/menu.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/menu.png"), ButtonType.MENU);
-        menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET * 1, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
+        menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 + 20, (Const.SCREEN_HEIGHT - 3* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(menu);
 
     }
@@ -151,7 +154,7 @@ public class PlayScene extends Scene {
         toBeRemove.clear();
         renderer.clear();
         GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+                AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
         setting.setType(ObjectType.OTHER);
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
@@ -170,7 +173,7 @@ public class PlayScene extends Scene {
                         block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, Const.TILE_W, Const.TILE_H), Const.STILL_OBJECT_ZINDEX));
                         super.addGameObject(block);
                     }
-                    case '*' -> {
+                    case '*', 'B', 'F', 'S', 'X' -> {
                         GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
                         if (rock == null) {
                             System.out.println("Can not generate block");

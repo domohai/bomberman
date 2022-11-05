@@ -84,7 +84,8 @@ public class PlayerMovement extends Component {
             Stats.decreaseBombNumber();
             bombCooldown = false;
         }
-        if(!KeyController.is_keyPressed(KeyEvent.VK_SPACE)) bombCooldown = true;
+        if(!KeyController.is_keyPressed(KeyEvent.VK_SPACE))
+            bombCooldown = true;
         List<GameObject> botList = typeListMap.get(ObjectType.BOT);
         for (GameObject bot : botList) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
