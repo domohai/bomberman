@@ -6,6 +6,7 @@ import core.GameObject.Transform;
 import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.Stats;
+import core.Window.Sound;
 import core.Window.Window;
 import util.Const;
 import util.Prefabs;
@@ -35,13 +36,12 @@ public class Bomb extends Component {
     
     private void addFlame(double x, double y) {
         GameObject newFlame = Prefabs.generateFlame();
-        newFlame.setTransform(new Transform(new Box2D(x + 8, y + 8, Const.FLAME_SIZE, Const.FLAME_SIZE), 0));
+        newFlame.setTransform(new Transform(new Box2D(x + 8, y + 8, Const.FLAME_SIZE, Const.FLAME_SIZE), Const.FLAME_ZINDEX));
         scene.addGameObject(newFlame);
     }
     
     @Override
     public void update(double dt) {
-        System.out.println("bomb up");
         countDownTime -= dt;
         map[box2d.getCoordY()][box2d.getCoordX()] = 'o';
         List<GameObject> flame = typeListMap.get(ObjectType.FLAME);
@@ -58,6 +58,7 @@ public class Bomb extends Component {
             map[i][j] = ' ';
             placedBombs[i][j] = false;
             addFlame(j * Const.TILE_W, i * Const.TILE_H);
+            Sound.play(Const.EXPLOSION_SOUND);
             int flameLength = Stats.get().getFlameSize();
             int ip, jp;
             for (ip = i + 1; ip <= Math.min(i + flameLength, 12); ip++)
@@ -84,7 +85,6 @@ public class Bomb extends Component {
                 } else break;
             if (jp >= Math.max(j - flameLength, 0) && map[i][jp] == '*')
                 addFlame(jp * Const.TILE_W, i * Const.TILE_H);
-            
         }
     }
 }

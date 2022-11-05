@@ -6,13 +6,15 @@ import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
 import core.GameObject.components.ButtonType;
 import core.KeyController;
+import core.MouseController;
+import core.Window.Window;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,10 +25,8 @@ public class PlayScene extends Scene {
     private boolean[][] placedBombs = new boolean[12][20];
     private Map<ObjectType, List<GameObject>> typeListMap;
     private List<GameObject> toBeRemove;
-    private boolean pause;
+    private boolean pause, lose, win;
     private List<GameObject> pauseMenu;
-    private int currentLevel = 1;
-
 
     public PlayScene() {
         super();
@@ -37,29 +37,35 @@ public class PlayScene extends Scene {
             typeListMap.put(type, new ArrayList<>());
         }
         pause = false;
+        lose = false;
+        win = false;
     }
 
     @Override
     public void start() {
         for (ObjectType type : typeListMap.keySet()) {
             List<GameObject> list = typeListMap.get(type);
-            for (GameObject g : list) {
-                g.start();
-            }
+            for (GameObject g : list) g.start();
         }
         isRunning = true;
     }
 
     @Override
     public void init() {
-        change_map("src/main/resources/Level0.txt");
+        change_map("src/main/resources/Levels/Level1.txt");
         createButton();
     }
 
     @Override
     public void update(double dt) {
-        if (!pause) updateGame(dt);
-        else updateMenuPause(dt);
+        if (lose || win) {
+            if (MouseController.isMousePressed(MouseEvent.BUTTON1)) {
+                Window.changeScene(SceneType.MENU_SCENE);
+            }
+        } else {
+            if (!pause) updateGame(dt);
+            else updateMenuPause(dt);
+        }
     }
 
     private void updateGame(double dt) {
@@ -88,9 +94,16 @@ public class PlayScene extends Scene {
     public void draw(Graphics2D g2D) {
         g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
         renderer.render(g2D);
+        drawHeart(g2D);
         if (pause) {
             g2D.drawImage(Const.blur_background, 0, 0, Const.blur_background.getWidth(), Const.blur_background.getHeight(), null);
             renderer.renderButton(g2D);
+        }
+    }
+    
+    private void drawHeart(Graphics2D g2D) {
+        for (int i = 1; i <= Stats.get().getHP(); i++) {
+            g2D.drawImage(Const.heart, 20 * i + 10 * i, 20, Const.heart.getWidth(), Const.heart.getHeight(), null);
         }
     }
 
@@ -113,17 +126,6 @@ public class PlayScene extends Scene {
     }
 
     private void createButton() {
-        // setting button
-        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
-        setting.setType(ObjectType.OTHER);
-        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 0));
-        addGameObject(setting);
-        //Add menu Board
-        GameObject board = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/pause_menu_bg.png"),
-        AssetsPool.getButton("src/main/resources/pause_menu_bg.png"), ButtonType.BOARD);
-        board.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - 600)/2.0, (Const.SCREEN_HEIGHT - 636)/2.0, 600, 636), 1));
-        addButton(board);
         // Add to Game Object Menu
         GameObject resume = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/resume.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/resume.png"), ButtonType.RESUME);
@@ -144,9 +146,7 @@ public class PlayScene extends Scene {
 
     private void change_map(String path) {
         // clear old map
-        for (ObjectType type : ObjectType.values()) {
-            typeListMap.get(type).clear();
-        }
+        for (ObjectType type : ObjectType.values()) typeListMap.get(type).clear();
         gameObjects.clear();
         toBeRemove.clear();
         renderer.clear();
@@ -164,10 +164,10 @@ public class PlayScene extends Scene {
                     case '#' -> {
                         GameObject block = Prefabs.generateBlock("src/main/resources/Wall.png");
                         if (block == null) {
-                            System.out.println("Can not generate block");
+                            System.out.println("Cannot generate block");
                             return;
                         }
-                        block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
+                        block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, Const.TILE_W, Const.TILE_H), Const.STILL_OBJECT_ZINDEX));
                         super.addGameObject(block);
                     }
                     case '*' -> {
@@ -176,7 +176,7 @@ public class PlayScene extends Scene {
                             System.out.println("Can not generate block");
                             return;
                         }
-                        rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
+                        rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, Const.TILE_W, Const.TILE_H), Const.BREAKABLE_ROCK_ZINDEX));
                         rock.setType(ObjectType.UNSTABLE);
                         rock.addComponent(new Breakable());
                         addGameObject(rock);
@@ -188,7 +188,7 @@ public class PlayScene extends Scene {
                             return;
                         }
                         // set position
-                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.PLAYER_ZINDEX));
                         addGameObject(player);
                     }
                     case '1' -> {
@@ -198,7 +198,7 @@ public class PlayScene extends Scene {
                             return;
                         }
                         // set position
-                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.BOT_ZINDEX));
                         addGameObject(bot);
                     }
                     case '2' -> {
@@ -208,7 +208,7 @@ public class PlayScene extends Scene {
                             return;
                         }
                         // set position
-                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.BOT_ZINDEX));
                         addGameObject(bot);
                     }
                     case 'b', 'f', 's' -> {
@@ -222,7 +222,7 @@ public class PlayScene extends Scene {
                             return;
                         }
                         // set position
-                        item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), 0));
+                        item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), Const.ITEM_ZINDEX));
                         addGameObject(item);
                     }
                 }
@@ -244,5 +244,13 @@ public class PlayScene extends Scene {
 
     public void setPause(boolean pause) {
         this.pause = pause;
+    }
+    
+    public void setLose(boolean lose) {
+        this.lose = lose;
+    }
+    
+    public void setWin(boolean win) {
+        this.win = win;
     }
 }

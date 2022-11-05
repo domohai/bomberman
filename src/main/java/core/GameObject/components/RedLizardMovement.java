@@ -9,7 +9,6 @@ import util.Const;
 import util.PathFinder;
 import util.Box2D;
 import util.RandomMove;
-
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ public class RedLizardMovement extends Component {
     private int prevDir;
     private boolean wasCollided = false;
     private double sp;
-    private Box2D playerBox;//for calculate distance(player,bot)
+    private Box2D playerBox; //for calculate distance(player,bot)
     private static final double RANGE = 500;
 
     public RedLizardMovement() {
@@ -51,7 +50,6 @@ public class RedLizardMovement extends Component {
         if(dir == 0){
             dir = RandomMove.randomDirection(dir,wasCollided,box2d,map);
         }
-
         if (!box2d.isInbound()) {
             dir = prevDir;
         }

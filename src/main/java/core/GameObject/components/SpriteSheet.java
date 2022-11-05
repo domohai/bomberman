@@ -30,8 +30,6 @@ public class SpriteSheet {
         }
     }
     
-    
-    
     public BufferedImage getSprite(int index) {
         return sheet.get(index);
     }

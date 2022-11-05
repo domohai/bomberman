@@ -38,6 +38,18 @@ public class Audio {
         this.filePath = path;
     }
     
+    public void setVolume(float volume) {
+        if (volume < 0f) volume = 0f;
+        else if (volume > 1f) volume = 1f;
+        if (status.equals("play")) {
+            pause();
+            gainControl.setValue(20f * (float) Math.log10(volume));
+            resume();
+        } else {
+            gainControl.setValue(20f * (float) Math.log10(volume));
+        }
+    }
+    
     public void play() {
         // start the clip
         clip.start();
@@ -76,6 +88,10 @@ public class Audio {
         currentFrame = 0L;
         clip.stop();
         clip.close();
+    }
+    
+    public void reset() {
+        clip.setMicrosecondPosition(0L);
     }
     
     public void resetAudioStream() {

@@ -11,7 +11,6 @@ import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +19,12 @@ public class PlayerMovement extends Component {
     private StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
     private Map<ObjectType, List<GameObject>> typeListMap = null;
-    private Box2D box2d;
-    private char[][] map;
-    private boolean[][] placedBombs;
+    private Box2D box2d = null;
+    private char[][] map = null;
+    private boolean[][] placedBombs = null;
     private PlayScene scene = null;
-    private double sp;
+    private double sp = 0;
     private boolean bombCooldown = true;
-
-//    private boolean debug = false;
 
     public PlayerMovement() {
     }
@@ -44,7 +41,9 @@ public class PlayerMovement extends Component {
 
     @Override
     public void update(double dt) {
-        map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
+        int i = box2d.getCoordY();
+        int j = box2d.getCoordX();
+        map[i][j] = ' ';
         sp = (Const.PLAYER_SPEED * dt) * Stats.get().getSpeedMultiplier();
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
@@ -71,14 +70,11 @@ public class PlayerMovement extends Component {
             }
         }
         box2d.updateCenter();
-        int i = box2d.getCoordY();
-        int j = box2d.getCoordX();
         if (map[i][j] == ' ')
             map[i][j] = 'p';
 
         if (bombCooldown && !placedBombs[i][j] && Stats.get().getBombNumber() > 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             placedBombs[i][j] = true;
-            System.out.println("bomb placed");
             GameObject newBomb = Prefabs.generateBomb();
             newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
                     i * Const.TILE_H + (Const.HALF_TILE_H - Const.HALF_BOMB_H),
@@ -88,14 +84,13 @@ public class PlayerMovement extends Component {
             Stats.decreaseBombNumber();
             bombCooldown = false;
         }
-        if(!KeyController.is_keyPressed(KeyEvent.VK_SPACE))
-            bombCooldown = true;
-        List<GameObject> botList = typeListMap.get(ObjectType.MOVING);
+        if(!KeyController.is_keyPressed(KeyEvent.VK_SPACE)) bombCooldown = true;
+        List<GameObject> botList = typeListMap.get(ObjectType.BOT);
         for (GameObject bot : botList) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
-
                 gameObject.setAlive(false);
                 map[i][j] = ' ';
+                
             }
         }
         List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
@@ -117,16 +112,5 @@ public class PlayerMovement extends Component {
                 item.setAlive(false);
             }
         }
-
-
-//        if (KeyController.is_keyPressed(KeyEvent.VK_ENTER) && debug == false) {
-//            debug = true;
-//            for (int ii = 0; ii < map.length; ii++) {
-//                for (int jj = 0; jj < map[ii].length; jj++) {
-//                    System.out.print(map[ii][jj]);
-//                }
-//                System.out.println();
-//            }
-//        } else debug = false;
     }
 }

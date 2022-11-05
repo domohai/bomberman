@@ -20,7 +20,7 @@ public class Renderer {
     }
     
     public void submit(GameObject newGameObject) {
-        //compute = put but with function execution inside
+        // compute = put but with function execution inside
         gameObjects.computeIfAbsent(newGameObject.getTransform().getzIndex(), (x) -> new ArrayList<>());
         gameObjects.get(newGameObject.getTransform().getzIndex()).add(newGameObject);
     }
