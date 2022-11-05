@@ -177,8 +177,10 @@ public class Window extends JFrame implements Runnable {
 
 
         // maps
-        AssetsPool.addMap("src/main/resources/Level0.txt");
-        AssetsPool.addMap("src/main/resources/Level1.txt");
+        AssetsPool.addMap("src/main/resources/Levels/Level0.txt");
+        AssetsPool.addMap("src/main/resources/Levels/Level1.txt");
+        AssetsPool.addMap("src/main/resources/Levels/Level2.txt");
+        AssetsPool.addMap("src/main/resources/Levels/Level3.txt");
     }
 
     public void exit() {
