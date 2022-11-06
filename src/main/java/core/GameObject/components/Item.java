@@ -1,7 +1,8 @@
 package core.GameObject.components;
 
 public class Item extends Component{
-    private int type;//1 2 3 = bomb, flame, speed
+    private int type;// 1 2 3 = bomb, flame, speed
+    
     public Item(String typeName) {
         type = switch (typeName) {
             case "PUBomb" -> 1;

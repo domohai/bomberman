@@ -1,23 +1,72 @@
 package core.Window.Scenes;
 
-// player stats
-// Singleton implement
+import util.Const;
+
+/**
+ * player stats
+ * Singleton implement
+ */
 public class Stats {
     private static final Stats stats = new Stats();
     private int HP;
-    private int bombNumber;
-    private int flameSize;
+    private int bombNumber, flameSize;
+    private int currentLevel;
     private double speedMultiplier;
+    private boolean pause, lose, win;
 
     private Stats() {
-        HP = 3;
-        bombNumber = 1;
-        flameSize = 1;
+        HP = Const.INITIAL_HP;
+        bombNumber = Const.INITIAL_BOMB_NUMBER;
+        flameSize = Const.INITIAL_FLAME_SIZE;
         speedMultiplier = 1.0;
+        currentLevel = Const.INITIAL_MAP;
+        pause = false;
+        lose = false;
+        win = false;
+    }
+    
+    public void reset() {
+        HP = Const.INITIAL_HP;
+        bombNumber = Const.INITIAL_BOMB_NUMBER;
+        flameSize = Const.INITIAL_FLAME_SIZE;
+        speedMultiplier = 1.0;
+        currentLevel = Const.INITIAL_MAP;
     }
 
     public static Stats get() {
         return stats;
+    }
+    
+    public static boolean isPause() {
+        return stats.pause;
+    }
+    
+    public static boolean isLose() {
+        return stats.lose;
+    }
+    
+    public static boolean isWin() {
+        return stats.win;
+    }
+    
+    public static int currentLevel() {
+        return stats.currentLevel;
+    }
+    
+    public static void setLose(boolean lose) {
+        stats.lose = lose;
+    }
+    
+    public static void setWin(boolean win) {
+        stats.win = win;
+    }
+    
+    public static void setPause(boolean pause) {
+        stats.pause = pause;
+    }
+    
+    public static void setLevel(int level) {
+        stats.currentLevel = level;
     }
 
     public static void increaseHP() {
@@ -33,7 +82,7 @@ public class Stats {
     }
 
     public static void increaseSpeedMultiplier() {
-        stats.setSpeedMultiplier(stats.getSpeedMultiplier() + 0.2);
+        stats.setSpeedMultiplier(stats.getSpeedMultiplier() + 0.3);
     }
 
     public static void decreaseHP() {

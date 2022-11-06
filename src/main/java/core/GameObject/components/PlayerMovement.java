@@ -7,6 +7,7 @@ import core.KeyController;
 import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.Stats;
+import core.Window.Sound;
 import core.Window.Window;
 import util.Const;
 import util.Prefabs;
@@ -24,7 +25,7 @@ public class PlayerMovement extends Component {
     private boolean[][] placedBombs = null;
     private PlayScene scene = null;
     private double sp = 0;
-    private boolean bombCooldown = true;
+    private boolean bombCooldown = true, die = false;
 
     public PlayerMovement() {
     }
@@ -73,7 +74,8 @@ public class PlayerMovement extends Component {
         if (map[i][j] == ' ')
             map[i][j] = 'p';
 
-        if (bombCooldown && !placedBombs[i][j] && Stats.get().getBombNumber() > 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
+        if (bombCooldown && !placedBombs[i][j] && Stats.get().getBombNumber() > 0
+        && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             placedBombs[i][j] = true;
             GameObject newBomb = Prefabs.generateBomb();
             newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
@@ -89,17 +91,15 @@ public class PlayerMovement extends Component {
         List<GameObject> botList = typeListMap.get(ObjectType.BOT);
         for (GameObject bot : botList) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
-                gameObject.setAlive(false);
                 map[i][j] = ' ';
-                
+                die();
             }
         }
         List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
         for (GameObject flame : flameList) {
             if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
-                Stats.decreaseHP();
-                gameObject.setAlive(false);
                 map[i][j] = ' ';
+                die();
             }
         }
         List<GameObject> itemList = typeListMap.get(ObjectType.ITEM);
@@ -110,8 +110,24 @@ public class PlayerMovement extends Component {
                     case 2 -> Stats.increaseFlameSize();
                     case 3 -> Stats.increaseSpeedMultiplier();
                 }
+                Sound.play(Const.ITEM_SOUND);
                 item.setAlive(false);
             }
         }
+        map[i][j] = ' ';
+    }
+    
+    private void die() {
+        gameObject.setAlive(false);
+        Stats.decreaseHP();
+        if (Stats.get().getHP() <= 0) Stats.setLose(true);
+//        else {
+//            switch (Stats.currentLevel()) {
+//                case 1 -> scene.change_map(Const.LEVEL_1);
+//                case 2 -> scene.change_map(Const.LEVEL_2);
+//                case 3 -> scene.change_map(Const.LEVEL_3);
+//                default -> System.out.println("Current level of Stats exceeds the number of available maps");
+//            }
+//        }
     }
 }

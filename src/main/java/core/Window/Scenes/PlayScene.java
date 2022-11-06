@@ -5,7 +5,6 @@ import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
 import core.GameObject.components.ButtonType;
-import core.KeyController;
 import core.MouseController;
 import core.Window.Window;
 import util.AssetsPool;
@@ -13,7 +12,6 @@ import util.Const;
 import util.Prefabs;
 import util.Box2D;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,11 +23,7 @@ public class PlayScene extends Scene {
     private boolean[][] placedBombs = new boolean[12][20];
     private Map<ObjectType, List<GameObject>> typeListMap;
     private List<GameObject> toBeRemove;
-    private boolean pause, lose, win;
     private List<GameObject> pauseMenu;
-    private int currentLevel = 1;
-    private String level1;
-
 
     public PlayScene() {
         super();
@@ -39,9 +33,6 @@ public class PlayScene extends Scene {
         for (ObjectType type : ObjectType.values()) {
             typeListMap.put(type, new ArrayList<>());
         }
-        pause = false;
-        lose = false;
-        win = false;
     }
 
     @Override
@@ -55,18 +46,18 @@ public class PlayScene extends Scene {
 
     @Override
     public void init() {
-        change_map("src/main/resources/Levels/Level3.txt");
+        change_map(Const.LEVEL_1);
         createButton();
     }
 
     @Override
     public void update(double dt) {
-        if (lose || win) {
+        if (Stats.isLose() || Stats.isWin()) {
             if (MouseController.isMousePressed(MouseEvent.BUTTON1)) {
                 Window.changeScene(SceneType.MENU_SCENE);
             }
         } else {
-            if (!pause) updateGame(dt);
+            if (!Stats.isPause()) updateGame(dt);
             else updateMenuPause(dt);
         }
     }
@@ -84,8 +75,27 @@ public class PlayScene extends Scene {
             toBeRemove.clear();
         }
         // todo: change map when all bots die
-        if (KeyController.is_keyPressed(KeyEvent.VK_G)) {
-            change_map(level1);
+        if (typeListMap.get(ObjectType.BOT).size() < 1) {
+            Stats.setLevel(Stats.currentLevel() + 1);
+            if (Stats.currentLevel() > Const.MAX_LEVEL) {
+                Stats.setWin(true);
+            } else {
+                change_map(switch (Stats.currentLevel()) {
+                    case 1 -> Const.LEVEL_1;
+                    case 2 -> Const.LEVEL_2;
+                    case 3 -> Const.LEVEL_3;
+                    default -> "";
+                });
+            }
+        }
+        if (typeListMap.get(ObjectType.PLAYER).size() < 1) {
+            Stats.get().reset();
+            change_map(switch (Stats.currentLevel()) {
+                case 1 -> Const.LEVEL_1;
+                case 2 -> Const.LEVEL_2;
+                case 3 -> Const.LEVEL_3;
+                default -> "";
+            });
         }
     }
 
@@ -95,12 +105,16 @@ public class PlayScene extends Scene {
 
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
-        renderer.render(g2D);
-        drawHeart(g2D);
-        if (pause) {
-            g2D.drawImage(Const.blur_background, 0, 0, Const.blur_background.getWidth(), Const.blur_background.getHeight(), null);
-            renderer.renderButton(g2D);
+        if (Stats.isWin() || Stats.isLose()) {
+        
+        } else {
+            g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
+            renderer.render(g2D);
+            drawHeart(g2D);
+            if (Stats.isPause()) {
+                g2D.drawImage(Const.blur_background, 0, 0, Const.blur_background.getWidth(), Const.blur_background.getHeight(), null);
+                renderer.renderButton(g2D);
+            }
         }
     }
     
@@ -147,7 +161,7 @@ public class PlayScene extends Scene {
 
     }
 
-    private void change_map(String path) {
+    public void change_map(String path) {
         // clear old map
         for (ObjectType type : ObjectType.values()) typeListMap.get(type).clear();
         gameObjects.clear();
@@ -159,7 +173,7 @@ public class PlayScene extends Scene {
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
         // load new map
-        map = AssetsPool.getMap(path);
+        map = Prefabs.loadMap(path);
         if (map == null) return;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
@@ -243,17 +257,5 @@ public class PlayScene extends Scene {
 
     public Map<ObjectType, List<GameObject>> getTypeListMap() {
         return typeListMap;
-    }
-
-    public void setPause(boolean pause) {
-        this.pause = pause;
-    }
-    
-    public void setLose(boolean lose) {
-        this.lose = lose;
-    }
-    
-    public void setWin(boolean win) {
-        this.win = win;
     }
 }

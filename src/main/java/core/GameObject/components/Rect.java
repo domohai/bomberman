@@ -1,8 +1,8 @@
 package core.GameObject.components;
 
 import core.MouseController;
-import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.SceneType;
+import core.Window.Scenes.Stats;
 import core.Window.Window;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -50,12 +50,13 @@ public class Rect extends Component {
     // Function Button
     private static void handleAction(ButtonType type){
         switch (type) {
-            case SETTING -> ((PlayScene)Window.getCurrentScene()).setPause(true);
-            case PLAY -> Window.changeScene(SceneType.PLAY_SCENE);
+            case SETTING -> Stats.setPause(true);
+            case PLAY -> {Window.changeScene(SceneType.PLAY_SCENE);
+            Stats.get().reset();}
             case QUIT -> Window.get().exit();
-            case RESUME -> ((PlayScene)Window.getCurrentScene()).setPause(false);
-            case MENU -> Window.changeScene(SceneType.MENU_SCENE);
-
+            case RESUME -> Stats.setPause(false);
+            case MENU -> {Window.changeScene(SceneType.MENU_SCENE);
+                Stats.get().reset();}
         }
     }
 
