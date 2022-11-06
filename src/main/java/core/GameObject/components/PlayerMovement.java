@@ -42,9 +42,7 @@ public class PlayerMovement extends Component {
 
     @Override
     public void update(double dt) {
-        int i = box2d.getCoordY();
-        int j = box2d.getCoordX();
-        map[i][j] = ' ';
+        map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
         sp = (Const.PLAYER_SPEED * dt) * Stats.get().getSpeedMultiplier();
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
@@ -71,11 +69,12 @@ public class PlayerMovement extends Component {
             }
         }
         box2d.updateCenter();
+        int i = box2d.getCoordY();
+        int j = box2d.getCoordX();
         if (map[i][j] == ' ')
             map[i][j] = 'p';
 
-        if (bombCooldown && !placedBombs[i][j] && Stats.get().getBombNumber() > 0
-        && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
+        if (bombCooldown && !placedBombs[i][j] && Stats.get().getBombNumber() > 0 && KeyController.is_keyPressed(KeyEvent.VK_SPACE)) {
             placedBombs[i][j] = true;
             GameObject newBomb = Prefabs.generateBomb();
             newBomb.setTransform(new Transform(new Box2D(j * Const.TILE_W + (Const.HALF_TILE_W - Const.HALF_BOMB_W),
@@ -100,11 +99,25 @@ public class PlayerMovement extends Component {
                 die();
             }
         }
+
+        if(KeyController.is_keyPressed(KeyEvent.VK_ENTER)) {
+            if(debug){
+                printDebug(map);
+                debug = false;
+            }
+        } else debug = true;
     }
-    
+    private static boolean debug = true;
     private void die() {
         gameObject.setAlive(false);
         Stats.decreaseHP();
         if (Stats.get().getHP() <= 0) Stats.setLose(true);
+    }
+
+    private void printDebug(char[][] map) {
+        for (char[] chars : map) {
+            for (int j = 0; j < chars.length; j++) System.out.print(chars[j]);
+            System.out.println();
+        }
     }
 }

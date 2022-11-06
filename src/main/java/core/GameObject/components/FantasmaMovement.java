@@ -8,6 +8,7 @@ import core.Window.Window;
 import util.Box2D;
 import util.Const;
 import util.PathFinder;
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,8 @@ public class FantasmaMovement extends Component {
     private int prevDir;
     private boolean wasCollided = false;
     private double sp;
-    private Box2D playerBox;//for calculate distance(player,bot)
+    private Box2D playerBox; // for calculate distance(player,bot)
+    private char insideBreakable = ' '; //
     private static final double RANGE = 500;
 
     public FantasmaMovement() {
@@ -40,7 +42,7 @@ public class FantasmaMovement extends Component {
 
     @Override
     public void update(double dt) {
-        map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
+        map[box2d.getCoordY()][box2d.getCoordX()] = insideBreakable;
         prevDir = dir;
         sp = (Const.PLAYER_SPEED / 2.0 * dt);
         dir = 0;
@@ -82,6 +84,7 @@ public class FantasmaMovement extends Component {
                 break;
         }
         box2d.updateCenter();
+        insideBreakable = map[box2d.getCoordY()][box2d.getCoordX()];
         map[box2d.getCoordY()][box2d.getCoordX()] = '3';
         List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
         for (GameObject flame : flameList) {

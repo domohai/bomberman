@@ -68,8 +68,6 @@ public class Bomb extends Component {
                 } else break;
             if (ip >= Math.max(i - flameLength, 0) && isBreakable(map[ip][j])) {
                 addFlame(j * Const.TILE_W, ip * Const.TILE_H);
-                if (isHidingItem(map[ip][j]))
-                    addItem(ip, j);
             }
             //down
             for (ip = i + 1; ip <= Math.min(i + flameLength, 12); ip++)
@@ -78,8 +76,6 @@ public class Bomb extends Component {
                 } else break;
             if (ip <= Math.min(i + flameLength, 12) && isBreakable(map[ip][j])) {
                 addFlame(j * Const.TILE_W, ip * Const.TILE_H);
-                if (isHidingItem(map[ip][j]))
-                    addItem(ip, j);
             }
             //left
             for (jp = j - 1; jp >= Math.max(j - flameLength, 0); jp--)
@@ -88,8 +84,6 @@ public class Bomb extends Component {
                 } else break;
             if (jp >= Math.max(j - flameLength, 0) && isBreakable(map[i][jp])) {
                 addFlame(jp * Const.TILE_W, i * Const.TILE_H);
-                if (isHidingItem(map[i][jp]))
-                    addItem(i, jp);
             }
             // right
             for (jp = j + 1; jp <= Math.min(j + flameLength, 20); jp++)
@@ -98,8 +92,6 @@ public class Bomb extends Component {
                 } else break;
             if (jp <= Math.min(j + flameLength, 20) && isBreakable(map[i][jp])) {
                 addFlame(jp * Const.TILE_W, i * Const.TILE_H);
-                if (isHidingItem(map[i][jp]))
-                    addItem(i, jp);
             }
         }
     }
@@ -112,15 +104,5 @@ public class Bomb extends Component {
         return x == '*' || isHidingItem(x);
     }
 
-    public void addItem(int i, int j) {
-        String type = "PUBomb";
-        if (map[i][j] == 'B') type = "PUBomb";
-        if (map[i][j] == 'F') type = "PUFlame";
-        if (map[i][j] == 'S') type = "PUSpeed";
-        if (map[i][j] == 'X') type = "Portal";
-        map[i][j] = ' ';
-        GameObject item = Prefabs.generateItem(type);
-        item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), 0));
-        scene.addGameObject(item);
-    }
+
 }

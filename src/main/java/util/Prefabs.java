@@ -293,6 +293,8 @@ public class Prefabs {
             open.setLoop(false);
             open.addFrame(new Frame(sheet.getSprite(1), Const.DEFAULT_FRAME_TIME));
             machine.addState(open);
+            //set default
+            machine.setDefaultState(open.getState());
         } else {
             State idle = new State("idle");
             idle.setLoop(true);
