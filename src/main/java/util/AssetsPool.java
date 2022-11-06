@@ -32,13 +32,14 @@ public class AssetsPool {
         return spriteSheet;
     }
     
-    public static void addAudio(String path, boolean loop) {
+    public static void addAudio(String path, boolean loop, float volume) {
         File file = new File(path);
         if (AssetsPool.audioPool.containsKey(file.getAbsolutePath())) {
             System.out.println("Audio already exist: " + file.getAbsolutePath());
             return;
         }
         Audio audio = new Audio(file.getAbsolutePath(), loop);
+        audio.setVolume(volume);
         AssetsPool.audioPool.put(file.getAbsolutePath(), audio);
     }
     

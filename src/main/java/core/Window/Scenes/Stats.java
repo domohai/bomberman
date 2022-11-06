@@ -1,6 +1,7 @@
 package core.Window.Scenes;
 
-//player stats   Singleton implement
+// player stats
+// Singleton implement
 public class Stats {
     private static final Stats stats = new Stats();
     private int HP;

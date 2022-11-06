@@ -6,6 +6,7 @@ import core.GameObject.Transform;
 import core.Window.Scenes.Collision;
 import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.Stats;
+import core.Window.Sound;
 import core.Window.Window;
 import util.Const;
 import util.Prefabs;
@@ -36,7 +37,7 @@ public class Bomb extends Component {
 
     private void addFlame(double x, double y) {
         GameObject newFlame = Prefabs.generateFlame();
-        newFlame.setTransform(new Transform(new Box2D(x + 8, y + 8, Const.FLAME_SIZE, Const.FLAME_SIZE), 0));
+        newFlame.setTransform(new Transform(new Box2D(x + 8, y + 8, Const.FLAME_SIZE, Const.FLAME_SIZE), Const.FLAME_ZINDEX));
         scene.addGameObject(newFlame);
     }
 
@@ -58,6 +59,7 @@ public class Bomb extends Component {
             map[i][j] = ' ';
             placedBombs[i][j] = false;
             addFlame(j * Const.TILE_W, i * Const.TILE_H);
+            Sound.play(Const.EXPLOSION_SOUND);
             int flameLength = Stats.get().getFlameSize();
             int ip, jp;
             //up
@@ -100,7 +102,6 @@ public class Bomb extends Component {
                 if (isHidingItem(map[i][jp]))
                     addItem(i, jp);
             }
-
         }
     }
 

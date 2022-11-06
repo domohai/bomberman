@@ -46,10 +46,10 @@ public class RedLizardMovement extends Component {
         sp = (Const.PLAYER_SPEED * dt);
         dir = 0;
         if (box2d.euclideanDistance(playerBox) <= RANGE) {
-            dir = PathFinder.pathFinderBFS(box2d.getCoordY(), box2d.getCoordX(), map, false);
+            dir = PathFinder.pathFinderBFS(box2d.getCoordY(), box2d.getCoordX(), map);
         }
-        if (dir == 0) {
-            dir = RandomMove.randomDirection(dir, wasCollided, box2d, map);
+        if(dir == 0){
+            dir = RandomMove.randomDirection(dir,wasCollided,box2d,map);
         }
         //make the bot turn only when it is able to
         if (!box2d.isInbound()) {
@@ -58,22 +58,22 @@ public class RedLizardMovement extends Component {
         switch (dir) {
             case 1:
                 stateMachine.changeState("runUp");
-                wasCollided = Collision.mapObject(box2d, 0, -sp, map, false);
+                wasCollided = Collision.mapObject(box2d, 0, -sp, map);
                 previousDirection = Direction.UP;
                 break;
             case 2:
                 stateMachine.changeState("runDown");
-                wasCollided = Collision.mapObject(box2d, 0, sp, map, false);
+                wasCollided = Collision.mapObject(box2d, 0, sp, map);
                 previousDirection = Direction.DOWN;
                 break;
             case 3:
                 stateMachine.changeState("runLeft");
-                wasCollided = Collision.mapObject(box2d, -sp, 0, map, false);
+                wasCollided = Collision.mapObject(box2d, -sp, 0, map);
                 previousDirection = Direction.LEFT;
                 break;
             case 4:
                 stateMachine.changeState("runRight");
-                wasCollided = Collision.mapObject(box2d, sp, 0, map, false);
+                wasCollided = Collision.mapObject(box2d, sp, 0, map);
                 previousDirection = Direction.RIGHT;
                 break;
             case 0:
