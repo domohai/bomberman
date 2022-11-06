@@ -53,7 +53,7 @@ public class PlayScene extends Scene {
 
     @Override
     public void init() {
-        change_map("src/main/resources/Levels/Level3.txt");
+        change_map("src/main/resources/Levels/Level1.txt");
         createButton();
     }
 
@@ -210,6 +210,16 @@ public class PlayScene extends Scene {
                         }
                         // set position
                         bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        addGameObject(bot);
+                    }
+                    case '3' -> {
+                        GameObject bot = Prefabs.generateBot("Fantasma");
+                        if (bot == null) {
+                            System.out.println("Can not generate Fantasma!");
+                            return;
+                        }
+                        // set position
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 42, 60, 11, 0), 0));
                         addGameObject(bot);
                     }
                     case 'b', 'f', 's' -> {

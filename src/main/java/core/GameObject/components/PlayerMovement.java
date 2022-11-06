@@ -48,19 +48,19 @@ public class PlayerMovement extends Component {
         sp = (Const.PLAYER_SPEED * dt) * Stats.get().getSpeedMultiplier();
         if (KeyController.is_keyPressed(KeyEvent.VK_UP)) {
             stateMachine.changeState("runUp");
-            Collision.mapObject(box2d, 0, -sp, map);
+            Collision.mapObject(box2d, 0, -sp, map, false);
             previousDirection = Direction.UP;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_DOWN)) {
             stateMachine.changeState("runDown");
-            Collision.mapObject(box2d, 0, sp, map);
+            Collision.mapObject(box2d, 0, sp, map, false);
             previousDirection = Direction.DOWN;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_LEFT)) {
             stateMachine.changeState("runLeft");
-            Collision.mapObject(box2d, -sp, 0, map);
+            Collision.mapObject(box2d, -sp, 0, map, false);
             previousDirection = Direction.LEFT;
         } else if (KeyController.is_keyPressed(KeyEvent.VK_RIGHT)) {
             stateMachine.changeState("runRight");
-            Collision.mapObject(box2d, sp, 0, map);
+            Collision.mapObject(box2d, sp, 0, map, false);
             previousDirection = Direction.RIGHT;
         } else {
             switch (previousDirection) {

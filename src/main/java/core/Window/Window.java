@@ -10,6 +10,7 @@ import core.Window.Scenes.SceneType;
 import util.AssetsPool;
 import util.Const;
 import util.Time;
+
 import javax.swing.JFrame;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -30,7 +31,7 @@ public class Window extends JFrame implements Runnable {
     private Scene currentScene = null;
     private Image bufferImage = null;
     private Graphics bufferGraphics = null;
-    
+
     /**
      * we don't want any other class to call this constructor,
      * so we only have one window open
@@ -49,7 +50,7 @@ public class Window extends JFrame implements Runnable {
         this.isRunning = true;
 
     }
-    
+
     /**
      * initialize stuff:)
      */
@@ -68,21 +69,22 @@ public class Window extends JFrame implements Runnable {
 
     public void update(double delta_time) {
 //        System.out.println(1/delta_time + " fps");
-        window.setTitle("Bomberman | " + (int)(1/delta_time) + " fps");
+        window.setTitle("Bomberman | " + (int) (1 / delta_time) + " fps");
         window.currentScene.update(delta_time);
         this.draw(getGraphics());
     }
-    
+
     public void draw(Graphics g) {
         if (g == null) return;
         renderOffScreen(bufferGraphics);
         g.drawImage(bufferImage, 7, 30, getWidth(), getHeight(), null);
     }
-    
+
     /**
      * this function draws all the objects to an image called bufferImage
      * and then the bufferImage will be drawn to the window (JFrame)
      * so the movement of objects will be more smooth.:)
+     *
      * @param g bufferGraphics
      */
     public void renderOffScreen(Graphics g) {
@@ -90,9 +92,10 @@ public class Window extends JFrame implements Runnable {
         g2D.fillRect(0, 0, getWidth(), getHeight());
         window.currentScene.draw(g2D);
     }
-    
+
     /**
      * switch between menuScene and playScene...:)
+     *
      * @param type type of new scene
      */
     public static void changeScene(SceneType type) {
@@ -105,7 +108,7 @@ public class Window extends JFrame implements Runnable {
         window.currentScene.init();
         window.currentScene.start();
     }
-    
+
     /**
      * Game loop
      */
@@ -131,11 +134,11 @@ public class Window extends JFrame implements Runnable {
     public static Scene getCurrentScene() {
         return window.currentScene;
     }
-    
+
     public void load_resources() {
         // game sprites
-        String[] nameList = {"DoctorBomb","BoarGuard","RedLizard"};
-        for(String name : nameList) {
+        String[] nameList = {"DoctorBomb", "BoarGuard", "RedLizard", "Fantasma"};
+        for (String name : nameList) {
             SpriteSheet RunUp = new SpriteSheet("src/main/resources/" + name + "Up.png", 0, 0, 9);
             AssetsPool.addSpriteSheet(RunUp.getPath(), RunUp);
             SpriteSheet RunLeft = new SpriteSheet("src/main/resources/" + name + "Left.png", 0, 0, 9);
@@ -154,12 +157,12 @@ public class Window extends JFrame implements Runnable {
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
         //PowerUps
-        SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png",0,0,50,64,6);
-        AssetsPool.addSpriteSheet(bombPU.getPath(),bombPU);
-        SpriteSheet flamePU = new SpriteSheet("src/main/resources/PUFlame.png",0,0,50,64,6);
-        AssetsPool.addSpriteSheet(flamePU.getPath(),flamePU);
-        SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png",0,0,50,64,6);
-        AssetsPool.addSpriteSheet(speedPU.getPath(),speedPU);
+        SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png", 0, 0, 50, 64, 6);
+        AssetsPool.addSpriteSheet(bombPU.getPath(), bombPU);
+        SpriteSheet flamePU = new SpriteSheet("src/main/resources/PUFlame.png", 0, 0, 50, 64, 6);
+        AssetsPool.addSpriteSheet(flamePU.getPath(), flamePU);
+        SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png", 0, 0, 50, 64, 6);
+        AssetsPool.addSpriteSheet(speedPU.getPath(), speedPU);
 
 
         // menu sprites
