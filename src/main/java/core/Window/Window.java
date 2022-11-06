@@ -176,16 +176,15 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/idle_buttons/resume.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/menu.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/menu.png");
+        AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/controls.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/controls.png");
-        AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
-
-
-        // maps
-        AssetsPool.addMap("src/main/resources/Levels/Level0.txt");
-        AssetsPool.addMap("src/main/resources/Levels/Level1.txt");
-        AssetsPool.addMap("src/main/resources/Levels/Level2.txt");
-        AssetsPool.addMap("src/main/resources/Levels/Level3.txt");
+        
+        // audios
+        AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
+       
     }
 
     public void exit() {

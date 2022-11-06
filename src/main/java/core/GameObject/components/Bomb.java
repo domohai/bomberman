@@ -11,7 +11,6 @@ import core.Window.Window;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +91,7 @@ public class Bomb extends Component {
                 if (isHidingItem(map[i][jp]))
                     addItem(i, jp);
             }
-            //right
+            // right
             for (jp = j + 1; jp <= Math.min(j + flameLength, 20); jp++)
                 if (map[i][jp] != '#' && !isBreakable(map[i][jp])) {
                     addFlame(jp * Const.TILE_W, i * Const.TILE_H);
