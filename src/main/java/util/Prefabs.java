@@ -262,6 +262,7 @@ public class Prefabs {
         Component movement = switch (botName) {
             case "RedLizard" -> new RedLizardMovement();
             case "BoarGuard" -> new BoarGuardMovement();
+            case "Fantasma" -> new FantasmaMovement();
             default -> null;
         };
         bot.addComponent(movement);

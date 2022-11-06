@@ -1,7 +1,7 @@
 12 20
 ###################
-#1              p #
-# # # # # # # # # #
+#1  BBBBBBBX    p #
+###################
 #                 #
 # # # # # # # # # #
 #                 #
@@ -28,6 +28,7 @@ Character:
 p - DoctorBomber
 1 - BoarGuard
 2 - RedLizard
+3 - Fantasm
 
 Items:
 b(B) - Bomb Item

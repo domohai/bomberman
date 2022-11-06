@@ -8,7 +8,7 @@ public class Const {
     public static final int TILE_H = 64;
     public static final int HALF_TILE_W = 32;
     public static final int HALF_TILE_H = 32;
-    public static final int SCREEN_WIDTH = TILE_W * 20 - 50;
+    public static final int SCREEN_WIDTH = TILE_W * 21 - 50;
     public static final int SCREEN_HEIGHT = TILE_H * 12 + 37;
     public static final String SCREEN_TITLE = "Bomberman";
 
@@ -62,8 +62,8 @@ public class Const {
     public static final int STILL_OBJECT_ZINDEX = -5;
     public static final int ITEM_ZINDEX = -1;
     public static final int PLAYER_ZINDEX = 0;
-    public static final int BOT_ZINDEX = 3;
-    public static final int BREAKABLE_ROCK_ZINDEX = 4;
+    public static final int BREAKABLE_ROCK_ZINDEX = 3;
+    public static final int BOT_ZINDEX = 4;
     public static final int FLAME_ZINDEX = 5;
     public static final int MAX_Z_INDEX = 10;
     
