@@ -31,7 +31,7 @@ public class Window extends JFrame implements Runnable {
     private Scene currentScene = null;
     private Image bufferImage = null;
     private Graphics bufferGraphics = null;
-
+    
     /**
      * we don't want any other class to call this constructor,
      * so we only have one window open
@@ -48,51 +48,13 @@ public class Window extends JFrame implements Runnable {
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
-
+        
     }
-
-    /**
-     * initialize stuff:)
-     */
-    public void init() {
-        load_resources();
-        bufferImage = createImage(getWidth(), getHeight());
-        bufferGraphics = bufferImage.getGraphics();
-        bufferGraphics.setColor(Color.BLACK);
-        //Window.changeScene(SceneType.PLAY_SCENE);
-        Window.changeScene(SceneType.MENU_SCENE);
-    }
-
+    
     public static Window get() {
         return Window.window;
     }
-
-    public void update(double delta_time) {
-//        System.out.println(1/delta_time + " fps");
-        window.setTitle("Bomberman | " + (int) (1 / delta_time) + " fps");
-        window.currentScene.update(delta_time);
-        this.draw(getGraphics());
-    }
-
-    public void draw(Graphics g) {
-        if (g == null) return;
-        renderOffScreen(bufferGraphics);
-        g.drawImage(bufferImage, 7, 30, getWidth(), getHeight(), null);
-    }
-
-    /**
-     * this function draws all the objects to an image called bufferImage
-     * and then the bufferImage will be drawn to the window (JFrame)
-     * so the movement of objects will be more smooth.:)
-     *
-     * @param g bufferGraphics
-     */
-    public void renderOffScreen(Graphics g) {
-        Graphics2D g2D = (Graphics2D) g;
-        g2D.fillRect(0, 0, getWidth(), getHeight());
-        window.currentScene.draw(g2D);
-    }
-
+    
     /**
      * switch between menuScene and playScene...:)
      *
@@ -108,7 +70,50 @@ public class Window extends JFrame implements Runnable {
         window.currentScene.init();
         window.currentScene.start();
     }
-
+    
+    public static Scene getCurrentScene() {
+        return window.currentScene;
+    }
+    
+    /**
+     * initialize stuff:)
+     */
+    public void init() {
+        load_resources();
+        bufferImage = createImage(getWidth(), getHeight());
+        bufferGraphics = bufferImage.getGraphics();
+        bufferGraphics.setColor(Color.BLACK);
+//        Sound.play(Const.BACKGROUND_MUSIC);
+        //Window.changeScene(SceneType.PLAY_SCENE);
+        Window.changeScene(SceneType.MENU_SCENE);
+    }
+    
+    public void update(double delta_time) {
+//        System.out.println(1/delta_time + " fps");
+        window.setTitle("Bomberman | " + (int) (1 / delta_time) + " fps");
+        window.currentScene.update(delta_time);
+        this.draw(getGraphics());
+    }
+    
+    public void draw(Graphics g) {
+        if (g == null) return;
+        renderOffScreen(bufferGraphics);
+        g.drawImage(bufferImage, 7, 30, getWidth(), getHeight(), null);
+    }
+    
+    /**
+     * this function draws all the objects to an image called bufferImage
+     * and then the bufferImage will be drawn to the window (JFrame)
+     * so the movement of objects will be more smooth.:)
+     *
+     * @param g bufferGraphics
+     */
+    public void renderOffScreen(Graphics g) {
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.fillRect(0, 0, getWidth(), getHeight());
+        window.currentScene.draw(g2D);
+    }
+    
     /**
      * Game loop
      */
@@ -124,17 +129,13 @@ public class Window extends JFrame implements Runnable {
                 delta_time = time - lastFrameTime;
                 lastFrameTime = time;
                 update(delta_time);
-                Thread.sleep(25);
+                Thread.sleep(Math.max(0, (int)(16.66666666667 - (Time.getTime() - time)*1000)));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public static Scene getCurrentScene() {
-        return window.currentScene;
-    }
-
+    
     public void load_resources() {
         // game sprites
         String[] nameList = {"DoctorBomb", "BoarGuard", "RedLizard", "Fantasma"};
@@ -163,8 +164,7 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addSpriteSheet(flamePU.getPath(), flamePU);
         SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png", 0, 0, 50, 64, 6);
         AssetsPool.addSpriteSheet(speedPU.getPath(), speedPU);
-
-
+        
         // menu sprites
         AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
@@ -182,11 +182,11 @@ public class Window extends JFrame implements Runnable {
         
         // audios
         AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, false, Const.DEFAULT_VOLUME);
         AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
-       
+        
     }
-
+    
     public void exit() {
         isRunning = false;
         window.setVisible(false);

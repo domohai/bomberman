@@ -91,14 +91,12 @@ public class PlayerMovement extends Component {
         List<GameObject> botList = typeListMap.get(ObjectType.BOT);
         for (GameObject bot : botList) {
             if (Collision.movingObject(box2d, bot.getTransform().getPosition())) {
-                map[i][j] = ' ';
                 die();
             }
         }
         List<GameObject> flameList = typeListMap.get(ObjectType.FLAME);
         for (GameObject flame : flameList) {
             if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
-                map[i][j] = ' ';
                 die();
             }
         }
@@ -114,20 +112,11 @@ public class PlayerMovement extends Component {
                 item.setAlive(false);
             }
         }
-        map[i][j] = ' ';
     }
     
     private void die() {
         gameObject.setAlive(false);
         Stats.decreaseHP();
         if (Stats.get().getHP() <= 0) Stats.setLose(true);
-//        else {
-//            switch (Stats.currentLevel()) {
-//                case 1 -> scene.change_map(Const.LEVEL_1);
-//                case 2 -> scene.change_map(Const.LEVEL_2);
-//                case 3 -> scene.change_map(Const.LEVEL_3);
-//                default -> System.out.println("Current level of Stats exceeds the number of available maps");
-//            }
-//        }
     }
 }
