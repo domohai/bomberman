@@ -90,8 +90,6 @@ public class Collision {
         return true;
     }
 
-    public static boolean sameTile(Box2D box1, Box2D box2) {
-        return (box1.getCoordX() == box2.getCoordX()) && (box1.getCoordY() == box2.getCoordY());
-    }
+
 
 }

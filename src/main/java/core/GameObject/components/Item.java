@@ -46,7 +46,16 @@ public class Item extends Component {
                     Sound.play(Const.ITEM_SOUND);
                 }
                 case 4 -> {
-                
+//                    if (typeListMap.get(ObjectType.BOT).size() < 1) {
+//                        GameObject player = typeListMap.get(ObjectType.PLAYER).get(0);
+//
+//                        Stats.setLevel(Stats.currentLevel() + 1);
+//                        if (Stats.currentLevel() > Const.MAX_LEVEL) {
+//                            Stats.setWin(true);
+//                        } else {
+//                            change_map();
+//                        }
+//                    }
                 }
             }
             gameObject.setAlive(false);
