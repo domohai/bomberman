@@ -52,8 +52,8 @@ public class Const {
     public static final int STILL_OBJECT_ZINDEX = -5;
     public static final int ITEM_ZINDEX = -1;
     public static final int PLAYER_ZINDEX = 0;
-    public static final int BOT_ZINDEX = 3;
-    public static final int BREAKABLE_ROCK_ZINDEX = 4;
+    public static final int BREAKABLE_ROCK_ZINDEX = 3;
+    public static final int BOT_ZINDEX = 4;
     public static final int FLAME_ZINDEX = 5;
     public static final int MAX_Z_INDEX = 10;
     
