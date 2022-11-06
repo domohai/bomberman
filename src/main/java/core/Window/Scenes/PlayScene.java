@@ -5,13 +5,16 @@ import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
 import core.GameObject.components.ButtonType;
+import core.KeyController;
 import core.MouseController;
+import core.Window.Sound;
 import core.Window.Window;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +63,7 @@ public class PlayScene extends Scene {
             if (!Stats.isPause()) updateGame(dt);
             else updateMenuPause(dt);
         }
+        if (KeyController.is_keyPressed(KeyEvent.VK_T)) Sound.play(Const.ITEM_SOUND);
     }
 
     private void updateGame(double dt) {
