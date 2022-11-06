@@ -26,7 +26,7 @@ public class Stats {
     }
     
     public void reset() {
-        HP = Const.INITIAL_HP;
+//        HP = Const.INITIAL_HP;
         bombNumber = Const.INITIAL_BOMB_NUMBER;
         flameSize = Const.INITIAL_FLAME_SIZE;
         speedMultiplier = 1.0;

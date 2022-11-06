@@ -8,7 +8,6 @@ import core.Window.Window;
 import util.Box2D;
 import util.Const;
 import util.PathFinder;
-
 import java.util.List;
 import java.util.Map;
 

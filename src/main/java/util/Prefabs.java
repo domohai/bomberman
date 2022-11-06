@@ -24,7 +24,7 @@ public class Prefabs {
         }
         return parent;
     }
-
+    
     public static char[][] loadMap(String path) {
         char[][] map = null;
         try (FileReader fileReader = new FileReader(path);
@@ -45,7 +45,7 @@ public class Prefabs {
         }
         return map;
     }
-
+    
     public static GameObject generateBomb() {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
         if (sheet == null) {
@@ -68,7 +68,7 @@ public class Prefabs {
         bomb.addComponent(new Bomb());
         return bomb;
     }
-
+    
     public static GameObject generateFlame() {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Flame.png");
         if (sheet == null) {
@@ -91,7 +91,7 @@ public class Prefabs {
         flame.addComponent(new Flame());
         return flame;
     }
-
+    
     public static GameObject generateBlock(String path) {
         SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
         if (sheet == null) {
@@ -108,7 +108,7 @@ public class Prefabs {
         block.addComponent(machine);
         return block;
     }
-
+    
     public static GameObject generatePlayer() {
         SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/DoctorBombLeft.png");
         SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/DoctorBombRight.png");
@@ -182,14 +182,14 @@ public class Prefabs {
         player.addComponent(movement);
         return player;
     }
-
+    
     public static GameObject generateButton(BufferedImage idleImage, BufferedImage hoverImage, ButtonType type) {
         GameObject button = new GameObject();
         Rect menuRect = new Rect(idleImage, hoverImage, type);
         button.addComponent(menuRect);
         return button;
     }
-
+    
     public static GameObject generateBot(String botName) {
         SpriteSheet runLeftSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Left.png");
         SpriteSheet runRightSheet = AssetsPool.getSpriteSheet("src/main/resources/" + botName + "Right.png");
@@ -268,7 +268,7 @@ public class Prefabs {
         bot.addComponent(movement);
         return bot;
     }
-
+    
     public static GameObject generateItem(String itemName) {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + itemName + ".png");
         // check
@@ -284,17 +284,29 @@ public class Prefabs {
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
-        State idle = new State("idle");
-        idle.setLoop(true);
-        for (int i = 0; i < sheet.size(); i++)
-            idle.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
-        machine.addState(idle);
-        //set default
-        machine.setDefaultState(idle.getState());
+        if (itemName.equals("Portal")) {
+            State close = new State("Close");
+            close.setLoop(false);
+            close.addFrame(new Frame(sheet.getSprite(0), Const.DEFAULT_FRAME_TIME));
+            machine.addState(close);
+            State open = new State("Open");
+            open.setLoop(false);
+            open.addFrame(new Frame(sheet.getSprite(1), Const.DEFAULT_FRAME_TIME));
+            machine.addState(open);
+        } else {
+            State idle = new State("idle");
+            idle.setLoop(true);
+            for (int i = 0; i < sheet.size(); i++)
+                idle.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
+            machine.addState(idle);
+            //set default
+            machine.setDefaultState(idle.getState());
+        }
         item.addComponent(machine);
         return item;
     }
-
+    
+    //dev only
     public static GameObject devGenerateImage(String imgName) {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + imgName + ".png");
         // check
