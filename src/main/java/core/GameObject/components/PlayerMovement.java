@@ -25,7 +25,7 @@ public class PlayerMovement extends Component {
     private boolean[][] placedBombs = null;
     private PlayScene scene = null;
     private double sp = 0;
-    private boolean bombCooldown = true, die = false;
+    private boolean bombCooldown = true;
 
     public PlayerMovement() {
     }
@@ -98,18 +98,6 @@ public class PlayerMovement extends Component {
         for (GameObject flame : flameList) {
             if (Collision.movingObject(box2d, flame.getTransform().getPosition())) {
                 die();
-            }
-        }
-        List<GameObject> itemList = typeListMap.get(ObjectType.ITEM);
-        for (GameObject item : itemList) {
-            if (Collision.boxCollision(box2d, item.getTransform().getPosition())) {
-                switch (item.getComponent(Item.class).getType()) {
-                    case 1 -> Stats.increaseBombNumber();
-                    case 2 -> Stats.increaseFlameSize();
-                    case 3 -> Stats.increaseSpeedMultiplier();
-                }
-                Sound.play(Const.ITEM_SOUND);
-                item.setAlive(false);
             }
         }
     }

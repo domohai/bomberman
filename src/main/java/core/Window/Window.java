@@ -84,7 +84,6 @@ public class Window extends JFrame implements Runnable {
         bufferGraphics = bufferImage.getGraphics();
         bufferGraphics.setColor(Color.BLACK);
 //        Sound.play(Const.BACKGROUND_MUSIC);
-        //Window.changeScene(SceneType.PLAY_SCENE);
         Window.changeScene(SceneType.MENU_SCENE);
     }
     
@@ -157,14 +156,16 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
         SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
-        //PowerUps
+        // PowerUps
         SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png", 0, 0, 50, 64, 6);
         AssetsPool.addSpriteSheet(bombPU.getPath(), bombPU);
         SpriteSheet flamePU = new SpriteSheet("src/main/resources/PUFlame.png", 0, 0, 50, 64, 6);
         AssetsPool.addSpriteSheet(flamePU.getPath(), flamePU);
         SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png", 0, 0, 50, 64, 6);
         AssetsPool.addSpriteSheet(speedPU.getPath(), speedPU);
-        
+        // door
+        SpriteSheet door = new SpriteSheet("src/main/resources/Door/Portal.png", 0, 0, Const.TILE_W, Const.TILE_H, 2);
+        AssetsPool.addSpriteSheet(door.getPath(), door);
         // menu sprites
         AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
@@ -184,6 +185,7 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
         AssetsPool.addAudio(Const.BACKGROUND_MUSIC, false, Const.DEFAULT_VOLUME);
         AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME);
         
     }
     

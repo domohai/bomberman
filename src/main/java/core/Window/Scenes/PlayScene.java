@@ -5,16 +5,13 @@ import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
 import core.GameObject.components.ButtonType;
-import core.KeyController;
 import core.MouseController;
-import core.Window.Sound;
 import core.Window.Window;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +46,7 @@ public class PlayScene extends Scene {
 
     @Override
     public void init() {
-        change_map(Const.LEVEL_1);
+        change_map();
         createButton();
     }
 
@@ -63,7 +60,6 @@ public class PlayScene extends Scene {
             if (!Stats.isPause()) updateGame(dt);
             else updateMenuPause(dt);
         }
-        if (KeyController.is_keyPressed(KeyEvent.VK_T)) Sound.play(Const.ITEM_SOUND);
     }
 
     private void updateGame(double dt) {
@@ -80,26 +76,18 @@ public class PlayScene extends Scene {
         }
         // todo: change map when all bots die
         if (typeListMap.get(ObjectType.BOT).size() < 1) {
+            GameObject player = typeListMap.get(ObjectType.PLAYER).get(0);
+            
             Stats.setLevel(Stats.currentLevel() + 1);
             if (Stats.currentLevel() > Const.MAX_LEVEL) {
                 Stats.setWin(true);
             } else {
-                change_map(switch (Stats.currentLevel()) {
-                    case 1 -> Const.LEVEL_1;
-                    case 2 -> Const.LEVEL_2;
-                    case 3 -> Const.LEVEL_3;
-                    default -> "";
-                });
+                change_map();
             }
         }
         if (typeListMap.get(ObjectType.PLAYER).size() < 1) {
             Stats.get().reset();
-            change_map(switch (Stats.currentLevel()) {
-                case 1 -> Const.LEVEL_1;
-                case 2 -> Const.LEVEL_2;
-                case 3 -> Const.LEVEL_3;
-                default -> "";
-            });
+            change_map();
         }
     }
 
@@ -165,7 +153,7 @@ public class PlayScene extends Scene {
 
     }
 
-    public void change_map(String path) {
+    public void change_map() {
         // clear old map
         for (ObjectType type : ObjectType.values()) typeListMap.get(type).clear();
         gameObjects.clear();
@@ -177,6 +165,12 @@ public class PlayScene extends Scene {
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
         // load new map
+        String path = (switch (Stats.currentLevel()) {
+            case 1 -> Const.LEVEL_1;
+            case 2 -> Const.LEVEL_2;
+            case 3 -> Const.LEVEL_3;
+            default -> "";
+        });
         map = Prefabs.loadMap(path);
         if (map == null) return;
         for (int i = 0; i < map.length; i++) {
