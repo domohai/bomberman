@@ -176,6 +176,9 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/controls.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/controls.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/back.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/back.png");
+
 
 
         // maps

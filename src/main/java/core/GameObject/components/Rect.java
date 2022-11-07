@@ -1,6 +1,7 @@
 package core.GameObject.components;
 
 import core.MouseController;
+import core.Window.Scenes.MenuScene;
 import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.SceneType;
 import core.Window.Window;
@@ -55,12 +56,16 @@ public class Rect extends Component {
             case QUIT -> Window.get().exit();
             case RESUME -> ((PlayScene)Window.getCurrentScene()).setPause(false);
             case MENU -> Window.changeScene(SceneType.MENU_SCENE);
-
         }
     }
 
     @Override
     public void draw(Graphics2D g2D) {
+
         g2D.drawImage(currentImage, x, y, width, height, null);
+    }
+
+    public ButtonType getType() {
+        return type;
     }
 }

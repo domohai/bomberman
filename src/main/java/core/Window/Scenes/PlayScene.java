@@ -245,4 +245,5 @@ public class PlayScene extends Scene {
     public void setPause(boolean pause) {
         this.pause = pause;
     }
+
 }
