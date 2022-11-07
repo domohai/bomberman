@@ -268,4 +268,8 @@ public class PlayScene extends Scene {
     public Map<ObjectType, List<GameObject>> getTypeListMap() {
         return typeListMap;
     }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
+    }
 }

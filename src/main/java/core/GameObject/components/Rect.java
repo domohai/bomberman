@@ -1,6 +1,8 @@
 package core.GameObject.components;
 
 import core.MouseController;
+import core.Window.Scenes.MenuScene;
+import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.SceneType;
 import core.Window.Scenes.Stats;
 import core.Window.Window;
@@ -81,6 +83,11 @@ public class Rect extends Component {
 
     @Override
     public void draw(Graphics2D g2D) {
+
         g2D.drawImage(currentImage, x, y, width, height, null);
+    }
+
+    public ButtonType getType() {
+        return type;
     }
 }
