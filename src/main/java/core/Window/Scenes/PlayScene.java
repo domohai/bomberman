@@ -269,7 +269,5 @@ public class PlayScene extends Scene {
         return typeListMap;
     }
 
-    public void setPause(boolean pause) {
-        this.pause = pause;
-    }
+
 }

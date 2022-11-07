@@ -36,9 +36,19 @@ public class MenuScene extends Scene {
         // setting position for button on menu scene
         play.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0, (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 0));
         quit.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 , (Const.SCREEN_HEIGHT - 2* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET , Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 0));
+        //add img
+        GameObject img = Prefabs.generateImage("pixelBomberman");
+        AssetsPool.getSpriteSheet("src/main/resources/pixelBomberman.png");
+        img.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - 400) / 2.0, (Const.SCREEN_HEIGHT - 3 * Const.BUTTON_HEIGHT )/2.0- 182 - 50, 400, 182),5));
+        //background
+        GameObject menuBG = Prefabs.generateImage("map");
+        AssetsPool.getSpriteSheet("src/main/resources/map.png");
+        menuBG.setTransform(new Transform(new Box2D(0, 0, 1298,805),-1));
         // add object
         addGameObject(play);
         addGameObject(quit);
+        addGameObject(img);
+        addGameObject(menuBG);
 
     }
 
