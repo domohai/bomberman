@@ -180,17 +180,22 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/controls.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/controls.png");
+
+        AssetsPool.addButton("src/main/resources/idle_buttons/audio.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/audio.png");
+
         //menu img
         SpriteSheet img = new SpriteSheet("src/main/resources/pixelBomberman.png",0,0,400,182,1);
         AssetsPool.addSpriteSheet("src/main/resources/pixelBomberman.png",img);
         SpriteSheet menuBG = new SpriteSheet("src/main/resources/map.png",0,0,1298,805,1);
         AssetsPool.addSpriteSheet("src/main/resources/map.png",menuBG);
+
         // audios
         AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
-        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
-        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
+        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.BG_VOLUME);
+        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME);
 
     }
     

@@ -53,8 +53,9 @@ public class Const {
     public static final int BUTTON_OFFSET = 105;
 
     // volume
-    public static final float DEFAULT_VOLUME = 0.1f;
+    public static final float DEFAULT_VOLUME = 0.2f;
     public static final float MIN_VOLUME = 0.0f;
+    public static final float BG_VOLUME = 0.1f;
     public static final float MAX_VOLUME = 0.5f;
 
     // z index
