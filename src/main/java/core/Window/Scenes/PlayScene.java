@@ -170,7 +170,7 @@ public class PlayScene extends Scene {
                         super.addGameObject(block);
                     }
                     case '*', 'B', 'F', 'S', 'X' -> {
-                        GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
+                        GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock.png");
                         if (rock == null) {
                             System.out.println("Can not generate block");
                             return;

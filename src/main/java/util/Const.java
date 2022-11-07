@@ -44,7 +44,7 @@ public class Const {
     public static final BufferedImage background = Prefabs.readImage("src/main/resources/background.png");
     public static final BufferedImage blur_background = Prefabs.readImage("src/main/resources/blur_background.png");
     // heart
-    public static final BufferedImage heart = Prefabs.readImage("src/main/resources/heart1.png");
+    public static final BufferedImage heart = Prefabs.readImage("src/main/resources/Heart.png");
     // buttons
     public static final int SQUARE_BUTTON = 60;
     public static final int BUTTON_WIDTH = 300;

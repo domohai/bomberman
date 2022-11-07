@@ -47,7 +47,7 @@ public class Prefabs {
     }
 
     public static GameObject generateBomb() {
-        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Bomb.png");
         if (sheet == null) {
             System.out.println("Bomb sheet was not loaded");
             return null;
@@ -325,8 +325,7 @@ public class Prefabs {
         return portal;
     }
 
-    // dev only
-    public static GameObject devGenerateImage(String imgName) {
+    public static GameObject generateImage(String imgName) {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + imgName + ".png");
         // check
         if (sheet == null) {
