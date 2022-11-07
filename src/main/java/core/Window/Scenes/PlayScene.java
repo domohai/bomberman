@@ -166,6 +166,7 @@ public class PlayScene extends Scene {
         audio.setType(ObjectType.OTHER);
         audio.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 135, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(audio);
+        Stats.get().reset();
         // load new map
         String path = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
         map = Prefabs.loadMap(path);
