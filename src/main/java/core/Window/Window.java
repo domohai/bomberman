@@ -3,10 +3,7 @@ package core.Window;
 import core.GameObject.components.SpriteSheet;
 import core.KeyController;
 import core.MouseController;
-import core.Window.Scenes.MenuScene;
-import core.Window.Scenes.PlayScene;
-import core.Window.Scenes.Scene;
-import core.Window.Scenes.SceneType;
+import core.Window.Scenes.*;
 import util.AssetsPool;
 import util.Const;
 import util.Time;
@@ -47,7 +44,36 @@ public class Window extends JFrame implements Runnable {
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
-
+        
+    }
+    
+    public static Window get() {
+        return Window.window;
+    }
+    
+    /**
+     * switch between menuScene and playScene...:)
+     *
+     * @param type type of new scene
+     */
+    public static void changeScene(SceneType type) {
+        MouseController.get().reset();
+        Stats.get().setHP(Const.INITIAL_HP);
+        Stats.setPause(false);
+        Stats.setWin(false);
+        Stats.setLose(false);
+        Stats.setLevel(Const.FIRST_LEVEL);
+        switch (type) {
+            case MENU_SCENE -> window.currentScene = new MenuScene();
+            case PLAY_SCENE -> window.currentScene = new PlayScene();
+            default -> System.out.println("Invalid scene!");
+        }
+        window.currentScene.init();
+        window.currentScene.start();
+    }
+    
+    public static Scene getCurrentScene() {
+        return window.currentScene;
     }
     
     /**
@@ -58,17 +84,13 @@ public class Window extends JFrame implements Runnable {
         bufferImage = createImage(getWidth(), getHeight());
         bufferGraphics = bufferImage.getGraphics();
         bufferGraphics.setColor(Color.BLACK);
-        //Window.changeScene(SceneType.PLAY_SCENE);
+//        Sound.play(Const.BACKGROUND_MUSIC);
         Window.changeScene(SceneType.MENU_SCENE);
     }
-
-    public static Window get() {
-        return Window.window;
-    }
-
+    
     public void update(double delta_time) {
 //        System.out.println(1/delta_time + " fps");
-        window.setTitle("Bomberman | " + (int)(1/delta_time) + " fps");
+        window.setTitle("Bomberman | " + (int) (1.0 / delta_time) + " fps");
         window.currentScene.update(delta_time);
         this.draw(getGraphics());
     }
@@ -83,6 +105,7 @@ public class Window extends JFrame implements Runnable {
      * this function draws all the objects to an image called bufferImage
      * and then the bufferImage will be drawn to the window (JFrame)
      * so the movement of objects will be more smooth.:)
+     *
      * @param g bufferGraphics
      */
     public void renderOffScreen(Graphics g) {
@@ -92,50 +115,30 @@ public class Window extends JFrame implements Runnable {
     }
     
     /**
-     * switch between menuScene and playScene...:)
-     * @param type type of new scene
-     */
-    public static void changeScene(SceneType type) {
-        MouseController.get().reset();
-        switch (type) {
-            case MENU_SCENE -> window.currentScene = new MenuScene();
-            case PLAY_SCENE -> window.currentScene = new PlayScene();
-            default -> System.out.println("Invalid scene!");
-        }
-        window.currentScene.init();
-        window.currentScene.start();
-    }
-    
-    /**
      * Game loop
      */
     @Override
     public void run() {
         // variables for calculating delta time
-        double lastFrameTime = 0.0;
+//        double lastFrameTime = 0.0;
         double time;
-        double delta_time;
+        double delta_time = 0;
         try {
             while (isRunning) {
                 time = Time.getTime();
-                delta_time = time - lastFrameTime;
-                lastFrameTime = time;
                 update(delta_time);
-                Thread.sleep(25);
+                Thread.sleep(Math.max(0, (int)(16.66666666667 - (Time.getTime() - time)*1000)));
+                delta_time = Time.getTime() - time;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public static Scene getCurrentScene() {
-        return window.currentScene;
-    }
     
     public void load_resources() {
         // game sprites
-        String[] nameList = {"DoctorBomb","BoarGuard","RedLizard"};
-        for(String name : nameList) {
+        String[] nameList = {"DoctorBomb", "BoarGuard", "RedLizard", "Fantasma"};
+        for (String name : nameList) {
             SpriteSheet RunUp = new SpriteSheet("src/main/resources/" + name + "Up.png", 0, 0, 9);
             AssetsPool.addSpriteSheet(RunUp.getPath(), RunUp);
             SpriteSheet RunLeft = new SpriteSheet("src/main/resources/" + name + "Left.png", 0, 0, 9);
@@ -147,21 +150,22 @@ public class Window extends JFrame implements Runnable {
         }
         SpriteSheet wall = new SpriteSheet("src/main/resources/Wall.png", 0, 0, 1);
         AssetsPool.addSpriteSheet(wall.getPath(), wall);
-        SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0, 40, 52, 6);
+        SpriteSheet bomb = new SpriteSheet("src/main/resources/Bomb.png", 0, 0, 40, 52, 6);
         AssetsPool.addSpriteSheet(bomb.getPath(), bomb);
         SpriteSheet explosion = new SpriteSheet("src/main/resources/Flame.png", 0, 0, 48, 48, 18);
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
-        SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
+        SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
-        //PowerUps
-        SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png",0,0,50,64,6);
-        AssetsPool.addSpriteSheet(bombPU.getPath(),bombPU);
-        SpriteSheet flamePU = new SpriteSheet("src/main/resources/PUFlame.png",0,0,50,64,6);
-        AssetsPool.addSpriteSheet(flamePU.getPath(),flamePU);
-        SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png",0,0,50,64,6);
-        AssetsPool.addSpriteSheet(speedPU.getPath(),speedPU);
-
-
+        // PowerUps
+        SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png", 0, 0, 50, 64, 6);
+        AssetsPool.addSpriteSheet(bombPU.getPath(), bombPU);
+        SpriteSheet flamePU = new SpriteSheet("src/main/resources/PUFlame.png", 0, 0, 50, 64, 6);
+        AssetsPool.addSpriteSheet(flamePU.getPath(), flamePU);
+        SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png", 0, 0, 50, 64, 6);
+        AssetsPool.addSpriteSheet(speedPU.getPath(), speedPU);
+        // door
+        SpriteSheet door = new SpriteSheet("src/main/resources/Portal.png", 0, 0, Const.TILE_W, Const.TILE_H, 2);
+        AssetsPool.addSpriteSheet(door.getPath(), door);
         // menu sprites
         AssetsPool.addButton("src/main/resources/idle_buttons/play.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/play.png");
@@ -180,12 +184,24 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/idle_buttons/back.png");
 
 
+        AssetsPool.addButton("src/main/resources/idle_buttons/audio.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/audio.png");
 
-        // maps
-        AssetsPool.addMap("src/main/resources/Level0.txt");
-        AssetsPool.addMap("src/main/resources/Level1.txt");
+        //menu img
+        SpriteSheet img = new SpriteSheet("src/main/resources/pixelBomberman.png",0,0,400,182,1);
+        AssetsPool.addSpriteSheet("src/main/resources/pixelBomberman.png",img);
+        SpriteSheet menuBG = new SpriteSheet("src/main/resources/map.png",0,0,1298,805,1);
+        AssetsPool.addSpriteSheet("src/main/resources/map.png",menuBG);
+
+        // audios
+        AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.BG_VOLUME);
+        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME);
+
     }
-
+    
     public void exit() {
         isRunning = false;
         window.setVisible(false);

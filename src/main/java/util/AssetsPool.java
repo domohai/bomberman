@@ -10,7 +10,6 @@ import java.util.Map;
 public class AssetsPool {
     private static final Map<String, SpriteSheet> spritePool = new HashMap<>();
     private static final Map<String, Audio> audioPool = new HashMap<>();
-    private static final Map<String, char[][]> mapPool = new HashMap<>();
     private static final Map<String, BufferedImage> buttonPool = new HashMap<>();
     
     public static void addSpriteSheet(String path, SpriteSheet sheet) {
@@ -32,13 +31,14 @@ public class AssetsPool {
         return spriteSheet;
     }
     
-    public static void addAudio(String path, boolean loop) {
+    public static void addAudio(String path, boolean loop, float volume) {
         File file = new File(path);
         if (AssetsPool.audioPool.containsKey(file.getAbsolutePath())) {
             System.out.println("Audio already exist: " + file.getAbsolutePath());
             return;
         }
         Audio audio = new Audio(file.getAbsolutePath(), loop);
+        audio.setVolume(volume);
         AssetsPool.audioPool.put(file.getAbsolutePath(), audio);
     }
     
@@ -50,26 +50,6 @@ public class AssetsPool {
             return null;
         }
         return audio;
-    }
-    
-    public static void addMap(String path) {
-        File file = new File(path);
-        if (mapPool.containsKey(file.getAbsolutePath())) {
-            System.out.println("Map already exist: " + file.getAbsolutePath());
-            return;
-        }
-        char[][] map = Prefabs.loadMap(file.getAbsolutePath());
-        AssetsPool.mapPool.put(file.getAbsolutePath(), map);
-    }
-    
-    public static char[][] getMap(String path) {
-        File file = new File(path);
-        char[][] map = AssetsPool.mapPool.get(file.getAbsolutePath());
-        if (map == null) {
-            System.out.println("Map has not been added yet: " + file.getAbsolutePath());
-            return null;
-        }
-        return map;
     }
     
     public static void addButton(String path) {
@@ -90,5 +70,9 @@ public class AssetsPool {
             return null;
         }
         return image;
+    }
+    
+    public static Map<String, Audio> getAudioPool() {
+        return audioPool;
     }
 }

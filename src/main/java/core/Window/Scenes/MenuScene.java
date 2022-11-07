@@ -9,6 +9,7 @@ import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
+
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class MenuScene extends Scene {
         // setting button
         // add button image in load_resources in Window class first
         GameObject play = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/play.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/play.png"), ButtonType.PLAY);
+                AssetsPool.getButton("src/main/resources/hover_buttons/play.png"), ButtonType.PLAY);
         GameObject quit = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/quit.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/quit.png"), ButtonType.QUIT);
 

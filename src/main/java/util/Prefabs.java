@@ -47,7 +47,7 @@ public class Prefabs {
     }
 
     public static GameObject generateBomb() {
-        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/bomb_scaled.png");
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Bomb.png");
         if (sheet == null) {
             System.out.println("Bomb sheet was not loaded");
             return null;
@@ -262,6 +262,7 @@ public class Prefabs {
         Component movement = switch (botName) {
             case "RedLizard" -> new RedLizardMovement();
             case "BoarGuard" -> new BoarGuardMovement();
+            case "Fantasma" -> new FantasmaMovement();
             default -> null;
         };
         bot.addComponent(movement);
@@ -278,11 +279,12 @@ public class Prefabs {
         // create new game object
         GameObject item = new GameObject(ObjectType.ITEM);
         //create item component
-        Component itemType = new Item(itemName);
+        Item itemType = new Item(itemName);
         item.addComponent(itemType);
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
+
         State idle = new State("idle");
         idle.setLoop(true);
         for (int i = 0; i < sheet.size(); i++)
@@ -294,7 +296,36 @@ public class Prefabs {
         return item;
     }
 
-    public static GameObject devGenerateImage(String imgName) {
+    public static GameObject generatePortal() {
+        SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/Portal.png");
+        // check
+        if (sheet == null) {
+            System.out.println("Forgot to load Portal spriteSheet!");
+            return null;
+        }
+        // create new game object
+        GameObject portal = new GameObject(ObjectType.ITEM);
+        //create item component
+        Portal portalComp = new Portal();
+        portal.addComponent(portalComp);
+        // create state machine
+        StateMachine machine = new StateMachine();
+        // add idle states
+        State close = new State("Close");
+        close.setLoop(false);
+        close.addFrame(new Frame(sheet.getSprite(0), Const.DEFAULT_FRAME_TIME));
+        machine.addState(close);
+        State open = new State("Open");
+        open.setLoop(false);
+        open.addFrame(new Frame(sheet.getSprite(1), Const.DEFAULT_FRAME_TIME));
+        machine.addState(open);
+        //set default
+        machine.setDefaultState(close.getState());
+        portal.addComponent(machine);
+        return portal;
+    }
+
+    public static GameObject generateImage(String imgName) {
         SpriteSheet sheet = AssetsPool.getSpriteSheet("src/main/resources/" + imgName + ".png");
         // check
         if (sheet == null) {

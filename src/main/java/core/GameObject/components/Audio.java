@@ -19,6 +19,7 @@ public class Audio {
     private String filePath;
     private boolean loop;
     private FloatControl gainControl = null;
+    private float volume;
     
     public Audio(String path, boolean loop) {
         try {
@@ -36,6 +37,19 @@ public class Audio {
         }
         this.loop = loop;
         this.filePath = path;
+    }
+    
+    public void setVolume(float volume) {
+        if (volume < 0f) volume = 0f;
+        else if (volume > 1f) volume = 1f;
+        this.volume = volume;
+        if (status.equals("play")) {
+            pause();
+            gainControl.setValue(20f * (float) Math.log10(volume));
+            resume();
+        } else {
+            gainControl.setValue(20f * (float) Math.log10(volume));
+        }
     }
     
     public void play() {
@@ -78,9 +92,15 @@ public class Audio {
         clip.close();
     }
     
+    public void reset() {
+        clip.setMicrosecondPosition(0L);
+    }
+    
     public void resetAudioStream() {
         try {
             audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+            clip.close();
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             if (loop) clip.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
@@ -99,5 +119,9 @@ public class Audio {
     
     public FloatControl getGainControl() {
         return gainControl;
+    }
+    
+    public float getVolume() {
+        return volume;
     }
 }

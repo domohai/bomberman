@@ -6,13 +6,15 @@ import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
 import core.GameObject.components.ButtonType;
 import core.KeyController;
+import core.MouseController;
+import core.Window.Window;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,13 +22,10 @@ import java.util.Map;
 
 public class PlayScene extends Scene {
     private char[][] map;
-    private boolean[][] placedBombs = new boolean[12][20];
-    private Map<ObjectType, List<GameObject>> typeListMap;
-    private List<GameObject> toBeRemove;
-    private boolean pause;
-    private List<GameObject> pauseMenu;
-    private int currentLevel = 1;
-
+    private final boolean[][] placedBombs = new boolean[12][20];
+    private final Map<ObjectType, List<GameObject>> typeListMap;
+    private final List<GameObject> toBeRemove;
+    private final List<GameObject> pauseMenu;
 
     public PlayScene() {
         super();
@@ -36,30 +35,33 @@ public class PlayScene extends Scene {
         for (ObjectType type : ObjectType.values()) {
             typeListMap.put(type, new ArrayList<>());
         }
-        pause = false;
     }
 
     @Override
     public void start() {
         for (ObjectType type : typeListMap.keySet()) {
             List<GameObject> list = typeListMap.get(type);
-            for (GameObject g : list) {
-                g.start();
-            }
+            for (GameObject g : list) g.start();
         }
         isRunning = true;
     }
 
     @Override
     public void init() {
-        change_map("src/main/resources/Level1.txt");
+        change_map();
         createButton();
     }
 
     @Override
     public void update(double dt) {
-        if (!pause) updateGame(dt);
-        else updateMenuPause(dt);
+        if (Stats.isLose() || Stats.isWin()) {
+            if (MouseController.isMousePressed(MouseEvent.BUTTON1)) {
+                Window.changeScene(SceneType.MENU_SCENE);
+            }
+        } else {
+            if (!Stats.isPause()) updateGame(dt);
+            else updateMenuPause(dt);
+        }
     }
 
     private void updateGame(double dt) {
@@ -74,9 +76,9 @@ public class PlayScene extends Scene {
             for (GameObject g : toBeRemove) remove(g);
             toBeRemove.clear();
         }
-        // todo: change map when all bots die
-        if (KeyController.is_keyPressed(KeyEvent.VK_G)) {
-            change_map(Const.LEVEL_1);
+        if (typeListMap.get(ObjectType.PLAYER).size() < 1) {
+            Stats.get().reset();
+            change_map();
         }
     }
 
@@ -86,11 +88,23 @@ public class PlayScene extends Scene {
 
     @Override
     public void draw(Graphics2D g2D) {
-        g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
-        renderer.render(g2D);
-        if (pause) {
-            g2D.drawImage(Const.blur_background, 0, 0, Const.blur_background.getWidth(), Const.blur_background.getHeight(), null);
-            renderer.renderButton(g2D);
+        if (Stats.isWin() || Stats.isLose()) {
+            if (Stats.isLose()) g2D.drawImage(Const.LOSE, 0,0, Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT, null);
+            else g2D.drawImage(Const.WIN, 0, 0, Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT, null);
+        } else {
+            g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
+            renderer.render(g2D);
+            drawHeart(g2D);
+            if (Stats.isPause()) {
+                g2D.drawImage(Const.blur_background, 0, 0, Const.blur_background.getWidth(), Const.blur_background.getHeight(), null);
+                renderer.renderButton(g2D);
+            }
+        }
+    }
+    
+    private void drawHeart(Graphics2D g2D) {
+        for (int i = 1; i <= Stats.get().getHP(); i++) {
+            g2D.drawImage(Const.heart, 20 * i + 10 * i, 20, Const.heart.getWidth(), Const.heart.getHeight(), null);
         }
     }
 
@@ -113,17 +127,6 @@ public class PlayScene extends Scene {
     }
 
     private void createButton() {
-        // setting button
-        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
-        setting.setType(ObjectType.OTHER);
-        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 0));
-        addGameObject(setting);
-        //Add menu Board
-        GameObject board = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/pause_menu_bg.png"),
-        AssetsPool.getButton("src/main/resources/pause_menu_bg.png"), ButtonType.BOARD);
-        board.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - 600)/2.0, (Const.SCREEN_HEIGHT - 636)/2.0, 600, 636), 1));
-        addButton(board);
         // Add to Game Object Menu
         GameObject resume = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/resume.png"),
         AssetsPool.getButton("src/main/resources/hover_buttons/resume.png"), ButtonType.RESUME);
@@ -139,56 +142,70 @@ public class PlayScene extends Scene {
         AssetsPool.getButton("src/main/resources/hover_buttons/menu.png"), ButtonType.MENU);
         menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 + 20, (Const.SCREEN_HEIGHT - 3* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(menu);
-
+        // sound
+        
     }
 
-    private void change_map(String path) {
-        // clear old map
-        for (ObjectType type : ObjectType.values()) {
-            typeListMap.get(type).clear();
+    public void change_map() {
+        if(Stats.currentLevel() > Const.LAST_LEVEL) {
+            Stats.setWin(true);
+            return;
         }
+        // clear old map
+        for (ObjectType type : ObjectType.values()) typeListMap.get(type).clear();
         gameObjects.clear();
         toBeRemove.clear();
         renderer.clear();
         GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
-        AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+                AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
         setting.setType(ObjectType.OTHER);
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
+        GameObject audio = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/audio.png"),
+                AssetsPool.getButton("src/main/resources/hover_buttons/audio.png"), ButtonType.AUDIO);
+        audio.setType(ObjectType.OTHER);
+        audio.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 135, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
+        addGameObject(audio);
         // load new map
-        map = AssetsPool.getMap(path);
+        String path = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
+        map = Prefabs.loadMap(path);
         if (map == null) return;
+        // generate a temp player
+        GameObject temp = Prefabs.generatePlayer();
+        temp.setTransform(new Transform(new Box2D(0, 0, 0, 0), 0));
+        typeListMap.get(ObjectType.PLAYER).add(temp);
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 switch (map[i][j]) {
                     case '#' -> {
                         GameObject block = Prefabs.generateBlock("src/main/resources/Wall.png");
                         if (block == null) {
-                            System.out.println("Can not generate block");
+                            System.out.println("Cannot generate block");
                             return;
                         }
-                        block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
+                        block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, Const.TILE_W, Const.TILE_H), Const.STILL_OBJECT_ZINDEX));
                         super.addGameObject(block);
                     }
-                    case '*' -> {
-                        GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
+                    case '*', 'B', 'F', 'S', 'X' -> {
+                        GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock.png");
                         if (rock == null) {
                             System.out.println("Can not generate block");
                             return;
                         }
-                        rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64), 0));
+                        rock.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, Const.TILE_W, Const.TILE_H), Const.BREAKABLE_ROCK_ZINDEX));
                         rock.setType(ObjectType.UNSTABLE);
                         rock.addComponent(new Breakable());
                         addGameObject(rock);
                     }
                     case 'p' -> {
+                        typeListMap.get(ObjectType.PLAYER).clear();
                         GameObject player = Prefabs.generatePlayer();
                         if (player == null) {
                             System.out.println("Can not generate player!");
                             return;
                         }
                         // set position
-                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.PLAYER_ZINDEX));
                         addGameObject(player);
                     }
                     case '1' -> {
@@ -198,7 +215,7 @@ public class PlayScene extends Scene {
                             return;
                         }
                         // set position
-                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.BOT_ZINDEX));
                         addGameObject(bot);
                     }
                     case '2' -> {
@@ -208,7 +225,17 @@ public class PlayScene extends Scene {
                             return;
                         }
                         // set position
-                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), 0));
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.BOT_ZINDEX));
+                        addGameObject(bot);
+                    }
+                    case '3' -> {
+                        GameObject bot = Prefabs.generateBot("Fantasma");
+                        if (bot == null) {
+                            System.out.println("Can not generate Fantasma!");
+                            return;
+                        }
+                        // set position
+                        bot.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 42, 60, 11, 0), Const.BOT_ZINDEX));
                         addGameObject(bot);
                     }
                     case 'b', 'f', 's' -> {
@@ -222,7 +249,7 @@ public class PlayScene extends Scene {
                             return;
                         }
                         // set position
-                        item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), 0));
+                        item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), Const.ITEM_ZINDEX));
                         addGameObject(item);
                     }
                 }
@@ -245,5 +272,4 @@ public class PlayScene extends Scene {
     public void setPause(boolean pause) {
         this.pause = pause;
     }
-
 }
