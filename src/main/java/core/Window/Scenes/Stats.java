@@ -19,7 +19,7 @@ public class Stats {
         bombNumber = Const.INITIAL_BOMB_NUMBER;
         flameSize = Const.INITIAL_FLAME_SIZE;
         speedMultiplier = 1.0;
-        currentLevel = Const.INITIAL_MAP;
+        currentLevel = Const.FIRST_LEVEL;
         pause = false;
         lose = false;
         win = false;
@@ -30,7 +30,7 @@ public class Stats {
         bombNumber = Const.INITIAL_BOMB_NUMBER;
         flameSize = Const.INITIAL_FLAME_SIZE;
         speedMultiplier = 1.0;
-        currentLevel = Const.INITIAL_MAP;
+        currentLevel = Const.FIRST_LEVEL;
     }
 
     public static Stats get() {

@@ -40,7 +40,7 @@ public class BoarGuardMovement extends Component {
         if (turnBit != 0) {
             dir = RandomMove.randomDirection(dir,wasCollided,turnBit);
         }
-        sp = Const.PLAYER_SPEED * 0.8 * dt;
+        sp = Const.PLAYER_SPEED * 0.7 * dt;
         switch (dir) {
             case 1:
                 stateMachine.changeState("runUp");
