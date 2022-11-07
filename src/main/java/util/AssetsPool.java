@@ -71,4 +71,8 @@ public class AssetsPool {
         }
         return image;
     }
+    
+    public static Map<String, Audio> getAudioPool() {
+        return audioPool;
+    }
 }

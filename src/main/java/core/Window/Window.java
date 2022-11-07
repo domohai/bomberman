@@ -177,13 +177,15 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/controls.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/controls.png");
+        AssetsPool.addButton("src/main/resources/idle_buttons/audio.png");
+        AssetsPool.addButton("src/main/resources/hover_buttons/audio.png");
         
         // audios
         AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
-        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
-        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
+        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.BG_VOLUME);
+        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME);
 
     }
     

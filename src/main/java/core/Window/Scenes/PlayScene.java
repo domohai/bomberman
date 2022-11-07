@@ -20,10 +20,10 @@ import java.util.Map;
 
 public class PlayScene extends Scene {
     private char[][] map;
-    private boolean[][] placedBombs = new boolean[12][20];
-    private Map<ObjectType, List<GameObject>> typeListMap;
-    private List<GameObject> toBeRemove;
-    private List<GameObject> pauseMenu;
+    private final boolean[][] placedBombs = new boolean[12][20];
+    private final Map<ObjectType, List<GameObject>> typeListMap;
+    private final List<GameObject> toBeRemove;
+    private final List<GameObject> pauseMenu;
 
     public PlayScene() {
         super();
@@ -140,7 +140,8 @@ public class PlayScene extends Scene {
         AssetsPool.getButton("src/main/resources/hover_buttons/menu.png"), ButtonType.MENU);
         menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 + 20, (Const.SCREEN_HEIGHT - 3* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(menu);
-
+        // sound
+        
     }
 
     public void change_map() {
@@ -154,6 +155,11 @@ public class PlayScene extends Scene {
         setting.setType(ObjectType.OTHER);
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
+        GameObject audio = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/audio.png"),
+                AssetsPool.getButton("src/main/resources/hover_buttons/audio.png"), ButtonType.AUDIO);
+        audio.setType(ObjectType.OTHER);
+        audio.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 135, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
+        addGameObject(audio);
         // load new map
         String path = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
         map = Prefabs.loadMap(path);

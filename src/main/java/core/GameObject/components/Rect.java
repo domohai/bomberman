@@ -4,6 +4,9 @@ import core.MouseController;
 import core.Window.Scenes.SceneType;
 import core.Window.Scenes.Stats;
 import core.Window.Window;
+import util.AssetsPool;
+import util.Const;
+
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -51,12 +54,28 @@ public class Rect extends Component {
     private static void handleAction(ButtonType type){
         switch (type) {
             case SETTING -> Stats.setPause(true);
-            case PLAY -> {Window.changeScene(SceneType.PLAY_SCENE);
-            Stats.get().reset();}
+            case PLAY -> {
+                Window.changeScene(SceneType.PLAY_SCENE);
+                Stats.get().reset();
+            }
             case QUIT -> Window.get().exit();
             case RESUME -> Stats.setPause(false);
-            case MENU -> {Window.changeScene(SceneType.MENU_SCENE);
-                Stats.get().reset();}
+            case MENU -> {
+                Window.changeScene(SceneType.MENU_SCENE);
+                Stats.get().reset();
+            }
+            case AUDIO -> {
+                for (String s : AssetsPool.getAudioPool().keySet()) {
+                    Audio audio = AssetsPool.getAudio(s);
+                    if (audio.getVolume() == Const.MIN_VOLUME) {
+                        audio.restart();
+                        audio.setVolume(Const.DEFAULT_VOLUME);
+                    } else {
+                        audio.stop();
+                        audio.setVolume(Const.MIN_VOLUME);
+                    }
+                }
+            }
         }
     }
 
