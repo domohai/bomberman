@@ -30,7 +30,7 @@ public class Stats {
         bombNumber = Const.INITIAL_BOMB_NUMBER;
         flameSize = Const.INITIAL_FLAME_SIZE;
         speedMultiplier = 1.0;
-        currentLevel = Const.FIRST_LEVEL;
+//        currentLevel = Const.FIRST_LEVEL;
     }
 
     public static Stats get() {

@@ -60,6 +60,9 @@ public class Window extends JFrame implements Runnable {
         MouseController.get().reset();
         Stats.get().setHP(Const.INITIAL_HP);
         Stats.setPause(false);
+        Stats.setWin(false);
+        Stats.setLose(false);
+        Stats.setLevel(Const.FIRST_LEVEL);
         switch (type) {
             case MENU_SCENE -> window.currentScene = new MenuScene();
             case PLAY_SCENE -> window.currentScene = new PlayScene();

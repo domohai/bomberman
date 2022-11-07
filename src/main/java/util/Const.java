@@ -27,7 +27,6 @@ public class Const {
     public static final int HALF_BOMB_W = 20;
     public static final int HALF_BOMB_H = 26;
     public static final int FLAME_SIZE = 48;
-    public static final int HALF_FLAME_SIZE = 24;
     
     // audio paths
     public static final String EXPLOSION_SOUND = "src/main/resources/audio/Explosion4.wav";

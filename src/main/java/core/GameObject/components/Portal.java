@@ -38,11 +38,7 @@ public class Portal extends Component {
             if(box2d.sameTile(playerBox)) {
                 gameObject.setAlive(false);
                 Stats.setLevel(Stats.currentLevel() + 1);
-                if (Stats.currentLevel() > Const.LAST_LEVEL) {
-                    Stats.setWin(true);
-                } else {
-                    scene.change_map();
-                }
+                scene.change_map();
             }
         }
     }
