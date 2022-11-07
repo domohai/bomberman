@@ -58,7 +58,8 @@ public class Window extends JFrame implements Runnable {
      */
     public static void changeScene(SceneType type) {
         MouseController.get().reset();
-        Stats.get().setHP(3);
+        Stats.get().setHP(Const.INITIAL_HP);
+        Stats.setPause(false);
         switch (type) {
             case MENU_SCENE -> window.currentScene = new MenuScene();
             case PLAY_SCENE -> window.currentScene = new PlayScene();
@@ -179,8 +180,8 @@ public class Window extends JFrame implements Runnable {
         
         // audios
         AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, false, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
         AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
         AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
 

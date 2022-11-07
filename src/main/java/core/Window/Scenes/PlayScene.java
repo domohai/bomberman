@@ -87,7 +87,8 @@ public class PlayScene extends Scene {
     @Override
     public void draw(Graphics2D g2D) {
         if (Stats.isWin() || Stats.isLose()) {
-        
+            if (Stats.isLose()) g2D.drawImage(Const.LOSE, 0,0, Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT, null);
+            else g2D.drawImage(Const.WIN, 0, 0, Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT, null);
         } else {
             g2D.drawImage(Const.background, 0, 0, Const.background.getWidth(), Const.background.getHeight(), null);
             renderer.render(g2D);
