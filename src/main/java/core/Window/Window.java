@@ -60,6 +60,9 @@ public class Window extends JFrame implements Runnable {
         MouseController.get().reset();
         Stats.get().setHP(Const.INITIAL_HP);
         Stats.setPause(false);
+        Stats.setWin(false);
+        Stats.setLose(false);
+        Stats.setLevel(Const.FIRST_LEVEL);
         switch (type) {
             case MENU_SCENE -> window.currentScene = new MenuScene();
             case PLAY_SCENE -> window.currentScene = new PlayScene();
@@ -117,7 +120,7 @@ public class Window extends JFrame implements Runnable {
     @Override
     public void run() {
         // variables for calculating delta time
-        double lastFrameTime = 0.0;
+//        double lastFrameTime = 0.0;
         double time;
         double delta_time = 0;
         try {
@@ -147,11 +150,11 @@ public class Window extends JFrame implements Runnable {
         }
         SpriteSheet wall = new SpriteSheet("src/main/resources/Wall.png", 0, 0, 1);
         AssetsPool.addSpriteSheet(wall.getPath(), wall);
-        SpriteSheet bomb = new SpriteSheet("src/main/resources/bomb_scaled.png", 0, 0, 40, 52, 6);
+        SpriteSheet bomb = new SpriteSheet("src/main/resources/Bomb.png", 0, 0, 40, 52, 6);
         AssetsPool.addSpriteSheet(bomb.getPath(), bomb);
         SpriteSheet explosion = new SpriteSheet("src/main/resources/Flame.png", 0, 0, 48, 48, 18);
         AssetsPool.addSpriteSheet(explosion.getPath(), explosion);
-        SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock_large.png", 0, 0, 52, 52, 1);
+        SpriteSheet rock = new SpriteSheet("src/main/resources/breakable_rock.png", 0, 0, 52, 52, 1);
         AssetsPool.addSpriteSheet(rock.getPath(), rock);
         // PowerUps
         SpriteSheet bombPU = new SpriteSheet("src/main/resources/PUBomb.png", 0, 0, 50, 64, 6);
@@ -177,9 +180,16 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/pause_menu_bg.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/controls.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/controls.png");
+
         AssetsPool.addButton("src/main/resources/idle_buttons/audio.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/audio.png");
-        
+
+        //menu img
+        SpriteSheet img = new SpriteSheet("src/main/resources/pixelBomberman.png",0,0,400,182,1);
+        AssetsPool.addSpriteSheet("src/main/resources/pixelBomberman.png",img);
+        SpriteSheet menuBG = new SpriteSheet("src/main/resources/map.png",0,0,1298,805,1);
+        AssetsPool.addSpriteSheet("src/main/resources/map.png",menuBG);
+
         // audios
         AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
         AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.BG_VOLUME);

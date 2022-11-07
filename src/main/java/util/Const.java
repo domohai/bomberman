@@ -27,7 +27,6 @@ public class Const {
     public static final int HALF_BOMB_W = 20;
     public static final int HALF_BOMB_H = 26;
     public static final int FLAME_SIZE = 48;
-    public static final int HALF_FLAME_SIZE = 24;
     
     // audio paths
     public static final String EXPLOSION_SOUND = "src/main/resources/audio/Explosion4.wav";
@@ -46,7 +45,7 @@ public class Const {
     public static final BufferedImage WIN = Prefabs.readImage("src/main/resources/Win.png");
     public static final BufferedImage LOSE = Prefabs.readImage("src/main/resources/Lose.png");
     // heart
-    public static final BufferedImage heart = Prefabs.readImage("src/main/resources/heart1.png");
+    public static final BufferedImage heart = Prefabs.readImage("src/main/resources/Heart.png");
     // buttons
     public static final int SQUARE_BUTTON = 60;
     public static final int BUTTON_WIDTH = 300;

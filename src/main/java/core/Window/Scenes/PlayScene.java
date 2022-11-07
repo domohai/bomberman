@@ -5,6 +5,7 @@ import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
 import core.GameObject.components.ButtonType;
+import core.KeyController;
 import core.MouseController;
 import core.Window.Window;
 import util.AssetsPool;
@@ -12,6 +13,7 @@ import util.Const;
 import util.Prefabs;
 import util.Box2D;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,6 +147,10 @@ public class PlayScene extends Scene {
     }
 
     public void change_map() {
+        if(Stats.currentLevel() > Const.LAST_LEVEL) {
+            Stats.setWin(true);
+            return;
+        }
         // clear old map
         for (ObjectType type : ObjectType.values()) typeListMap.get(type).clear();
         gameObjects.clear();
@@ -164,6 +170,10 @@ public class PlayScene extends Scene {
         String path = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
         map = Prefabs.loadMap(path);
         if (map == null) return;
+        // generate a temp player
+        GameObject temp = Prefabs.generatePlayer();
+        temp.setTransform(new Transform(new Box2D(0, 0, 0, 0), 0));
+        typeListMap.get(ObjectType.PLAYER).add(temp);
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 switch (map[i][j]) {
@@ -177,7 +187,7 @@ public class PlayScene extends Scene {
                         super.addGameObject(block);
                     }
                     case '*', 'B', 'F', 'S', 'X' -> {
-                        GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock_large.png");
+                        GameObject rock = Prefabs.generateBlock("src/main/resources/breakable_rock.png");
                         if (rock == null) {
                             System.out.println("Can not generate block");
                             return;
@@ -188,6 +198,7 @@ public class PlayScene extends Scene {
                         addGameObject(rock);
                     }
                     case 'p' -> {
+                        typeListMap.get(ObjectType.PLAYER).clear();
                         GameObject player = Prefabs.generatePlayer();
                         if (player == null) {
                             System.out.println("Can not generate player!");
