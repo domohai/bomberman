@@ -3,14 +3,10 @@ package core.Window;
 import core.GameObject.components.SpriteSheet;
 import core.KeyController;
 import core.MouseController;
-import core.Window.Scenes.MenuScene;
-import core.Window.Scenes.PlayScene;
-import core.Window.Scenes.Scene;
-import core.Window.Scenes.SceneType;
+import core.Window.Scenes.*;
 import util.AssetsPool;
 import util.Const;
 import util.Time;
-
 import javax.swing.JFrame;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -62,6 +58,7 @@ public class Window extends JFrame implements Runnable {
      */
     public static void changeScene(SceneType type) {
         MouseController.get().reset();
+        Stats.get().setHP(3);
         switch (type) {
             case MENU_SCENE -> window.currentScene = new MenuScene();
             case PLAY_SCENE -> window.currentScene = new PlayScene();
@@ -184,8 +181,9 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
         AssetsPool.addAudio(Const.BACKGROUND_MUSIC, false, Const.DEFAULT_VOLUME);
         AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME);
-        
+        AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
+        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME + 0.1f);
+
     }
     
     public void exit() {

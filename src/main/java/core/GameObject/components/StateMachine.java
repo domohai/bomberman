@@ -28,11 +28,6 @@ public class StateMachine extends Component {
                 currentState.getCurrentFrameImage().getWidth(), currentState.getCurrentFrameImage().getHeight(), null);
     }
 
-    /**
-     * set default state.
-     *
-     * @param state state's name.
-     */
     public void setDefaultState(String state) {
         this.currentState = this.states.get(state);
     }
@@ -43,5 +38,9 @@ public class StateMachine extends Component {
 
     public Map<String, State> getStates() {
         return states;
+    }
+
+    public State getCurrentState() {
+        return currentState;
     }
 }

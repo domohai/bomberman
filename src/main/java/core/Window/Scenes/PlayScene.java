@@ -74,17 +74,6 @@ public class PlayScene extends Scene {
             for (GameObject g : toBeRemove) remove(g);
             toBeRemove.clear();
         }
-        // todo: change map when all bots die
-        if (typeListMap.get(ObjectType.BOT).size() < 1) {
-            GameObject player = typeListMap.get(ObjectType.PLAYER).get(0);
-            
-            Stats.setLevel(Stats.currentLevel() + 1);
-            if (Stats.currentLevel() > Const.MAX_LEVEL) {
-                Stats.setWin(true);
-            } else {
-                change_map();
-            }
-        }
         if (typeListMap.get(ObjectType.PLAYER).size() < 1) {
             Stats.get().reset();
             change_map();

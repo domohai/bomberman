@@ -26,6 +26,7 @@ public class PlayerMovement extends Component {
     private PlayScene scene = null;
     private double sp = 0;
     private boolean bombCooldown = true;
+    private static boolean debug = true;
 
     public PlayerMovement() {
     }
@@ -107,9 +108,10 @@ public class PlayerMovement extends Component {
             }
         } else debug = true;
     }
-    private static boolean debug = true;
+
     private void die() {
         gameObject.setAlive(false);
+        Sound.play(Const.DIE_SOUND);
         Stats.decreaseHP();
         if (Stats.get().getHP() <= 0) Stats.setLose(true);
     }

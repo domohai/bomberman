@@ -34,7 +34,7 @@ public class Const {
     public static final String BACKGROUND_MUSIC = "src/main/resources/audio/Dungeon1.wav";
     public static final String ITEM_SOUND = "src/main/resources/audio/Item2.wav";
     public static final String DOOR_SOUND = "src/main/resources/audio/Open5.wav";
-    
+    public static final String DIE_SOUND = "src/main/resources/audio/Die.wav";
     
     // map
     public static final int FIRST_LEVEL = 1;
