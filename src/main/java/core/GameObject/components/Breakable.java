@@ -38,8 +38,8 @@ public class Breakable extends Component {
         for (GameObject flame : flames) {
             if (Collision.boxCollision(box2d, flame.getTransform().getPosition())) {
                 gameObject.setAlive(false);
-                if(isHidingItem(map[i][j]))
-                    addItem(i,j);
+                if (isHidingItem(map[i][j]))
+                    addItem(i, j);
                 map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
             }
         }
@@ -49,14 +49,21 @@ public class Breakable extends Component {
     public boolean isHidingItem(char x) {
         return x == 'B' || x == 'F' || x == 'S' || x == 'X';
     }
+
     public void addItem(int i, int j) {
         String type = "PUBomb";
         if (map[i][j] == 'B') type = "PUBomb";
         if (map[i][j] == 'F') type = "PUFlame";
         if (map[i][j] == 'S') type = "PUSpeed";
         if (map[i][j] == 'X') type = "Portal";
-        GameObject item = Prefabs.generateItem(type);
-        item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), 0));
-        scene.addGameObject(item);
+        if (type.equals("Portal")) {
+            GameObject portal = Prefabs.generatePortal();
+            portal.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 64, 64, 0, 0), Const.ITEM_ZINDEX));
+            scene.addGameObject(portal);
+        } else {
+            GameObject item = Prefabs.generateItem(type);
+            item.setTransform(new Transform(new Box2D(Const.TILE_W * j + 7, Const.TILE_H * i, 38, 56, 5, 4), Const.ITEM_ZINDEX));
+            scene.addGameObject(item);
+        }
     }
 }

@@ -89,7 +89,7 @@ public class Window extends JFrame implements Runnable {
     
     public void update(double delta_time) {
 //        System.out.println(1/delta_time + " fps");
-        window.setTitle("Bomberman | " + (int) (1 / delta_time) + " fps");
+        window.setTitle("Bomberman | " + (int) (1.0 / delta_time) + " fps");
         window.currentScene.update(delta_time);
         this.draw(getGraphics());
     }
@@ -121,14 +121,13 @@ public class Window extends JFrame implements Runnable {
         // variables for calculating delta time
         double lastFrameTime = 0.0;
         double time;
-        double delta_time;
+        double delta_time = 0;
         try {
             while (isRunning) {
                 time = Time.getTime();
-                delta_time = time - lastFrameTime;
-                lastFrameTime = time;
                 update(delta_time);
                 Thread.sleep(Math.max(0, (int)(16.66666666667 - (Time.getTime() - time)*1000)));
+                delta_time = Time.getTime() - time;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,7 +163,7 @@ public class Window extends JFrame implements Runnable {
         SpriteSheet speedPU = new SpriteSheet("src/main/resources/PUSpeed.png", 0, 0, 50, 64, 6);
         AssetsPool.addSpriteSheet(speedPU.getPath(), speedPU);
         // door
-        SpriteSheet door = new SpriteSheet("src/main/resources/Door/Portal.png", 0, 0, Const.TILE_W, Const.TILE_H, 2);
+        SpriteSheet door = new SpriteSheet("src/main/resources/Portal.png", 0, 0, Const.TILE_W, Const.TILE_H, 2);
         AssetsPool.addSpriteSheet(door.getPath(), door);
         // menu sprites
         AssetsPool.addButton("src/main/resources/idle_buttons/play.png");

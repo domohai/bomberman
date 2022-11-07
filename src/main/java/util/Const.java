@@ -17,7 +17,6 @@ public class Const {
 
     // Player
     public static final int PLAYER_SPEED = 150;
-    public static final int INITIAL_MAP = 1;
     public static final int INITIAL_FLAME_SIZE = 1;
     public static final int INITIAL_BOMB_NUMBER = 1;
     public static final int INITIAL_HP = 3;
@@ -37,11 +36,9 @@ public class Const {
     public static final String DOOR_SOUND = "src/main/resources/audio/Open5.wav";
     
     
-    // map paths
-    public static final int MAX_LEVEL = 3;
-    public static final String LEVEL_1 = "src/main/resources/Levels/Level1.txt";
-    public static final String LEVEL_2 = "src/main/resources/Levels/Level2.txt";
-    public static final String LEVEL_3 = "src/main/resources/Levels/Level3.txt";
+    // map
+    public static final int FIRST_LEVEL = 1;
+    public static final int LAST_LEVEL = 7;
     
     // background
     public static final BufferedImage background = Prefabs.readImage("src/main/resources/background.png");

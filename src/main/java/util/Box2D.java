@@ -54,7 +54,9 @@ public class Box2D {
     public double euclideanDistance(Box2D box) {
         return Math.sqrt((x - box.getX()) * (x - box.getX()) + (y - box.getY()) * (y - box.getY()));
     }
-
+    public boolean sameTile(Box2D box) {
+        return (getCoordX() == box.getCoordX()) && (getCoordY() == box.getCoordY());
+    }
     public int getCoordX() {
         return (int) centerX / Const.TILE_W;
     }

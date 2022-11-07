@@ -165,12 +165,7 @@ public class PlayScene extends Scene {
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
         // load new map
-        String path = (switch (Stats.currentLevel()) {
-            case 1 -> Const.LEVEL_1;
-            case 2 -> Const.LEVEL_2;
-            case 3 -> Const.LEVEL_3;
-            default -> "";
-        });
+        String path = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
         map = Prefabs.loadMap(path);
         if (map == null) return;
         for (int i = 0; i < map.length; i++) {
