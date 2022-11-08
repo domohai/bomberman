@@ -194,11 +194,11 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addSpriteSheet("src/main/resources/map.png",menuBG);
 
         // audios
-        AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.EXPLOSION_SOUND, false, Const.EXPLOSION_VOLUME);
         AssetsPool.addAudio(Const.BACKGROUND_MUSIC, true, Const.BG_VOLUME);
         AssetsPool.addAudio(Const.ITEM_SOUND, false, Const.DEFAULT_VOLUME);
         AssetsPool.addAudio(Const.DOOR_SOUND, false, Const.DEFAULT_VOLUME);
-        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DEFAULT_VOLUME);
+        AssetsPool.addAudio(Const.DIE_SOUND, false, Const.DIE_VOLUME);
 
     }
     

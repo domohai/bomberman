@@ -12,7 +12,7 @@ public class Stats {
     private int bombNumber, flameSize;
     private int currentLevel;
     private double speedMultiplier;
-    private boolean pause, lose, win;
+    private boolean pause, lose, win, nextLevel;
 
     private Stats() {
         HP = Const.INITIAL_HP;
@@ -23,6 +23,7 @@ public class Stats {
         pause = false;
         lose = false;
         win = false;
+        nextLevel = false;
     }
     
     public void reset() {
@@ -75,6 +76,14 @@ public class Stats {
 
     public static void increaseBombNumber() {
         stats.setBombNumber(stats.getBombNumber() + 1);
+    }
+    
+    public static void setNextLevel(boolean next) {
+        stats.nextLevel = next;
+    }
+    
+    public static boolean isNextLevel() {
+        return stats.nextLevel;
     }
 
     public static void increaseFlameSize() {

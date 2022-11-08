@@ -80,6 +80,13 @@ public class PlayScene extends Scene {
             Stats.get().reset();
             change_map();
         }
+        if (Stats.isNextLevel()) {
+            Stats.setNextLevel(false);
+            change_map();
+        }
+        if (KeyController.is_keyPressed(KeyEvent.VK_K)) {
+            typeListMap.get(ObjectType.BOT).clear();
+        }
     }
 
     private void updateMenuPause(double dt) {
@@ -164,6 +171,7 @@ public class PlayScene extends Scene {
         GameObject audio = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/audio.png"),
                 AssetsPool.getButton("src/main/resources/hover_buttons/audio.png"), ButtonType.AUDIO);
         audio.setType(ObjectType.OTHER);
+        
         audio.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 135, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(audio);
         Stats.get().reset();
@@ -171,10 +179,21 @@ public class PlayScene extends Scene {
         String path = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
         map = Prefabs.loadMap(path);
         if (map == null) return;
-        // generate a temp player
-        GameObject temp = Prefabs.generatePlayer();
-        temp.setTransform(new Transform(new Box2D(0, 0, 0, 0), 0));
-        typeListMap.get(ObjectType.PLAYER).add(temp);
+        // must load player first
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] == 'p') {
+                    GameObject player = Prefabs.generatePlayer();
+                    if (player == null) {
+                        System.out.println("Can not generate player!");
+                        return;
+                    }
+                    // set position
+                    player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.PLAYER_ZINDEX));
+                    addGameObject(player);
+                }
+            }
+        }
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 switch (map[i][j]) {
@@ -198,18 +217,17 @@ public class PlayScene extends Scene {
                         rock.addComponent(new Breakable());
                         addGameObject(rock);
                     }
-                    case 'p' -> {
-                        typeListMap.get(ObjectType.PLAYER).clear();
-                        GameObject player = Prefabs.generatePlayer();
-                        if (player == null) {
-                            System.out.println("Can not generate player!");
-                            return;
-                        }
-                        // set position
-                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.PLAYER_ZINDEX));
-                        player.setType(ObjectType.PLAYER);
-                        addGameObject(player);
-                    }
+//                    case 'p' -> {
+//                        typeListMap.get(ObjectType.PLAYER).clear();
+//                        GameObject player = Prefabs.generatePlayer();
+//                        if (player == null) {
+//                            System.out.println("Can not generate player!");
+//                            return;
+//                        }
+//                        // set position
+//                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.PLAYER_ZINDEX));
+//                        addGameObject(player);
+//                    }
                     case '1' -> {
                         GameObject bot = Prefabs.generateBot("BoarGuard");
                         if (bot == null) {
