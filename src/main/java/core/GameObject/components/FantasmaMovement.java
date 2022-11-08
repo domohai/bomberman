@@ -36,22 +36,24 @@ public class FantasmaMovement extends Component {
         PlayScene scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
         typeListMap = scene.getTypeListMap();
-        playerBox = typeListMap.get(ObjectType.PLAYER).get(0).getTransform().getPosition();
     }
 
 
     @Override
     public void update(double dt) {
+        playerBox = typeListMap.get(ObjectType.PLAYER).get(0).getTransform().getPosition();
         map[box2d.getCoordY()][box2d.getCoordX()] = insideBreakable;
         prevDir = dir;
         sp = (Const.PLAYER_SPEED / 2.0 * dt);
         dir = 0;
         if (box2d.euclideanDistance(playerBox) <= RANGE) {
             dir = PathFinder.pathFinderBFS(box2d.getCoordY(), box2d.getCoordX(), map, true);
+
         }
         //make the bot turn only when it is able to
         if (!box2d.isInbound()) {
             dir = prevDir;
+            System.out.println("nah");
         }
         switch (dir) {
             case 1:
