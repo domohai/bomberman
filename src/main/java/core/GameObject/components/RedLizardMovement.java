@@ -36,11 +36,11 @@ public class RedLizardMovement extends Component {
         PlayScene scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
         typeListMap = scene.getTypeListMap();
-        playerBox = typeListMap.get(ObjectType.PLAYER).get(0).getTransform().getPosition();
     }
 
     @Override
     public void update(double dt) {
+        playerBox = typeListMap.get(ObjectType.PLAYER).get(0).getTransform().getPosition();
         map[box2d.getCoordY()][box2d.getCoordX()] = ' ';
         prevDir = dir;
         sp = (Const.PLAYER_SPEED * dt);

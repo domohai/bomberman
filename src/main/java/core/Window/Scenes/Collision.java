@@ -72,7 +72,8 @@ public class Collision {
     }
 
     public static boolean isAbleToCollide(char x, boolean ghost) {
-        return x == '#' || (!ghost && (x == 'o' || x == '*' || x == 'B' || x == 'F' || x == 'S' || x == 'X'));
+        if(ghost) return x=='#';
+        return x == '#' || x == 'o' || x == '*' || x == 'B' || x == 'F' || x == 'S' || x == 'X';
     }
 
     public static boolean boxCollision(Box2D box1, Box2D box2) {

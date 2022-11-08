@@ -207,6 +207,7 @@ public class PlayScene extends Scene {
                         }
                         // set position
                         player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.PLAYER_ZINDEX));
+                        player.setType(ObjectType.PLAYER);
                         addGameObject(player);
                     }
                     case '1' -> {
