@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class PlayScene extends Scene {
-    private char[][] map;
+    private char[][] map = null;
     private final boolean[][] placedBombs = new boolean[12][20];
     private final Map<ObjectType, List<GameObject>> typeListMap;
     private final List<GameObject> toBeRemove;
@@ -389,7 +389,9 @@ public class PlayScene extends Scene {
                     && map[Objects[i].getTransform().getPosition().getCoordY()]
                             [Objects[i].getTransform().getPosition().getCoordX()] != 'S'
                     && map[Objects[i].getTransform().getPosition().getCoordY()]
-                            [Objects[i].getTransform().getPosition().getCoordX()] != 'F') {
+                            [Objects[i].getTransform().getPosition().getCoordX()] != 'F'
+                    && map[Objects[i].getTransform().getPosition().getCoordY()]
+                            [Objects[i].getTransform().getPosition().getCoordX()] != 'X') {
                         map[Objects[i].getTransform().getPosition().getCoordY()]
                                 [Objects[i].getTransform().getPosition().getCoordX()] = '*';
                     }

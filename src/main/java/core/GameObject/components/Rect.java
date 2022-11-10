@@ -61,6 +61,10 @@ public class Rect extends Component {
                 Window.changeScene(SceneType.MENU_SCENE);
                 Stats.get().reset();
             }
+            case LOAD -> {
+                Stats.setLoad(true);
+                Window.changeScene(SceneType.PLAY_SCENE);
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scene {
-    protected boolean isRunning = false;
+    protected boolean isRunning;
     protected List<GameObject> gameObjects;
     protected Renderer renderer;
     protected boolean dataLoaded;

@@ -102,10 +102,10 @@ public class PlayerMovement extends Component {
         }
 
         if(KeyController.is_keyPressed(KeyEvent.VK_ENTER)) {
-            if(debug){
-                printDebug(map);
-//                Stats.setLevel(Stats.currentLevel() + 1);
-//                scene.change_map();
+            if (debug) {
+//                printDebug(map);
+                Stats.setLevel(Stats.currentLevel() + 1);
+                scene.change_map();
                 debug = false;
             }
         } else debug = true;

@@ -1,5 +1,5 @@
 package core.GameObject.components;
 
 public enum ButtonType {
-    PLAY, QUIT, SETTING, RESUME, MENU, BOARD, CONTROLS
+    PLAY, QUIT, SETTING, RESUME, MENU, LOAD
 }
