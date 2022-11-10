@@ -3,7 +3,7 @@ package core.GameObject.components;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class PlainColorRectangle extends Component{
+public class PlainColorRectangle extends Component {
     private int x,y,width,height;
     private Color color;
 

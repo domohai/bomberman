@@ -16,11 +16,11 @@ import java.util.Map;
 
 public class Bomb extends Component {
     private double countDownTime = 3.0;
-    private Map<ObjectType, List<GameObject>> typeListMap = null;
-    private char[][] map = null;
-    private boolean[][] placedBombs;
-    private PlayScene scene = null;
-    private Box2D box2d = null;
+    private transient Map<ObjectType, List<GameObject>> typeListMap = null;
+    private transient char[][] map = null;
+    private transient boolean[][] placedBombs = null;
+    private transient PlayScene scene = null;
+    private transient Box2D box2d = null;
 
     public Bomb() {
     }

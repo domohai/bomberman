@@ -8,21 +8,20 @@ import core.Window.Window;
 import util.Box2D;
 import util.Const;
 import util.PathFinder;
-
 import java.util.List;
 import java.util.Map;
 
 public class FantasmaMovement extends Component {
-    private StateMachine stateMachine = null;
+    private transient StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
-    private Map<ObjectType, List<GameObject>> typeListMap = null;
-    private Box2D box2d = null;
-    private char[][] map;
+    private transient Map<ObjectType, List<GameObject>> typeListMap = null;
+    private transient Box2D box2d = null;
+    private transient char[][] map;
     private int dir;
     private int prevDir;
     private boolean wasCollided = false;
     private double sp;
-    private Box2D playerBox; // for calculate distance(player,bot)
+    private transient Box2D playerBox; // for calculate distance(player,bot)
     private char insideBreakable = ' '; //
     private static final double RANGE = 500;
 
@@ -36,12 +35,11 @@ public class FantasmaMovement extends Component {
         PlayScene scene = (PlayScene) Window.getCurrentScene();
         map = scene.getMap();
         typeListMap = scene.getTypeListMap();
+        playerBox = typeListMap.get(ObjectType.PLAYER).get(0).getTransform().getPosition();
     }
-
 
     @Override
     public void update(double dt) {
-        playerBox = typeListMap.get(ObjectType.PLAYER).get(0).getTransform().getPosition();
         map[box2d.getCoordY()][box2d.getCoordX()] = insideBreakable;
         prevDir = dir;
         sp = (Const.PLAYER_SPEED / 2.0 * dt);

@@ -7,13 +7,18 @@ import java.util.List;
 public class State {
     private List<Frame> frames;
     private String state;
+    private String path;
     private boolean loop = false;
     private transient int currentFrame = 0;
     private transient double tracker = 0.0;
     
-    public State() {}
-    public State(String state) {
+    public State() {
+        this("", "");
+    }
+    
+    public State(String state, String path) {
         this.state = state;
+        this.path = path;
         this.frames = new ArrayList<>();
     }
     
@@ -43,5 +48,13 @@ public class State {
     
     public String getState() {
         return this.state;
+    }
+    
+    public List<Frame> getFrames() {
+        return frames;
+    }
+    
+    public String getPath() {
+        return path;
     }
 }

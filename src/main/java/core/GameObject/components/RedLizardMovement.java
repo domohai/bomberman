@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.Map;
 
 public class RedLizardMovement extends Component {
-    private StateMachine stateMachine = null;
+    private transient StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
-    private Map<ObjectType, List<GameObject>> typeListMap = null;
-    private Box2D box2d = null;
-    private char[][] map;
+    private transient Map<ObjectType, List<GameObject>> typeListMap = null;
+    private transient Box2D box2d = null;
+    private transient char[][] map;
     private int dir;
     private int prevDir;
     private boolean wasCollided = false;
     private double sp;
-    private Box2D playerBox;//for calculate distance(player,bot)
+    private transient Box2D playerBox; //for calculate distance(player,bot)
     private static final double RANGE = 500;
 
     public RedLizardMovement() {
