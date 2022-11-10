@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Portal extends Component {
-    private StateMachine stateMachine = null;
-    private Direction previousDirection = Direction.DOWN;
-    private Box2D box2d = null, playerBox = null;
-    private PlayScene scene;
-    private Map<ObjectType, List<GameObject>> typeListMap = null;
+    private transient StateMachine stateMachine = null;
+    private transient Box2D box2d = null;
+    private transient Box2D playerBox = null;
+    private transient PlayScene scene = null;
+    private transient Map<ObjectType, List<GameObject>> typeListMap = null;
 
     @Override
     public void start() {

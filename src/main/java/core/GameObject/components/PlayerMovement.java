@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayerMovement extends Component {
-    private StateMachine stateMachine = null;
+    private transient StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
-    private Map<ObjectType, List<GameObject>> typeListMap = null;
-    private Box2D box2d = null;
-    private char[][] map = null;
-    private boolean[][] placedBombs = null;
-    private PlayScene scene = null;
+    private transient Map<ObjectType, List<GameObject>> typeListMap = null;
+    private transient Box2D box2d = null;
+    private transient char[][] map = null;
+    private transient boolean[][] placedBombs = null;
+    private transient PlayScene scene = null;
     private double sp = 0;
     private boolean bombCooldown = true;
     private static boolean debug = true;
@@ -103,10 +103,9 @@ public class PlayerMovement extends Component {
 
         if(KeyController.is_keyPressed(KeyEvent.VK_ENTER)) {
             if(debug){
-//                printDebug(map);
-
-                Stats.setLevel(Stats.currentLevel() + 1);
-                scene.change_map();
+                printDebug(map);
+//                Stats.setLevel(Stats.currentLevel() + 1);
+//                scene.change_map();
                 debug = false;
             }
         } else debug = true;

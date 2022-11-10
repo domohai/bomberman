@@ -6,7 +6,8 @@ public class Frame {
     private transient BufferedImage image;
     private double displayTime;
     
-    public Frame() {}
+    public Frame() {
+    }
     
     public Frame(BufferedImage image, double displayTime) {
         this.image = image;

@@ -3,25 +3,19 @@ package core.Window.Scenes;
 import core.GameObject.GameObject;
 import core.GameObject.Transform;
 import core.GameObject.components.ButtonType;
-import core.GameObject.components.Rect;
-import core.MouseController;
+import core.KeyController;
+import core.Window.Window;
 import util.AssetsPool;
 import util.Const;
 import util.Prefabs;
 import util.Box2D;
-
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.KeyEvent;
 
 public class MenuScene extends Scene {
-    private boolean tutorial = false;
-    private List<GameObject> tutorialList;
 
     public MenuScene() {
         super();
-        tutorialList = new ArrayList<>();
     }
 
     @Override
@@ -49,7 +43,6 @@ public class MenuScene extends Scene {
         addGameObject(quit);
         addGameObject(img);
         addGameObject(menuBG);
-
     }
 
     @Override
@@ -57,15 +50,14 @@ public class MenuScene extends Scene {
         for (GameObject g : gameObjects) {
             g.update(dt);
         }
+        if (KeyController.is_keyPressed(KeyEvent.VK_S)) {
+            Stats.setLoad(true);
+            Window.changeScene(SceneType.PLAY_SCENE);
+        }
     }
 
     @Override
     public void draw(Graphics2D g2D) {
          renderer.render(g2D);
-
-    }
-
-    public void setTutorial(boolean tutorial) {
-        this.tutorial = tutorial;
     }
 }

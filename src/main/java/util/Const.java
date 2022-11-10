@@ -13,6 +13,7 @@ public class Const {
     public static final String SCREEN_TITLE = "Bomberman";
 
     public static final double DEFAULT_FRAME_TIME = 0.08;
+    public static final double BOMB_TIME = 0.6;
     public static final double FLAME_TIME = 0.04;
 
     // Player
@@ -55,7 +56,7 @@ public class Const {
     // volume
     public static final float DEFAULT_VOLUME = 0.2f;
     public static final float MIN_VOLUME = 0.0f;
-    public static final float BG_VOLUME = 0.04f;
+    public static final float BG_VOLUME = 0.03f;
     public static final float DIE_VOLUME = 0.3f;
     public static final float EXPLOSION_VOLUME = 0.08f;
     public static final float MAX_VOLUME = 0.5f;

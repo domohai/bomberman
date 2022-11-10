@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 public class BoarGuardMovement extends Component {
-    private StateMachine stateMachine = null;
+    private transient StateMachine stateMachine = null;
     private Direction previousDirection = Direction.DOWN;
-    private Map<ObjectType, List<GameObject>> typeListMap = null;
-    private Box2D box2d = null;
-    private char[][] map;
+    private transient Map<ObjectType, List<GameObject>> typeListMap = null;
+    private transient Box2D box2d = null;
+    private transient char[][] map;
     private int dir = 0;
     private boolean wasCollided = false;
     private double sp;

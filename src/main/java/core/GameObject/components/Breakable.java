@@ -9,15 +9,14 @@ import core.Window.Window;
 import util.Box2D;
 import util.Const;
 import util.Prefabs;
-
 import java.util.List;
 import java.util.Map;
 
 public class Breakable extends Component {
-    private Map<ObjectType, List<GameObject>> typeListMap = null;
-    private char[][] map = null;
-    private PlayScene scene = null;
-    private Box2D box2d = null;
+    private transient Map<ObjectType, List<GameObject>> typeListMap = null;
+    private transient char[][] map = null;
+    private transient PlayScene scene = null;
+    private transient Box2D box2d = null;
 
     public Breakable() {
     }
@@ -44,8 +43,7 @@ public class Breakable extends Component {
             }
         }
     }
-
-
+    
     public boolean isHidingItem(char x) {
         return x == 'B' || x == 'F' || x == 'S' || x == 'X';
     }

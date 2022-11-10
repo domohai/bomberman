@@ -9,10 +9,13 @@ public abstract class Scene {
     protected boolean isRunning = false;
     protected List<GameObject> gameObjects;
     protected Renderer renderer;
+    protected boolean dataLoaded;
     
     public Scene() {
         this.gameObjects = new ArrayList<>();
         this.renderer = new Renderer();
+        this.dataLoaded = false;
+        isRunning = true;
     }
     
     public void init() {}
@@ -21,11 +24,12 @@ public abstract class Scene {
         for (GameObject g : this.gameObjects) {
             g.start();
         }
-        this.isRunning = true;
     }
     
     public abstract void update(double dt);
     public abstract void draw(Graphics2D g2D);
+    public void load() {}
+    public void save() {}
     
     public void addGameObject(GameObject newGameObject) {
         this.gameObjects.add(newGameObject);

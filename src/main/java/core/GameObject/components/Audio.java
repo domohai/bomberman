@@ -1,5 +1,7 @@
 package core.GameObject.components;
 
+import util.Const;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -71,16 +73,19 @@ public class Audio {
         if (status.equals("play")) {
             return;
         }
-        clip.close();
-        resetAudioStream();
+//        clip.close();
+//        resetAudioStream();
         clip.setMicrosecondPosition(currentFrame);
-        play();
+        gainControl.setValue(20f * (float) Math.log10(volume));
+        if (filePath.equals(Const.BACKGROUND_MUSIC)) {
+            play();
+        }
     }
     
     public void restart() {
         clip.stop();
-        clip.close();
-        resetAudioStream();
+//        clip.close();
+//        resetAudioStream();
         currentFrame = 0L;
         clip.setMicrosecondPosition(0);
         play();
@@ -93,7 +98,9 @@ public class Audio {
     }
     
     public void reset() {
-        clip.setMicrosecondPosition(0L);
+        clip.stop();
+        currentFrame = 0L;
+        clip.setMicrosecondPosition(currentFrame);
     }
     
     public void resetAudioStream() {
@@ -109,16 +116,12 @@ public class Audio {
         }
     }
     
-    public Clip getClip() {
-        return clip;
-    }
-    
     public boolean isLoop() {
         return loop;
     }
     
-    public FloatControl getGainControl() {
-        return gainControl;
+    public String getStatus() {
+        return status;
     }
     
     public float getVolume() {

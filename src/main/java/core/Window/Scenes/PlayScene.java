@@ -1,10 +1,19 @@
 package core.Window.Scenes;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import core.GameObject.GameObject;
+import core.GameObject.ObjectDeserializer;
 import core.GameObject.ObjectType;
 import core.GameObject.Transform;
 import core.GameObject.components.Breakable;
 import core.GameObject.components.ButtonType;
+import core.GameObject.components.Component;
+import core.GameObject.components.ComponentDeserializer;
+import core.GameObject.components.Frame;
+import core.GameObject.components.SpriteSheet;
+import core.GameObject.components.State;
+import core.GameObject.components.StateMachine;
 import core.KeyController;
 import core.MouseController;
 import core.Window.Window;
@@ -15,10 +24,15 @@ import util.Box2D;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlayScene extends Scene {
     private char[][] map;
@@ -43,12 +57,11 @@ public class PlayScene extends Scene {
             List<GameObject> list = typeListMap.get(type);
             for (GameObject g : list) g.start();
         }
-        isRunning = true;
     }
 
     @Override
     public void init() {
-        change_map();
+        if (!dataLoaded) change_map();
         createButton();
     }
 
@@ -86,6 +99,9 @@ public class PlayScene extends Scene {
         }
         if (KeyController.is_keyPressed(KeyEvent.VK_K)) {
             typeListMap.get(ObjectType.BOT).clear();
+        }
+        if (KeyController.is_keyPressed(KeyEvent.VK_Y)) {
+            save();
         }
     }
 
@@ -149,12 +165,10 @@ public class PlayScene extends Scene {
         AssetsPool.getButton("src/main/resources/hover_buttons/menu.png"), ButtonType.MENU);
         menu.setTransform(new Transform(new Box2D((Const.SCREEN_WIDTH - Const.BUTTON_WIDTH)/2.0 + 20, (Const.SCREEN_HEIGHT - 3* Const.BUTTON_HEIGHT)/2.0 + Const.BUTTON_OFFSET, Const.BUTTON_WIDTH, Const.BUTTON_HEIGHT), 1));
         addButton(menu);
-        // sound
-        
     }
 
     public void change_map() {
-        if(Stats.currentLevel() > Const.LAST_LEVEL) {
+        if (Stats.currentLevel() > Const.LAST_LEVEL) {
             Stats.setWin(true);
             return;
         }
@@ -163,17 +177,12 @@ public class PlayScene extends Scene {
         gameObjects.clear();
         toBeRemove.clear();
         renderer.clear();
+        // create setting button again
         GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
                 AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
         setting.setType(ObjectType.OTHER);
         setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
         addGameObject(setting);
-        GameObject audio = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/audio.png"),
-                AssetsPool.getButton("src/main/resources/hover_buttons/audio.png"), ButtonType.AUDIO);
-        audio.setType(ObjectType.OTHER);
-        
-        audio.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 135, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
-        addGameObject(audio);
         Stats.get().reset();
         // load new map
         String path = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
@@ -217,17 +226,6 @@ public class PlayScene extends Scene {
                         rock.addComponent(new Breakable());
                         addGameObject(rock);
                     }
-//                    case 'p' -> {
-//                        typeListMap.get(ObjectType.PLAYER).clear();
-//                        GameObject player = Prefabs.generatePlayer();
-//                        if (player == null) {
-//                            System.out.println("Can not generate player!");
-//                            return;
-//                        }
-//                        // set position
-//                        player.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, 30, 42, 16, 15), Const.PLAYER_ZINDEX));
-//                        addGameObject(player);
-//                    }
                     case '1' -> {
                         GameObject bot = Prefabs.generateBot("BoarGuard");
                         if (bot == null) {
@@ -276,6 +274,161 @@ public class PlayScene extends Scene {
             }
         }
     }
+    
+    @Override
+    public void load() {
+        Gson gson = new GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapter(Component.class, new ComponentDeserializer())
+                .registerTypeAdapter(GameObject.class, new ObjectDeserializer())
+                .enableComplexMapKeySerialization()
+                .create();
+        String inFile;
+        String level;
+        try {
+            inFile = new String(Files.readAllBytes(Paths.get("Data/data.txt")));
+            level = new String(Files.readAllBytes(Paths.get("Data/level.txt")));
+        } catch (IOException e) {
+            System.out.println("Failed to load game!");
+            e.printStackTrace();
+            return;
+        }
+        if (inFile.equals("") || level.equals("")) return;
+        Stats.setLevel(Integer.parseInt(level));
+        GameObject[] Objects = gson.fromJson(inFile, GameObject[].class);
+        
+        String pathMap = "src/main/resources/Levels/Level" + Stats.currentLevel() + ".txt";
+        map = Prefabs.loadMap(pathMap);
+        if (map == null) return;
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] == '#') {
+                    GameObject block = Prefabs.generateBlock("src/main/resources/Wall.png");
+                    if (block == null) {
+                        System.out.println("Cannot generate block");
+                        return;
+                    }
+                    block.setTransform(new Transform(new Box2D(Const.TILE_W * j, Const.TILE_H * i, Const.TILE_W, Const.TILE_H), Const.STILL_OBJECT_ZINDEX));
+                    super.addGameObject(block);
+                } else if (map[i][j] == ' ') {
+                
+                } else {
+                    if (map[i][j] == 'p' || map[i][j] == '*'
+                    || (map[i][j] >= '0' && map[i][j] <= '9')) {
+                        map[i][j] = ' ';
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0; i < Objects.length; i++) {
+            if (Objects[i].getType() == ObjectType.PLAYER) {
+                StateMachine stateMachine = Objects[i].getComponent(StateMachine.class);
+                if (stateMachine != null) {
+                    Map<String, State> states = stateMachine.getStates();
+                    for (String s : states.keySet()) {
+                        String path = states.get(s).getPath();
+                        SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
+                        if (states.get(s).getFrames().size() == 1) {
+                            states.get(s).getFrames().clear();
+                            states.get(s).addFrame(new Frame(sheet.getSprite(0), -1));
+                        } else {
+                            states.get(s).getFrames().clear();
+                            for (int j = 1; j < sheet.size(); j++) {
+                                states.get(s).addFrame(new Frame(sheet.getSprite(j), Const.DEFAULT_FRAME_TIME));
+                            }
+                        }
+                    }
+                }
+                addGameObject(Objects[i]);
+                break;
+            }
+        }
+        for (int i = 0; i < Objects.length; i++) {
+            if (Objects[i].getType() == ObjectType.PLAYER) continue;
+            StateMachine stateMachine = Objects[i].getComponent(StateMachine.class);
+            if (stateMachine != null) {
+                Map<String, State> states = stateMachine.getStates();
+                if (Objects[i].getType() == ObjectType.BOT) {
+                    for (String s : states.keySet()) {
+                        String path = states.get(s).getPath();
+                        SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
+                        if (states.get(s).getFrames().size() == 1) {
+                            states.get(s).getFrames().clear();
+                            states.get(s).addFrame(new Frame(sheet.getSprite(0), -1));
+                        } else {
+                            states.get(s).getFrames().clear();
+                            for (int j = 1; j < sheet.size(); j++) {
+                                states.get(s).addFrame(new Frame(sheet.getSprite(j), Const.DEFAULT_FRAME_TIME));
+                            }
+                        }
+                    }
+                } else if (Objects[i].getType() == ObjectType.PORTAL) {
+                    for (String s : states.keySet()) {
+                        String path = states.get(s).getPath();
+                        SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
+                        states.get(s).getFrames().clear();
+                        if (s.equals("Close")) states.get(s).addFrame(new Frame(sheet.getSprite(0), -1));
+                        else states.get(s).addFrame(new Frame(sheet.getSprite(1), -1));
+                    }
+                } else {
+                    for (String s : states.keySet()) {
+                        String path = states.get(s).getPath();
+                        SpriteSheet sheet = AssetsPool.getSpriteSheet(path);
+                        if (states.get(s).getFrames().size() == 1) {
+                            states.get(s).getFrames().clear();
+                            states.get(s).addFrame(new Frame(sheet.getSprite(0), -1));
+                        } else {
+                            states.get(s).getFrames().clear();
+                            for (int j = 0; j < sheet.size(); j++) {
+                                states.get(s).addFrame(new Frame(sheet.getSprite(j), Const.BOMB_TIME));
+                            }
+                        }
+                    }
+                    if (map[Objects[i].getTransform().getPosition().getCoordY()]
+                            [Objects[i].getTransform().getPosition().getCoordX()] != 'B'
+                    && map[Objects[i].getTransform().getPosition().getCoordY()]
+                            [Objects[i].getTransform().getPosition().getCoordX()] != 'S'
+                    && map[Objects[i].getTransform().getPosition().getCoordY()]
+                            [Objects[i].getTransform().getPosition().getCoordX()] != 'F') {
+                        map[Objects[i].getTransform().getPosition().getCoordY()]
+                                [Objects[i].getTransform().getPosition().getCoordX()] = '*';
+                    }
+                    
+                }
+            }
+            addGameObject(Objects[i]);
+        }
+        GameObject setting = Prefabs.generateButton(AssetsPool.getButton("src/main/resources/idle_buttons/square_settings.png"),
+                AssetsPool.getButton("src/main/resources/hover_buttons/square_settings.png"), ButtonType.SETTING);
+        setting.setType(ObjectType.OTHER);
+        setting.setTransform(new Transform(new Box2D(Const.SCREEN_WIDTH - 75, 1, Const.SQUARE_BUTTON, Const.SQUARE_BUTTON), 5));
+        addGameObject(setting);
+        this.dataLoaded = true;
+    }
+    
+    @Override
+    public void save() {
+        Gson gson = new GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapter(Component.class, new ComponentDeserializer())
+                .registerTypeAdapter(GameObject.class, new ObjectDeserializer())
+                .enableComplexMapKeySerialization()
+                .create();
+        // add all objects we want to save in a list
+        List<GameObject> list = new ArrayList<>();
+        for (ObjectType t : typeListMap.keySet()) {
+            if (t == ObjectType.FLAME || t == ObjectType.OTHER
+            || t == ObjectType.ITEM) continue;
+            list.addAll(typeListMap.get(t));
+        }
+        try (FileWriter writer = new FileWriter("Data/data.txt");
+        FileWriter writer1 = new FileWriter("Data/level.txt")) {
+            writer1.write(String.valueOf(Stats.currentLevel()));
+            writer.write(gson.toJson(list));
+        } catch (IOException e) {
+            System.out.println("Failed to save game!");
+            e.printStackTrace();
+        }
+    }
 
     public char[][] getMap() {
         return map;
@@ -288,6 +441,4 @@ public class PlayScene extends Scene {
     public Map<ObjectType, List<GameObject>> getTypeListMap() {
         return typeListMap;
     }
-
-
 }

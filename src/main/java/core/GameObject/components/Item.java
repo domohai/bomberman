@@ -11,7 +11,10 @@ import util.Const;
 
 public class Item extends Component {
     private int type; // 1 2 3 4 = bomb, flame, speed, portal
-    private GameObject player = null;
+    private transient GameObject player = null;
+    
+    public Item() {
+    }
     
     public Item(String typeName) {
         type = switch (typeName) {
@@ -44,18 +47,6 @@ public class Item extends Component {
                 case 3 -> {
                     Stats.increaseSpeedMultiplier();
                     Sound.play(Const.ITEM_SOUND);
-                }
-                case 4 -> {
-//                    if (typeListMap.get(ObjectType.BOT).size() < 1) {
-//                        GameObject player = typeListMap.get(ObjectType.PLAYER).get(0);
-//
-//                        Stats.setLevel(Stats.currentLevel() + 1);
-//                        if (Stats.currentLevel() > Const.MAX_LEVEL) {
-//                            Stats.setWin(true);
-//                        } else {
-//                            change_map();
-//                        }
-//                    }
                 }
             }
             gameObject.setAlive(false);

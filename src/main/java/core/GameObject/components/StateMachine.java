@@ -11,6 +11,14 @@ public class StateMachine extends Component {
         this.states = new HashMap<>();
         this.currentState = null;
     }
+    
+    @Override
+    public void start() {
+        for (String s : states.keySet()) {
+            currentState = states.get(s);
+            break;
+        }
+    }
 
     public void changeState(String newStateTitle) {
         State newState = states.get(newStateTitle);

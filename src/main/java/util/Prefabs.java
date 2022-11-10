@@ -3,15 +3,13 @@ package util;
 import core.GameObject.GameObject;
 import core.GameObject.ObjectType;
 import core.GameObject.components.*;
-
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
-
-import static javax.imageio.ImageIO.*;
+import static javax.imageio.ImageIO.read;
 
 public class Prefabs {
     public static BufferedImage readImage(String path) {
@@ -55,10 +53,10 @@ public class Prefabs {
         // create bomb
         GameObject bomb = new GameObject(ObjectType.UNSTABLE);
         // state
-        State countDown = new State("count");
+        State countDown = new State("count", sheet.getPath());
         countDown.setLoop(false);
         for (int i = 0; i < sheet.size(); i++) {
-            countDown.addFrame(new Frame(sheet.getSprite(i), 0.6));
+            countDown.addFrame(new Frame(sheet.getSprite(i), Const.BOMB_TIME));
         }
         // machine
         StateMachine machine = new StateMachine();
@@ -78,7 +76,7 @@ public class Prefabs {
         // create explosion
         GameObject flame = new GameObject(ObjectType.FLAME);
         // State
-        State flameState = new State("idle");
+        State flameState = new State("idle", sheet.getPath());
         flameState.setLoop(false);
         for (int i = 0; i < sheet.size(); i++) {
             flameState.addFrame(new Frame(sheet.getSprite(i), Const.FLAME_TIME));
@@ -100,7 +98,7 @@ public class Prefabs {
         }
         GameObject block = new GameObject();
         StateMachine machine = new StateMachine();
-        State idle = new State("idle");
+        State idle = new State("idle", sheet.getPath());
         idle.setLoop(false);
         idle.addFrame(new Frame(sheet.getSprite(0), -1));
         machine.addState(idle);
@@ -123,41 +121,41 @@ public class Prefabs {
         // create new game object
         GameObject player = new GameObject(ObjectType.PLAYER);
         // idle left state
-        State idleLeft = new State("idleLeft");
+        State idleLeft = new State("idleLeft", runLeftSheet.getPath());
         idleLeft.setLoop(false);
         idleLeft.addFrame(new Frame(runLeftSheet.getSprite(0), -1));
         // run left state
-        State runLeft = new State("runLeft");
+        State runLeft = new State("runLeft", runLeftSheet.getPath());
         runLeft.setLoop(true);
         for (int i = 1; i < runLeftSheet.size(); i++) {
             runLeft.addFrame(new Frame(runLeftSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // idle right state
-        State idleRight = new State("idleRight");
+        State idleRight = new State("idleRight", runRightSheet.getPath());
         idleRight.setLoop(false);
         idleRight.addFrame(new Frame(runRightSheet.getSprite(0), -1));
         // run right state
-        State runRight = new State("runRight");
+        State runRight = new State("runRight", runRightSheet.getPath());
         runRight.setLoop(true);
         for (int i = 1; i < runRightSheet.size(); i++) {
             runRight.addFrame(new Frame(runRightSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // idle up state
-        State idleUp = new State("idleUp");
+        State idleUp = new State("idleUp", runUpSheet.getPath());
         idleUp.setLoop(false);
         idleUp.addFrame(new Frame(runUpSheet.getSprite(0), -1));
         // run up state
-        State runUp = new State("runUp");
+        State runUp = new State("runUp", runUpSheet.getPath());
         runUp.setLoop(true);
         for (int i = 1; i < runUpSheet.size(); i++) {
             runUp.addFrame(new Frame(runUpSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // idle down state
-        State idleDown = new State("idleDown");
+        State idleDown = new State("idleDown", runDownSheet.getPath());
         idleDown.setLoop(false);
         idleDown.addFrame(new Frame(runDownSheet.getSprite(0), -1));
         // run down state
-        State runDown = new State("runDown");
+        State runDown = new State("runDown", runDownSheet.getPath());
         runDown.setLoop(true);
         for (int i = 1; i < runDownSheet.size(); i++) {
             runDown.addFrame(new Frame(runDownSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
@@ -204,41 +202,41 @@ public class Prefabs {
         // create new game object
         GameObject bot = new GameObject(ObjectType.BOT);
         // idle left state
-        State idleLeft = new State("idleLeft");
+        State idleLeft = new State("idleLeft", runLeftSheet.getPath());
         idleLeft.setLoop(false);
         idleLeft.addFrame(new Frame(runLeftSheet.getSprite(0), -1));
         // run left state
-        State runLeft = new State("runLeft");
+        State runLeft = new State("runLeft", runLeftSheet.getPath());
         runLeft.setLoop(true);
         for (int i = 1; i < runLeftSheet.size(); i++) {
             runLeft.addFrame(new Frame(runLeftSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // idle right state
-        State idleRight = new State("idleRight");
+        State idleRight = new State("idleRight", runRightSheet.getPath());
         idleRight.setLoop(false);
         idleRight.addFrame(new Frame(runRightSheet.getSprite(0), -1));
         // run right state
-        State runRight = new State("runRight");
+        State runRight = new State("runRight", runRightSheet.getPath());
         runRight.setLoop(true);
         for (int i = 1; i < runRightSheet.size(); i++) {
             runRight.addFrame(new Frame(runRightSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // idle up state
-        State idleUp = new State("idleUp");
+        State idleUp = new State("idleUp", runUpSheet.getPath());
         idleUp.setLoop(false);
         idleUp.addFrame(new Frame(runUpSheet.getSprite(0), -1));
         // run up state
-        State runUp = new State("runUp");
+        State runUp = new State("runUp", runUpSheet.getPath());
         runUp.setLoop(true);
         for (int i = 1; i < runUpSheet.size(); i++) {
             runUp.addFrame(new Frame(runUpSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
         }
         // idle down state
-        State idleDown = new State("idleDown");
+        State idleDown = new State("idleDown", runDownSheet.getPath());
         idleDown.setLoop(false);
         idleDown.addFrame(new Frame(runDownSheet.getSprite(0), -1));
         // run down state
-        State runDown = new State("runDown");
+        State runDown = new State("runDown", runDownSheet.getPath());
         runDown.setLoop(true);
         for (int i = 1; i < runDownSheet.size(); i++) {
             runDown.addFrame(new Frame(runDownSheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
@@ -284,8 +282,7 @@ public class Prefabs {
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
-
-        State idle = new State("idle");
+        State idle = new State("idle", sheet.getPath());
         idle.setLoop(true);
         for (int i = 0; i < sheet.size(); i++)
             idle.addFrame(new Frame(sheet.getSprite(i), Const.DEFAULT_FRAME_TIME));
@@ -304,20 +301,20 @@ public class Prefabs {
             return null;
         }
         // create new game object
-        GameObject portal = new GameObject(ObjectType.ITEM);
+        GameObject portal = new GameObject(ObjectType.PORTAL);
         //create item component
         Portal portalComp = new Portal();
         portal.addComponent(portalComp);
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
-        State close = new State("Close");
+        State close = new State("Close", sheet.getPath());
         close.setLoop(false);
-        close.addFrame(new Frame(sheet.getSprite(0), Const.DEFAULT_FRAME_TIME));
+        close.addFrame(new Frame(sheet.getSprite(0), -1));
         machine.addState(close);
-        State open = new State("Open");
+        State open = new State("Open", sheet.getPath());
         open.setLoop(false);
-        open.addFrame(new Frame(sheet.getSprite(1), Const.DEFAULT_FRAME_TIME));
+        open.addFrame(new Frame(sheet.getSprite(1), -1));
         machine.addState(open);
         //set default
         machine.setDefaultState(close.getState());
@@ -337,7 +334,7 @@ public class Prefabs {
         // create state machine
         StateMachine machine = new StateMachine();
         // add idle states
-        State idle = new State("idle");
+        State idle = new State("idle", sheet.getPath());
         idle.setLoop(true);
         idle.addFrame(new Frame(sheet.getSprite(0), -1));
         machine.addState(idle);

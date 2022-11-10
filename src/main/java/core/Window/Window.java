@@ -44,7 +44,6 @@ public class Window extends JFrame implements Runnable {
         this.addKeyListener(KeyController.get()); // add keyListener
         this.setVisible(true);
         this.isRunning = true;
-        
     }
     
     public static Window get() {
@@ -68,6 +67,10 @@ public class Window extends JFrame implements Runnable {
             case PLAY_SCENE -> window.currentScene = new PlayScene();
             default -> System.out.println("Invalid scene!");
         }
+        if (Stats.isLoad()) {
+            window.currentScene.load();
+            Stats.setLoad(false);
+        }
         window.currentScene.init();
         window.currentScene.start();
     }
@@ -84,7 +87,6 @@ public class Window extends JFrame implements Runnable {
         bufferImage = createImage(getWidth(), getHeight());
         bufferGraphics = bufferImage.getGraphics();
         bufferGraphics.setColor(Color.BLACK);
-//        Sound.play(Const.BACKGROUND_MUSIC);
         Window.changeScene(SceneType.MENU_SCENE);
     }
     
@@ -182,8 +184,6 @@ public class Window extends JFrame implements Runnable {
         AssetsPool.addButton("src/main/resources/hover_buttons/controls.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/back.png");
         AssetsPool.addButton("src/main/resources/idle_buttons/back.png");
-
-
         AssetsPool.addButton("src/main/resources/idle_buttons/audio.png");
         AssetsPool.addButton("src/main/resources/hover_buttons/audio.png");
 

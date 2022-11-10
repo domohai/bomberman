@@ -1,14 +1,9 @@
 package core.GameObject.components;
 
 import core.MouseController;
-import core.Window.Scenes.MenuScene;
-import core.Window.Scenes.PlayScene;
 import core.Window.Scenes.SceneType;
 import core.Window.Scenes.Stats;
 import core.Window.Window;
-import util.AssetsPool;
-import util.Const;
-
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -65,18 +60,6 @@ public class Rect extends Component {
             case MENU -> {
                 Window.changeScene(SceneType.MENU_SCENE);
                 Stats.get().reset();
-            }
-            case AUDIO -> {
-                for (String s : AssetsPool.getAudioPool().keySet()) {
-                    Audio audio = AssetsPool.getAudio(s);
-                    if (audio.getVolume() == Const.MIN_VOLUME) {
-                        audio.restart();
-                        audio.setVolume(Const.DEFAULT_VOLUME);
-                    } else {
-                        audio.stop();
-                        audio.setVolume(Const.MIN_VOLUME);
-                    }
-                }
             }
         }
     }
